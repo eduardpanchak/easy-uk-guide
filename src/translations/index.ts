@@ -1,0 +1,181 @@
+export type Language = 'en' | 'uk' | 'ru';
+
+export const translations = {
+  en: {
+    app: {
+      title: 'Easy UK 🇬🇧'
+    },
+    nav: {
+      home: 'Home',
+      checklists: 'Checklists',
+      saved: 'Saved'
+    },
+    home: {
+      documents: 'Documents',
+      documentsDesc: 'NIN, Bank, BRP, GP, Council Tax, Driving Licence',
+      nhs: 'NHS (Healthcare)',
+      nhsDesc: 'Find GP, Register, Free Services, Emergency Care',
+      checklist: 'What to Do After Arriving',
+      checklistDesc: 'Complete checklist for new arrivals',
+      jobs: 'Jobs & Work',
+      jobsDesc: 'CV writing, job search, interviews, worker rights',
+      housing: 'Housing',
+      housingDesc: 'Finding accommodation, costs, tenant rights',
+      benefits: 'Benefits & Support',
+      benefitsDesc: 'Universal Credit, Child Benefit, free services',
+      education: 'Education',
+      educationDesc: 'Schools, English classes, universities'
+    },
+    common: {
+      back: 'Back',
+      save: 'Save for Later',
+      saved: 'Saved',
+      complete: 'Mark as Complete',
+      completed: 'Completed',
+      search: 'Search',
+      searchPlaceholder: 'Search documents, NHS, checklists...',
+      startTyping: 'Start typing to search',
+      noResults: 'No results found for',
+      results: 'result',
+      results_plural: 'results'
+    },
+    saved: {
+      title: 'Saved',
+      noItems: 'No saved items yet',
+      noItemsDesc: 'Save helpful articles and guides for quick access'
+    },
+    settings: {
+      title: 'Settings',
+      language: 'Language',
+      about: 'About Easy UK',
+      aboutDesc: 'Version 1.0.0',
+      feedback: 'Send Feedback',
+      feedbackDesc: 'Help us improve'
+    },
+    messages: {
+      savedItem: 'Saved!',
+      removedSaved: 'Removed from saved',
+      languageInfo: 'Language: English',
+      aboutInfo: 'A simple assistant for migrants living in the UK',
+      feedbackInfo: 'Thank you for your interest! Feedback feature coming soon.'
+    }
+  },
+  uk: {
+    app: {
+      title: 'Easy UK 🇬🇧'
+    },
+    nav: {
+      home: 'Головна',
+      checklists: 'Списки',
+      saved: 'Збережене'
+    },
+    home: {
+      documents: 'Документи',
+      documentsDesc: 'NIN, Банк, BRP, GP, Муніципальний податок, Водійські права',
+      nhs: 'NHS (Медицина)',
+      nhsDesc: 'Знайти лікаря, Реєстрація, Безкоштовні послуги',
+      checklist: 'Що робити після прибуття',
+      checklistDesc: 'Повний список справ для новоприбулих',
+      jobs: 'Робота',
+      jobsDesc: 'CV, пошук роботи, співбесіди, права працівників',
+      housing: 'Житло',
+      housingDesc: 'Пошук житла, вартість, права орендарів',
+      benefits: 'Допомога та підтримка',
+      benefitsDesc: 'Universal Credit, допомога на дітей, безкоштовні послуги',
+      education: 'Освіта',
+      educationDesc: 'Школи, англійська мова, університети'
+    },
+    common: {
+      back: 'Назад',
+      save: 'Зберегти',
+      saved: 'Збережено',
+      complete: 'Позначити як виконане',
+      completed: 'Виконано',
+      search: 'Пошук',
+      searchPlaceholder: 'Пошук документів, NHS, списків...',
+      startTyping: 'Почніть вводити текст для пошуку',
+      noResults: 'Нічого не знайдено для',
+      results: 'результат',
+      results_plural: 'результатів'
+    },
+    saved: {
+      title: 'Збережене',
+      noItems: 'Поки немає збережених матеріалів',
+      noItemsDesc: 'Зберігайте корисні статті для швидкого доступу'
+    },
+    settings: {
+      title: 'Налаштування',
+      language: 'Мова',
+      about: 'Про Easy UK',
+      aboutDesc: 'Версія 1.0.0',
+      feedback: 'Зворотній зв\'язок',
+      feedbackDesc: 'Допоможіть нам покращити додаток'
+    },
+    messages: {
+      savedItem: 'Збережено!',
+      removedSaved: 'Видалено зі збереженого',
+      languageInfo: 'Мова: Українська',
+      aboutInfo: 'Простий помічник для мігрантів у Великобританії',
+      feedbackInfo: 'Дякуємо за інтерес! Функція зворотного зв\'язку скоро з\'явиться.'
+    }
+  },
+  ru: {
+    app: {
+      title: 'Easy UK 🇬🇧'
+    },
+    nav: {
+      home: 'Главная',
+      checklists: 'Списки',
+      saved: 'Сохранённое'
+    },
+    home: {
+      documents: 'Документы',
+      documentsDesc: 'NIN, Банк, BRP, GP, Муниципальный налог, Водительские права',
+      nhs: 'NHS (Медицина)',
+      nhsDesc: 'Найти врача, Регистрация, Бесплатные услуги',
+      checklist: 'Что делать после приезда',
+      checklistDesc: 'Полный список дел для новоприбывших',
+      jobs: 'Работа',
+      jobsDesc: 'CV, поиск работы, собеседования, права работников',
+      housing: 'Жильё',
+      housingDesc: 'Поиск жилья, расходы, права арендаторов',
+      benefits: 'Пособия и поддержка',
+      benefitsDesc: 'Universal Credit, пособие на детей, бесплатные услуги',
+      education: 'Образование',
+      educationDesc: 'Школы, английский язык, университеты'
+    },
+    common: {
+      back: 'Назад',
+      save: 'Сохранить',
+      saved: 'Сохранено',
+      complete: 'Отметить как выполненное',
+      completed: 'Выполнено',
+      search: 'Поиск',
+      searchPlaceholder: 'Поиск документов, NHS, списков...',
+      startTyping: 'Начните вводить текст для поиска',
+      noResults: 'Ничего не найдено для',
+      results: 'результат',
+      results_plural: 'результатов'
+    },
+    saved: {
+      title: 'Сохранённое',
+      noItems: 'Пока нет сохранённых материалов',
+      noItemsDesc: 'Сохраняйте полезные статьи для быстрого доступа'
+    },
+    settings: {
+      title: 'Настройки',
+      language: 'Язык',
+      about: 'О Easy UK',
+      aboutDesc: 'Версия 1.0.0',
+      feedback: 'Обратная связь',
+      feedbackDesc: 'Помогите нам улучшить приложение'
+    },
+    messages: {
+      savedItem: 'Сохранено!',
+      removedSaved: 'Удалено из сохранённого',
+      languageInfo: 'Язык: Русский',
+      aboutInfo: 'Простой помощник для мигрантов в Великобритании',
+      feedbackInfo: 'Спасибо за интерес! Функция обратной связи скоро появится.'
+    }
+  }
+};
