@@ -1,5 +1,6 @@
 import { ChevronRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useNavigate } from 'react-router-dom';
 
 interface CardProps {
   icon?: string;
@@ -8,12 +9,23 @@ interface CardProps {
   onClick?: () => void;
   className?: string;
   children?: React.ReactNode;
+  to?: string;
 }
 
-export const Card = ({ icon, title, description, onClick, className, children }: CardProps) => {
+export const Card = ({ icon, title, description, onClick, className, children, to }: CardProps) => {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    if (to) {
+      navigate(to);
+    } else if (onClick) {
+      onClick();
+    }
+  };
+
   return (
     <button
-      onClick={onClick}
+      onClick={handleClick}
       className={cn(
         "w-full bg-card border border-border rounded-xl p-4 text-left",
         "hover:border-primary transition-all active:scale-95",

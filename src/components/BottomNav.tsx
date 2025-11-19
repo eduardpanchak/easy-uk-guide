@@ -1,4 +1,4 @@
-import { Home, CheckSquare, Bookmark, Settings } from 'lucide-react';
+import { Home, CheckSquare, Bookmark, Settings, Briefcase } from 'lucide-react';
 import { NavLink } from '@/components/NavLink';
 import { useLanguage } from '@/contexts/LanguageContext';
 
@@ -33,6 +33,15 @@ export const BottomNav = () => {
         >
           <Bookmark className="w-5 h-5 mb-1" />
           <span className="text-xs font-medium">{t('nav.saved')}</span>
+        </NavLink>
+
+        <NavLink
+          to="/services"
+          className="flex flex-col items-center justify-center flex-1 h-full text-muted-foreground transition-colors"
+          activeClassName="text-primary"
+        >
+          <Briefcase className="w-5 h-5 mb-1" />
+          <span className="text-xs font-medium">{t('nav.services')}</span>
         </NavLink>
 
         <NavLink

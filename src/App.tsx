@@ -26,6 +26,8 @@ import CommunityServices from "./pages/CommunityServices";
 import Saved from "./pages/Saved";
 import Search from "./pages/Search";
 import Settings from "./pages/Settings";
+import Services from "./pages/Services";
+import BusinessRegistration from "./pages/BusinessRegistration";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -55,10 +57,12 @@ const ProtectedRoutes = () => {
       <Route path="/education" element={<Education />} />
       <Route path="/education/:id" element={<EducationDetails />} />
       <Route path="/community-services" element={<CommunityServices />} />
-      <Route path="/saved" element={<Saved />} />
-      <Route path="/search" element={<Search />} />
-      <Route path="/settings" element={<Settings />} />
-      <Route path="*" element={<NotFound />} />
+          <Route path="/saved" element={<Saved />} />
+          <Route path="/search" element={<Search />} />
+          <Route path="/settings" element={<Settings />} />
+          <Route path="/services" element={<Services />} />
+          <Route path="/business-registration" element={<BusinessRegistration />} />
+          <Route path="*" element={<NotFound />} />
     </Routes>
   );
 };

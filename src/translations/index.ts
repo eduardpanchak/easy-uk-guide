@@ -8,7 +8,8 @@ export const translations = {
     nav: {
       home: 'Home',
       checklists: 'Checklists',
-      saved: 'Saved'
+      saved: 'Saved',
+      services: 'Services'
     },
     home: {
       documents: 'Documents',
@@ -50,7 +51,12 @@ export const translations = {
       about: 'About Easy UK',
       aboutDesc: 'Version 1.0.0',
       feedback: 'Send Feedback',
-      feedbackDesc: 'Help us improve'
+      feedbackDesc: 'Help us improve',
+      businessMode: 'Business Mode',
+      businessModeDesc: 'Register your service'
+    },
+    services: {
+      noServices: 'No services available in your language yet'
     },
     messages: {
       savedItem: 'Saved!',
@@ -67,7 +73,8 @@ export const translations = {
     nav: {
       home: 'Головна',
       checklists: 'Списки',
-      saved: 'Збережене'
+      saved: 'Збережене',
+      services: 'Послуги'
     },
     home: {
       documents: 'Документи',
@@ -109,7 +116,12 @@ export const translations = {
       about: 'Про Easy UK',
       aboutDesc: 'Версія 1.0.0',
       feedback: 'Зворотній зв\'язок',
-      feedbackDesc: 'Допоможіть нам покращити додаток'
+      feedbackDesc: 'Допоможіть нам покращити додаток',
+      businessMode: 'Бізнес режим',
+      businessModeDesc: 'Зареєструйте свою послугу'
+    },
+    services: {
+      noServices: 'Послуг вашою мовою поки немає'
     },
     messages: {
       savedItem: 'Збережено!',
@@ -126,7 +138,8 @@ export const translations = {
     nav: {
       home: 'Главная',
       checklists: 'Списки',
-      saved: 'Сохранённое'
+      saved: 'Сохранённое',
+      services: 'Услуги'
     },
     home: {
       documents: 'Документы',
@@ -168,7 +181,12 @@ export const translations = {
       about: 'О Easy UK',
       aboutDesc: 'Версия 1.0.0',
       feedback: 'Обратная связь',
-      feedbackDesc: 'Помогите нам улучшить приложение'
+      feedbackDesc: 'Помогите нам улучшить приложение',
+      businessMode: 'Бизнес режим',
+      businessModeDesc: 'Зарегистрируйте свою услугу'
+    },
+    services: {
+      noServices: 'Услуг на вашем языке пока нет'
     },
     messages: {
       savedItem: 'Сохранено!',
