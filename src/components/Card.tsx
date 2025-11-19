@@ -7,16 +7,17 @@ interface CardProps {
   description?: string;
   onClick?: () => void;
   className?: string;
+  children?: React.ReactNode;
 }
 
-export const Card = ({ icon, title, description, onClick, className }: CardProps) => {
+export const Card = ({ icon, title, description, onClick, className, children }: CardProps) => {
   return (
     <button
       onClick={onClick}
       className={cn(
         "w-full bg-card border border-border rounded-xl p-4 text-left",
         "hover:border-primary transition-all active:scale-95",
-        "flex items-center gap-3 shadow-sm",
+        "flex items-center gap-3 shadow-sm relative",
         className
       )}
     >
@@ -30,6 +31,7 @@ export const Card = ({ icon, title, description, onClick, className }: CardProps
         )}
       </div>
       <ChevronRight className="w-5 h-5 text-muted-foreground flex-shrink-0" />
+      {children}
     </button>
   );
 };
