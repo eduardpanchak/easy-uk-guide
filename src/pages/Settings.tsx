@@ -135,6 +135,13 @@ export default function Settings() {
           description={t('settings.feedbackDesc')}
           onClick={() => toast.success(t('messages.feedbackInfo'))}
         />
+
+        <Card
+          icon="💼"
+          title={t('settings.businessMode')}
+          description={t('settings.businessModeDesc')}
+          to="/business-registration"
+        />
       </div>
 
       <BottomNav />
