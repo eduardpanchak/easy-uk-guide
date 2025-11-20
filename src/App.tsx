@@ -6,7 +6,9 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AppProvider } from "@/contexts/AppContext";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { UserPreferencesProvider, useUserPreferences } from "@/contexts/UserPreferencesContext";
+import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 import Start from "./pages/Start";
+import Auth from "./pages/Auth";
 import Index from "./pages/Index";
 import Documents from "./pages/Documents";
 import DocumentDetails from "./pages/DocumentDetails";
@@ -28,15 +30,33 @@ import Search from "./pages/Search";
 import Settings from "./pages/Settings";
 import Services from "./pages/Services";
 import BusinessRegistration from "./pages/BusinessRegistration";
+import Account from "./pages/Account";
+import MyProfile from "./pages/MyProfile";
+import About from "./pages/About";
+import Feedback from "./pages/Feedback";
+import FAQ from "./pages/FAQ";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
 const ProtectedRoutes = () => {
   const { hasCompletedOnboarding } = useUserPreferences();
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
 
   if (!hasCompletedOnboarding) {
     return <Navigate to="/start" replace />;
+  }
+
+  if (!user) {
+    return <Navigate to="/auth" replace />;
   }
 
   return (
@@ -57,12 +77,17 @@ const ProtectedRoutes = () => {
       <Route path="/education" element={<Education />} />
       <Route path="/education/:id" element={<EducationDetails />} />
       <Route path="/community-services" element={<CommunityServices />} />
-          <Route path="/saved" element={<Saved />} />
-          <Route path="/search" element={<Search />} />
-          <Route path="/settings" element={<Settings />} />
-          <Route path="/services" element={<Services />} />
-          <Route path="/business-registration" element={<BusinessRegistration />} />
-          <Route path="*" element={<NotFound />} />
+      <Route path="/saved" element={<Saved />} />
+      <Route path="/search" element={<Search />} />
+      <Route path="/settings" element={<Settings />} />
+      <Route path="/services" element={<Services />} />
+      <Route path="/business-registration" element={<BusinessRegistration />} />
+      <Route path="/account" element={<Account />} />
+      <Route path="/my-profile" element={<MyProfile />} />
+      <Route path="/about" element={<About />} />
+      <Route path="/feedback" element={<Feedback />} />
+      <Route path="/faq" element={<FAQ />} />
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 };
@@ -71,18 +96,21 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <LanguageProvider>
       <UserPreferencesProvider>
-        <AppProvider>
-          <TooltipProvider>
-            <Toaster />
-            <Sonner />
-            <BrowserRouter>
-              <Routes>
-                <Route path="/start" element={<Start />} />
-                <Route path="*" element={<ProtectedRoutes />} />
-              </Routes>
-            </BrowserRouter>
-          </TooltipProvider>
-        </AppProvider>
+        <AuthProvider>
+          <AppProvider>
+            <TooltipProvider>
+              <Toaster />
+              <Sonner />
+              <BrowserRouter>
+                <Routes>
+                  <Route path="/start" element={<Start />} />
+                  <Route path="/auth" element={<Auth />} />
+                  <Route path="*" element={<ProtectedRoutes />} />
+                </Routes>
+              </BrowserRouter>
+            </TooltipProvider>
+          </AppProvider>
+        </AuthProvider>
       </UserPreferencesProvider>
     </LanguageProvider>
   </QueryClientProvider>
