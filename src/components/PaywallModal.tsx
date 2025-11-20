@@ -7,6 +7,8 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Crown } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { useNavigate } from "react-router-dom";
 
 interface PaywallModalProps {
   isOpen: boolean;
@@ -14,6 +16,14 @@ interface PaywallModalProps {
 }
 
 export const PaywallModal = ({ isOpen, onClose }: PaywallModalProps) => {
+  const { t } = useLanguage();
+  const navigate = useNavigate();
+
+  const handleUpgrade = () => {
+    navigate('/auth');
+    onClose();
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-sm">
@@ -23,20 +33,20 @@ export const PaywallModal = ({ isOpen, onClose }: PaywallModalProps) => {
               <Crown className="w-8 h-8 text-primary" />
             </div>
           </div>
-          <DialogTitle className="text-center">Unlock this section</DialogTitle>
+          <DialogTitle className="text-center">{t('unlockSection')}</DialogTitle>
           <DialogDescription className="text-center pt-2">
-            Get full access to advanced guides including Jobs, Housing, Benefits, and Education.
+            {t('proDescription')}
           </DialogDescription>
         </DialogHeader>
         
         <div className="space-y-4 pt-4">
           <div className="bg-primary/5 border border-primary/20 rounded-lg p-4 text-center">
             <div className="text-2xl font-bold text-primary">£9.99</div>
-            <div className="text-sm text-muted-foreground">per year</div>
+            <div className="text-sm text-muted-foreground">{t('perYear')}</div>
           </div>
 
-          <Button className="w-full" size="lg">
-            Upgrade to Pro
+          <Button className="w-full" size="lg" onClick={handleUpgrade}>
+            {t('upgradeToPro')}
           </Button>
 
           <Button 
@@ -44,7 +54,7 @@ export const PaywallModal = ({ isOpen, onClose }: PaywallModalProps) => {
             className="w-full" 
             onClick={onClose}
           >
-            Maybe later
+            {t('maybeLater')}
           </Button>
         </div>
       </DialogContent>

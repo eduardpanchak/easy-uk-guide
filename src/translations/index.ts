@@ -9,7 +9,8 @@ export const translations = {
       home: 'Home',
       checklists: 'Checklists',
       saved: 'Saved',
-      services: 'Services'
+      services: 'Services',
+      account: 'Account'
     },
     home: {
       documents: 'Documents',
@@ -63,7 +64,12 @@ export const translations = {
       removedSaved: 'Removed from saved',
       languageInfo: 'Language: English',
       aboutInfo: 'A simple assistant for migrants living in the UK',
-      feedbackInfo: 'Thank you for your interest! Feedback feature coming soon.'
+      feedbackInfo: 'Thank you for your interest! Feedback feature coming soon.',
+      unlockSection: 'Unlock this section',
+      proDescription: 'Get full access to advanced guides including Jobs, Housing, Benefits, and Education.',
+      perYear: 'per year',
+      upgradeToPro: 'Upgrade to Pro',
+      maybeLater: 'Maybe later'
     }
   },
   uk: {
@@ -74,7 +80,8 @@ export const translations = {
       home: 'Головна',
       checklists: 'Списки',
       saved: 'Збережене',
-      services: 'Послуги'
+      services: 'Послуги',
+      account: 'Акаунт'
     },
     home: {
       documents: 'Документи',
@@ -128,7 +135,12 @@ export const translations = {
       removedSaved: 'Видалено зі збереженого',
       languageInfo: 'Мова: Українська',
       aboutInfo: 'Простий помічник для мігрантів у Великобританії',
-      feedbackInfo: 'Дякуємо за інтерес! Функція зворотного зв\'язку скоро з\'явиться.'
+      feedbackInfo: 'Дякуємо за інтерес! Функція зворотного зв\'язку скоро з\'явиться.',
+      unlockSection: 'Розблокувати цей розділ',
+      proDescription: 'Отримайте повний доступ до розширених посібників, включаючи Роботу, Житло, Допомогу та Освіту.',
+      perYear: 'на рік',
+      upgradeToPro: 'Оновити до Pro',
+      maybeLater: 'Можливо пізніше'
     }
   },
   ru: {
@@ -139,7 +151,8 @@ export const translations = {
       home: 'Главная',
       checklists: 'Списки',
       saved: 'Сохранённое',
-      services: 'Услуги'
+      services: 'Услуги',
+      account: 'Аккаунт'
     },
     home: {
       documents: 'Документы',
@@ -193,7 +206,12 @@ export const translations = {
       removedSaved: 'Удалено из сохранённого',
       languageInfo: 'Язык: Русский',
       aboutInfo: 'Простой помощник для мигрантов в Великобритании',
-      feedbackInfo: 'Спасибо за интерес! Функция обратной связи скоро появится.'
+      feedbackInfo: 'Спасибо за интерес! Функция обратной связи скоро появится.',
+      unlockSection: 'Разблокировать этот раздел',
+      proDescription: 'Получите полный доступ к расширенным руководствам, включая Работу, Жилье, Пособия и Образование.',
+      perYear: 'в год',
+      upgradeToPro: 'Обновить до Pro',
+      maybeLater: 'Может быть позже'
     }
   }
 };

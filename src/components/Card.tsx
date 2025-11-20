@@ -1,9 +1,9 @@
-import { ChevronRight } from 'lucide-react';
+import { ChevronRight, LucideIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useNavigate } from 'react-router-dom';
 
 interface CardProps {
-  icon?: string;
+  icon?: string | LucideIcon;
   title: string;
   description?: string;
   onClick?: () => void;
@@ -34,7 +34,12 @@ export const Card = ({ icon, title, description, onClick, className, children, t
       )}
     >
       {icon && (
-        <div className="text-3xl flex-shrink-0">{icon}</div>
+        <div className="text-3xl flex-shrink-0">
+          {typeof icon === 'string' ? icon : (() => {
+            const IconComponent = icon;
+            return <IconComponent className="h-6 w-6" />;
+          })()}
+        </div>
       )}
       <div className="flex-1 min-w-0">
         <h3 className="font-semibold text-foreground">{title}</h3>
