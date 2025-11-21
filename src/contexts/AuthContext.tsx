@@ -13,10 +13,17 @@ interface Profile {
   location: string | null;
 }
 
+interface Subscription {
+  status: 'free' | 'pro';
+  subscription_end: string | null;
+  subscribed: boolean;
+}
+
 interface AuthContextType {
   user: User | null;
   session: Session | null;
   profile: Profile | null;
+  subscription: Subscription | null;
   loading: boolean;
   signUp: (email: string, password: string, name: string) => Promise<{ error: any }>;
   signIn: (email: string, password: string) => Promise<{ error: any }>;
@@ -27,6 +34,7 @@ interface AuthContextType {
   updateProfile: (updates: Partial<Profile>) => Promise<{ error: any }>;
   uploadAvatar: (file: File) => Promise<{ url: string | null; error: any }>;
   refreshProfile: () => Promise<void>;
+  checkSubscription: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -35,6 +43,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
+  const [subscription, setSubscription] = useState<Subscription | null>(null);
   const [loading, setLoading] = useState(true);
 
   const fetchProfile = async (userId: string) => {
@@ -52,6 +61,25 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  const checkSubscription = async () => {
+    try {
+      const { data, error } = await supabase.functions.invoke('check-subscription');
+      
+      if (error) throw error;
+      
+      if (data) {
+        setSubscription({
+          status: data.status || 'free',
+          subscription_end: data.subscription_end || null,
+          subscribed: data.subscribed || false,
+        });
+      }
+    } catch (error) {
+      console.error('Error checking subscription:', error);
+      setSubscription({ status: 'free', subscription_end: null, subscribed: false });
+    }
+  };
+
   useEffect(() => {
     // Set up auth state listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
@@ -60,12 +88,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setUser(session?.user ?? null);
         
         if (session?.user) {
-          // Defer profile fetching to avoid blocking auth state update
+          // Defer profile and subscription fetching to avoid blocking auth state update
           setTimeout(() => {
             fetchProfile(session.user.id);
+            checkSubscription();
           }, 0);
         } else {
           setProfile(null);
+          setSubscription(null);
         }
         
         setLoading(false);
@@ -79,6 +109,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       
       if (session?.user) {
         fetchProfile(session.user.id);
+        checkSubscription();
       }
       setLoading(false);
     });
@@ -143,6 +174,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const signOut = async () => {
     await supabase.auth.signOut();
     setProfile(null);
+    setSubscription(null);
     toast.success('Signed out successfully');
   };
 
@@ -207,6 +239,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         user,
         session,
         profile,
+        subscription,
         loading,
         signUp,
         signIn,
@@ -217,6 +250,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         updateProfile,
         uploadAvatar,
         refreshProfile,
+        checkSubscription,
       }}
     >
       {children}

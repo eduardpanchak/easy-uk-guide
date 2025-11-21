@@ -6,9 +6,13 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Crown } from "lucide-react";
+import { Crown, Loader2 } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
+import { useState } from "react";
 
 interface PaywallModalProps {
   isOpen: boolean;
@@ -18,10 +22,32 @@ interface PaywallModalProps {
 export const PaywallModal = ({ isOpen, onClose }: PaywallModalProps) => {
   const { t } = useLanguage();
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const [loading, setLoading] = useState(false);
 
-  const handleUpgrade = () => {
-    navigate('/auth');
-    onClose();
+  const handleUpgrade = async () => {
+    if (!user) {
+      navigate('/auth');
+      onClose();
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('create-checkout');
+      
+      if (error) throw error;
+      
+      if (data?.url) {
+        window.open(data.url, '_blank');
+        onClose();
+      }
+    } catch (error) {
+      console.error('Error creating checkout:', error);
+      toast.error('Failed to start checkout. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -45,7 +71,8 @@ export const PaywallModal = ({ isOpen, onClose }: PaywallModalProps) => {
             <div className="text-sm text-muted-foreground">{t('perYear')}</div>
           </div>
 
-          <Button className="w-full" size="lg" onClick={handleUpgrade}>
+          <Button className="w-full" size="lg" onClick={handleUpgrade} disabled={loading}>
+            {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             {t('upgradeToPro')}
           </Button>
 
