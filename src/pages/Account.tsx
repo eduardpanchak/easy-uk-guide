@@ -3,13 +3,33 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Header } from '@/components/Header';
 import { BottomNav } from '@/components/BottomNav';
 import { Card } from '@/components/Card';
-import { ChevronRight, User, Briefcase, Info, MessageSquare, HelpCircle, LogOut } from 'lucide-react';
+import { ChevronRight, User, Briefcase, Info, MessageSquare, HelpCircle, LogOut, Crown, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
+import { useState, useEffect } from 'react';
 
 export default function Account() {
   const navigate = useNavigate();
-  const { profile, user, signOut } = useAuth();
+  const { profile, user, subscription, checkSubscription, signOut } = useAuth();
+  const [loading, setLoading] = useState(false);
+  const [portalLoading, setPortalLoading] = useState(false);
+
+  useEffect(() => {
+    // Check for success/cancel params
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('success') === 'true') {
+      toast.success('Subscription activated successfully!');
+      checkSubscription();
+      // Clean up URL
+      window.history.replaceState({}, '', '/account');
+    } else if (params.get('canceled') === 'true') {
+      toast.info('Checkout canceled');
+      // Clean up URL
+      window.history.replaceState({}, '', '/account');
+    }
+  }, [checkSubscription]);
 
   const getInitials = () => {
     if (profile?.name) {
@@ -26,6 +46,42 @@ export default function Account() {
   const handleSignOut = async () => {
     await signOut();
     navigate('/auth');
+  };
+
+  const handleUpgrade = async () => {
+    setLoading(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('create-checkout');
+      
+      if (error) throw error;
+      
+      if (data?.url) {
+        window.open(data.url, '_blank');
+      }
+    } catch (error) {
+      console.error('Error creating checkout:', error);
+      toast.error('Failed to start checkout. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleManageSubscription = async () => {
+    setPortalLoading(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('customer-portal');
+      
+      if (error) throw error;
+      
+      if (data?.url) {
+        window.open(data.url, '_blank');
+      }
+    } catch (error) {
+      console.error('Error opening customer portal:', error);
+      toast.error('Failed to open subscription management. Please try again.');
+    } finally {
+      setPortalLoading(false);
+    }
   };
 
   if (!user) {
@@ -47,6 +103,52 @@ export default function Account() {
           <div className="flex-1">
             <h2 className="text-lg font-semibold">{profile?.name || 'User'}</h2>
             <p className="text-sm text-muted-foreground">{profile?.email}</p>
+          </div>
+        </div>
+
+        <div className="space-y-2">
+          <h3 className="text-sm font-medium text-muted-foreground px-4">Subscription</h3>
+          
+          <div className="bg-card rounded-lg p-4">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-3">
+                <Crown className={`w-5 h-5 ${subscription?.subscribed ? 'text-primary' : 'text-muted-foreground'}`} />
+                <div>
+                  <span className="font-medium block">Subscription Status</span>
+                  <span className={`text-sm ${subscription?.subscribed ? 'text-primary' : 'text-muted-foreground'}`}>
+                    {subscription?.subscribed ? 'Pro' : 'Free'}
+                  </span>
+                </div>
+              </div>
+            </div>
+            
+            {subscription?.subscribed ? (
+              <div className="space-y-3">
+                {subscription.subscription_end && (
+                  <p className="text-sm text-muted-foreground">
+                    Renews on {new Date(subscription.subscription_end).toLocaleDateString()}
+                  </p>
+                )}
+                <Button 
+                  variant="outline" 
+                  className="w-full"
+                  onClick={handleManageSubscription}
+                  disabled={portalLoading}
+                >
+                  {portalLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                  Manage Subscription
+                </Button>
+              </div>
+            ) : (
+              <Button 
+                className="w-full" 
+                onClick={handleUpgrade}
+                disabled={loading}
+              >
+                {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                Upgrade to Pro - £9.99/year
+              </Button>
+            )}
           </div>
         </div>
 
