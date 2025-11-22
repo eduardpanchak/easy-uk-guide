@@ -39,7 +39,8 @@ export const translations = {
       startTyping: 'Start typing to search',
       noResults: 'No results found for',
       results: 'result',
-      results_plural: 'results'
+      results_plural: 'results',
+      loading: 'Loading...'
     },
     saved: {
       title: 'Saved',
@@ -58,6 +59,17 @@ export const translations = {
     },
     services: {
       noServices: 'No services available in your language yet'
+    },
+    serviceDetails: {
+      description: 'Description',
+      contactProvider: 'Contact Provider',
+      visitWebsite: 'Visit Website',
+      callProvider: 'Call Provider',
+      emailProvider: 'Email Provider',
+      messageProvider: 'Message Provider',
+      messagingInDevelopment: 'Messaging feature is under development',
+      fetchError: 'Failed to load service',
+      notFound: 'Service not found'
     },
     account: {
       title: 'Account',
@@ -235,7 +247,8 @@ export const translations = {
       startTyping: 'Почніть вводити текст для пошуку',
       noResults: 'Нічого не знайдено для',
       results: 'результат',
-      results_plural: 'результатів'
+      results_plural: 'результатів',
+      loading: 'Завантаження...'
     },
     saved: {
       title: 'Збережене',
@@ -254,6 +267,17 @@ export const translations = {
     },
     services: {
       noServices: 'Послуг вашою мовою поки немає'
+    },
+    serviceDetails: {
+      description: 'Опис',
+      contactProvider: 'Контакти постачальника',
+      visitWebsite: 'Відвідати сайт',
+      callProvider: 'Зателефонувати',
+      emailProvider: 'Написати email',
+      messageProvider: 'Відправити повідомлення',
+      messagingInDevelopment: 'Функція обміну повідомленнями в розробці',
+      fetchError: 'Не вдалося завантажити послугу',
+      notFound: 'Послугу не знайдено'
     },
     account: {
       title: 'Акаунт',
@@ -431,7 +455,8 @@ export const translations = {
       startTyping: 'Начните вводить текст для поиска',
       noResults: 'Ничего не найдено для',
       results: 'результат',
-      results_plural: 'результатов'
+      results_plural: 'результатов',
+      loading: 'Загрузка...'
     },
     saved: {
       title: 'Сохранённое',
@@ -450,6 +475,17 @@ export const translations = {
     },
     services: {
       noServices: 'Услуг на вашем языке пока нет'
+    },
+    serviceDetails: {
+      description: 'Описание',
+      contactProvider: 'Контакты поставщика',
+      visitWebsite: 'Посетить сайт',
+      callProvider: 'Позвонить',
+      emailProvider: 'Написать email',
+      messageProvider: 'Отправить сообщение',
+      messagingInDevelopment: 'Функция обмена сообщениями в разработке',
+      fetchError: 'Не удалось загрузить услугу',
+      notFound: 'Услуга не найдена'
     },
     account: {
       title: 'Аккаунт',
@@ -627,7 +663,8 @@ export const translations = {
       startTyping: 'Zacznij pisać, aby wyszukać',
       noResults: 'Nie znaleziono wyników dla',
       results: 'wynik',
-      results_plural: 'wyników'
+      results_plural: 'wyników',
+      loading: 'Ładowanie...'
     },
     saved: {
       title: 'Zapisane',
@@ -646,6 +683,17 @@ export const translations = {
     },
     services: {
       noServices: 'Brak usług w Twoim języku'
+    },
+    serviceDetails: {
+      description: 'Opis',
+      contactProvider: 'Kontakt z dostawcą',
+      visitWebsite: 'Odwiedź stronę',
+      callProvider: 'Zadzwoń',
+      emailProvider: 'Wyślij email',
+      messageProvider: 'Wyślij wiadomość',
+      messagingInDevelopment: 'Funkcja wiadomości jest w trakcie rozwoju',
+      fetchError: 'Nie udało się załadować usługi',
+      notFound: 'Usługa nie znaleziona'
     },
     account: {
       title: 'Konto',
@@ -823,7 +871,8 @@ export const translations = {
       startTyping: 'Pradėkite rašyti, kad ieškotumėte',
       noResults: 'Nerasta rezultatų',
       results: 'rezultatas',
-      results_plural: 'rezultatų'
+      results_plural: 'rezultatų',
+      loading: 'Kraunama...'
     },
     saved: {
       title: 'Išsaugota',
@@ -842,6 +891,17 @@ export const translations = {
     },
     services: {
       noServices: 'Jūsų kalba paslaugų nėra'
+    },
+    serviceDetails: {
+      description: 'Aprašymas',
+      contactProvider: 'Susisiekti su teikėju',
+      visitWebsite: 'Apsilankyti svetainėje',
+      callProvider: 'Paskambinti',
+      emailProvider: 'Rašyti el. paštu',
+      messageProvider: 'Siųsti žinutę',
+      messagingInDevelopment: 'Pranešimų funkcija kuriama',
+      fetchError: 'Nepavyko įkelti paslaugos',
+      notFound: 'Paslauga nerasta'
     },
     account: {
       title: 'Paskyra',
