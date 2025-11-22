@@ -14,6 +14,7 @@ export default function Saved() {
       case 'document': return '📄';
       case 'nhs': return '🏥';
       case 'checklist': return '✅';
+      case 'service': return '💼';
       default: return '📌';
     }
   };
@@ -25,6 +26,9 @@ export default function Saved() {
       navigate(`/nhs/${item.id}`);
     } else if (item.type === 'checklist') {
       navigate(`/checklists/${item.id}`);
+    } else if (item.type === 'service') {
+      // Future: navigate to service details
+      console.log('Service clicked:', item.id);
     }
   };
 

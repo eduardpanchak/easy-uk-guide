@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Header } from '@/components/Header';
 import { BottomNav } from '@/components/BottomNav';
-import { Card } from '@/components/Card';
+import { ServiceCard } from '@/components/ServiceCard';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { supabase } from '@/integrations/supabase/client';
 import { Loader2 } from 'lucide-react';
@@ -67,11 +67,14 @@ export default function Services() {
           </div>
         ) : (
           services.map((service) => (
-            <Card
+            <ServiceCard
               key={service.id}
-              icon="briefcase"
-              title={service.service_name}
-              description={`${service.category} • ${service.pricing || 'Contact for price'}`}
+              id={service.id}
+              name={service.service_name}
+              description={service.description}
+              category={service.category}
+              pricing={service.pricing}
+              photo={service.photos?.[0] || null}
               onClick={() => {
                 // Future: navigate to service details
                 console.log('Service clicked:', service.id);
