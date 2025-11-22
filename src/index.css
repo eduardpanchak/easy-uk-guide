@@ -51,4 +51,13 @@ All colors MUST be HSL.
   body {
     @apply bg-background text-foreground;
   }
+
+  @keyframes slide-up {
+    from {
+      transform: translateY(20px);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
 }
