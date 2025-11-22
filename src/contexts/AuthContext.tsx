@@ -11,6 +11,7 @@ interface Profile {
   avatar_url: string | null;
   phone: string | null;
   location: string | null;
+  is_business_user?: boolean;
 }
 
 interface Subscription {

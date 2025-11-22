@@ -7,9 +7,12 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
 import { toast } from 'sonner';
+import { useAuth } from '@/contexts/AuthContext';
+import { supabase } from '@/integrations/supabase/client';
 
 export default function BusinessRegistration() {
   const navigate = useNavigate();
+  const { user, refreshProfile } = useAuth();
   const [formData, setFormData] = useState({
     serviceName: '',
     category: '',
@@ -48,23 +51,44 @@ export default function BusinessRegistration() {
     );
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!formData.serviceName || !formData.category || selectedLanguages.length === 0) {
       toast.error('Please fill in all required fields');
       return;
     }
 
-    // Mock payment flow
-    const price = formData.planType === 'top' ? '£4.99' : '£1.99';
-    toast.success(`Service registered! Payment of ${price}/month required.`);
-    
-    // In a real app, this would integrate with Stripe
-    console.log('Business registration:', {
-      ...formData,
-      languages: selectedLanguages
-    });
-    
-    navigate('/services');
+    if (!user) {
+      toast.error('You must be logged in to register a business');
+      return;
+    }
+
+    try {
+      // Mark user as business user
+      const { error: updateError } = await supabase
+        .from('profiles')
+        .update({ is_business_user: true } as any)
+        .eq('id', user.id);
+
+      if (updateError) throw updateError;
+
+      // Refresh profile to get updated is_business_user status
+      await refreshProfile();
+
+      // Mock payment flow
+      const price = formData.planType === 'top' ? '£4.99' : '£1.99';
+      toast.success(`Service registered! Payment of ${price}/month required.`);
+      
+      // In a real app, this would integrate with Stripe
+      console.log('Business registration:', {
+        ...formData,
+        languages: selectedLanguages
+      });
+      
+      navigate('/services');
+    } catch (error) {
+      console.error('Error registering business:', error);
+      toast.error('Failed to register business. Please try again.');
+    }
   };
 
   return (
