@@ -23,6 +23,7 @@ export default function AddService() {
     website: '',
     phone: '',
     email: '',
+    subscriptionTier: 'standard' as 'standard' | 'top', // Default to standard
   });
   const [photos, setPhotos] = useState<File[]>([]);
 
@@ -106,7 +107,7 @@ export default function AddService() {
           status: 'trial', // Start with 14-day trial
           trial_start: trialStart.toISOString(),
           trial_end: trialEnd.toISOString(),
-          subscription_tier: 'standard', // Default tier
+          subscription_tier: formData.subscriptionTier,
           category: 'general', // Default category
           languages: ['en'], // Default language
         });
@@ -172,6 +173,50 @@ export default function AddService() {
             rows={4}
             required
           />
+        </div>
+
+        {/* Subscription Tier */}
+        <div className="space-y-3">
+          <Label className="text-sm font-medium">
+            {t('addService.subscriptionTier')} <span className="text-destructive">*</span>
+          </Label>
+          <p className="text-sm text-muted-foreground">{t('addService.tierDescription')}</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            {/* Standard Tier */}
+            <button
+              type="button"
+              onClick={() => setFormData(prev => ({ ...prev, subscriptionTier: 'standard' }))}
+              className={`p-4 border-2 rounded-lg transition-all ${
+                formData.subscriptionTier === 'standard'
+                  ? 'border-primary bg-primary/5'
+                  : 'border-border hover:border-primary/50'
+              }`}
+            >
+              <div className="text-left">
+                <div className="font-semibold text-lg">{t('addService.standardTier')}</div>
+                <div className="text-2xl font-bold text-primary my-2">£1.99<span className="text-sm font-normal text-muted-foreground">/month</span></div>
+                <div className="text-sm text-muted-foreground">{t('addService.standardFeatures')}</div>
+              </div>
+            </button>
+
+            {/* Top Tier */}
+            <button
+              type="button"
+              onClick={() => setFormData(prev => ({ ...prev, subscriptionTier: 'top' }))}
+              className={`p-4 border-2 rounded-lg transition-all ${
+                formData.subscriptionTier === 'top'
+                  ? 'border-primary bg-primary/5'
+                  : 'border-border hover:border-primary/50'
+              }`}
+            >
+              <div className="text-left">
+                <div className="font-semibold text-lg">{t('addService.topTier')}</div>
+                <div className="text-2xl font-bold text-primary my-2">£4.99<span className="text-sm font-normal text-muted-foreground">/month</span></div>
+                <div className="text-sm text-muted-foreground">{t('addService.topFeatures')}</div>
+              </div>
+            </button>
+          </div>
+          <p className="text-xs text-muted-foreground italic">{t('addService.trialNote')}</p>
         </div>
 
         {/* Address */}
