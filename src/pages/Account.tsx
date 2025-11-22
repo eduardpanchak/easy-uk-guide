@@ -190,16 +190,18 @@ export default function Account() {
           />
         </div>
 
-        <div className="space-y-2">
-          <h3 className="text-sm font-medium text-muted-foreground px-4">{t('account.business')}</h3>
-          
-          <Card
-            title={t('account.businessAccount')}
-            description={t('account.manageBusinessProfile')}
-            icon={Briefcase}
-            onClick={() => navigate('/business-registration')}
-          />
-        </div>
+        {profile?.is_business_user && (
+          <div className="space-y-2">
+            <h3 className="text-sm font-medium text-muted-foreground px-4">{t('account.business')}</h3>
+            
+            <Card
+              title={t('account.businessAccount')}
+              description={t('account.manageBusinessProfile')}
+              icon={Briefcase}
+              onClick={() => navigate('/business-registration')}
+            />
+          </div>
+        )}
 
         <div className="space-y-2">
           <h3 className="text-sm font-medium text-muted-foreground px-4">{t('account.support')}</h3>
