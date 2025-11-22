@@ -1,4 +1,4 @@
-import { ChevronRight, LucideIcon } from 'lucide-react';
+import { ChevronRight, LucideIcon, Lock } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useNavigate } from 'react-router-dom';
 
@@ -10,9 +10,10 @@ interface CardProps {
   className?: string;
   children?: React.ReactNode;
   to?: string;
+  locked?: boolean;
 }
 
-export const Card = ({ icon, title, description, onClick, className, children, to }: CardProps) => {
+export const Card = ({ icon, title, description, onClick, className, children, to, locked = false }: CardProps) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
@@ -30,6 +31,7 @@ export const Card = ({ icon, title, description, onClick, className, children, t
         "w-full bg-card border border-border rounded-xl p-4 text-left",
         "hover:border-primary transition-all active:scale-95",
         "flex items-center gap-3 shadow-sm relative",
+        locked && "opacity-60",
         className
       )}
     >
@@ -47,7 +49,11 @@ export const Card = ({ icon, title, description, onClick, className, children, t
           <p className="text-sm text-muted-foreground mt-0.5 line-clamp-1">{description}</p>
         )}
       </div>
-      <ChevronRight className="w-5 h-5 text-muted-foreground flex-shrink-0" />
+      {locked ? (
+        <Lock className="w-5 h-5 text-muted-foreground flex-shrink-0" />
+      ) : (
+        <ChevronRight className="w-5 h-5 text-muted-foreground flex-shrink-0" />
+      )}
       {children}
     </button>
   );

@@ -1,4 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { useAuth } from './AuthContext';
+import { supabase } from '@/integrations/supabase/client';
 
 export type Nationality = 
   | 'ukrainian' | 'russian' | 'polish' | 'lithuanian' | 'latvian' 
@@ -16,9 +18,10 @@ interface UserPreferencesContextType {
 const UserPreferencesContext = createContext<UserPreferencesContextType | undefined>(undefined);
 
 export const UserPreferencesProvider = ({ children }: { children: ReactNode }) => {
+  const { user } = useAuth();
   const [nationality, setNationalityState] = useState<Nationality | null>(null);
   const [hasCompletedOnboarding, setHasCompletedOnboarding] = useState(false);
-  const isPro = false; // Always false - no payment logic
+  const [isPro, setIsPro] = useState(false);
 
   useEffect(() => {
     // Load from localStorage on mount
@@ -32,6 +35,31 @@ export const UserPreferencesProvider = ({ children }: { children: ReactNode }) =
       setHasCompletedOnboarding(true);
     }
   }, []);
+
+  useEffect(() => {
+    // Check PRO status from Supabase subscriptions
+    const checkProStatus = async () => {
+      if (!user) {
+        setIsPro(false);
+        return;
+      }
+
+      const { data, error } = await supabase
+        .from('subscriptions')
+        .select('status')
+        .eq('user_id', user.id)
+        .eq('status', 'active')
+        .single();
+
+      if (error || !data) {
+        setIsPro(false);
+      } else {
+        setIsPro(true);
+      }
+    };
+
+    checkProStatus();
+  }, [user]);
 
   const setNationality = (nationality: Nationality) => {
     setNationalityState(nationality);
