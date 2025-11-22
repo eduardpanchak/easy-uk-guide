@@ -38,6 +38,7 @@ import Statistics from "./pages/Statistics";
 import ClientMessaging from "./pages/ClientMessaging";
 import Account from "./pages/Account";
 import AccountTypeSelection from "./pages/AccountTypeSelection";
+import SelectAccountType from "./pages/SelectAccountType";
 import MyProfile from "./pages/MyProfile";
 import About from "./pages/About";
 import Feedback from "./pages/Feedback";
@@ -112,6 +113,7 @@ const App = () => (
               <BrowserRouter>
                 <Routes>
                   <Route path="/start" element={<Start />} />
+                  <Route path="/select-account-type" element={<SelectAccountType />} />
                   <Route path="/auth" element={<Auth />} />
                   <Route path="/account-type-selection" element={<AccountTypeSelection />} />
                   <Route path="*" element={<ProtectedRoutes />} />
