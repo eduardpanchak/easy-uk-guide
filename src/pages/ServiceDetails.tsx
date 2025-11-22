@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, ExternalLink, Phone, Mail, MessageCircle } from 'lucide-react';
+import { ArrowLeft, ExternalLink, Phone, Mail, MessageCircle, Heart } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { useApp } from '@/contexts/AppContext';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { BottomNav } from '@/components/BottomNav';
 import { toast } from 'sonner';
+import { cn } from '@/lib/utils';
 
 interface Service {
   id: string;
@@ -24,6 +26,7 @@ export default function ServiceDetails() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { t } = useLanguage();
+  const { toggleSaved, isSaved } = useApp();
   const [service, setService] = useState<Service | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -85,6 +88,19 @@ export default function ServiceDetails() {
     toast.info(t('serviceDetails.messagingInDevelopment'));
   };
 
+  const handleSaveToggle = () => {
+    if (service) {
+      toggleSaved({ id: service.id, type: 'service', title: service.service_name });
+      toast.success(
+        isSaved(service.id) 
+          ? t('serviceDetails.removedFromSaved') 
+          : t('serviceDetails.addedToSaved')
+      );
+    }
+  };
+
+  const saved = service ? isSaved(service.id) : false;
+
   if (loading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
@@ -115,7 +131,23 @@ export default function ServiceDetails() {
           >
             <ArrowLeft className="h-5 w-5" />
           </Button>
-          <h1 className="text-xl font-semibold line-clamp-1">{service.service_name}</h1>
+          <h1 className="text-xl font-semibold line-clamp-1 flex-1">{service.service_name}</h1>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={handleSaveToggle}
+            className="shrink-0"
+            aria-label={saved ? "Remove from saved" : "Add to saved"}
+          >
+            <Heart
+              className={cn(
+                "h-5 w-5 transition-all",
+                saved 
+                  ? "fill-red-500 text-red-500" 
+                  : "text-muted-foreground"
+              )}
+            />
+          </Button>
         </div>
       </header>
 

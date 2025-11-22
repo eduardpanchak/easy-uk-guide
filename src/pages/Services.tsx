@@ -15,6 +15,7 @@ interface Service {
   pricing: string | null;
   photos: string[] | null;
   languages: string[];
+  subscription_tier: string;
 }
 
 export default function Services() {
@@ -35,7 +36,7 @@ export default function Services() {
       // NO language or nationality filtering - shows ALL services
       const { data, error } = await supabase
         .from('services')
-        .select('id, service_name, description, category, pricing, photos, languages')
+        .select('id, service_name, description, category, pricing, photos, languages, subscription_tier')
         .in('status', ['active', 'trial'])
         .order('created_at', { ascending: false });
 
@@ -44,7 +45,16 @@ export default function Services() {
         return;
       }
 
-      setServices(data || []);
+      // Sort: Premium/Top services first, then others
+      const sortedData = (data || []).sort((a, b) => {
+        const aIsPremium = a.subscription_tier === 'top' || a.subscription_tier === 'premium';
+        const bIsPremium = b.subscription_tier === 'top' || b.subscription_tier === 'premium';
+        if (aIsPremium && !bIsPremium) return -1;
+        if (!aIsPremium && bIsPremium) return 1;
+        return 0;
+      });
+
+      setServices(sortedData);
     } catch (error) {
       console.error('Error fetching services:', error);
     } finally {
@@ -77,6 +87,7 @@ export default function Services() {
               category={service.category}
               pricing={service.pricing}
               photo={service.photos?.[0] || null}
+              subscriptionTier={service.subscription_tier}
               onClick={() => navigate(`/services/${service.id}`)}
             />
           ))

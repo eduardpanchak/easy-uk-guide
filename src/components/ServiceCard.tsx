@@ -9,6 +9,7 @@ interface ServiceCardProps {
   category: string;
   pricing: string | null;
   photo: string | null;
+  subscriptionTier?: string;
   onClick?: () => void;
 }
 
@@ -19,10 +20,12 @@ export const ServiceCard = ({
   category,
   pricing,
   photo,
+  subscriptionTier,
   onClick
 }: ServiceCardProps) => {
   const { toggleSaved, isSaved } = useApp();
   const saved = isSaved(id);
+  const isPremium = subscriptionTier === 'top' || subscriptionTier === 'premium';
 
   const handleFavoriteClick = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -33,9 +36,12 @@ export const ServiceCard = ({
     <button
       onClick={onClick}
       className={cn(
-        "w-full bg-card border border-border rounded-xl p-3 text-left",
+        "w-full bg-card rounded-xl p-3 text-left",
         "hover:border-primary transition-all active:scale-95",
-        "flex items-start gap-3 shadow-sm relative"
+        "flex items-start gap-3 shadow-sm relative",
+        isPremium 
+          ? "border-2 border-amber-500 shadow-lg shadow-amber-500/20" 
+          : "border border-border"
       )}
     >
       {/* Left side - Photo */}

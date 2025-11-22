@@ -69,7 +69,9 @@ export const translations = {
       messageProvider: 'Message Provider',
       messagingInDevelopment: 'Messaging feature is under development',
       fetchError: 'Failed to load service',
-      notFound: 'Service not found'
+      notFound: 'Service not found',
+      addedToSaved: 'Added to saved',
+      removedFromSaved: 'Removed from saved'
     },
     account: {
       title: 'Account',
@@ -282,7 +284,9 @@ export const translations = {
       messageProvider: 'Відправити повідомлення',
       messagingInDevelopment: 'Функція обміну повідомленнями в розробці',
       fetchError: 'Не вдалося завантажити послугу',
-      notFound: 'Послугу не знайдено'
+      notFound: 'Послугу не знайдено',
+      addedToSaved: 'Додано до збережених',
+      removedFromSaved: 'Видалено зі збережених'
     },
     account: {
       title: 'Акаунт',
@@ -495,7 +499,9 @@ export const translations = {
       messageProvider: 'Отправить сообщение',
       messagingInDevelopment: 'Функция обмена сообщениями в разработке',
       fetchError: 'Не удалось загрузить услугу',
-      notFound: 'Услуга не найдена'
+      notFound: 'Услуга не найдена',
+      addedToSaved: 'Добавлено в сохранённые',
+      removedFromSaved: 'Удалено из сохранённых'
     },
     account: {
       title: 'Аккаунт',
@@ -708,7 +714,9 @@ export const translations = {
       messageProvider: 'Wyślij wiadomość',
       messagingInDevelopment: 'Funkcja wiadomości jest w trakcie rozwoju',
       fetchError: 'Nie udało się załadować usługi',
-      notFound: 'Usługa nie znaleziona'
+      notFound: 'Usługa nie znaleziona',
+      addedToSaved: 'Dodano do zapisanych',
+      removedFromSaved: 'Usunięto z zapisanych'
     },
     account: {
       title: 'Konto',
@@ -921,7 +929,9 @@ export const translations = {
       messageProvider: 'Siųsti žinutę',
       messagingInDevelopment: 'Pranešimų funkcija kuriama',
       fetchError: 'Nepavyko įkelti paslaugos',
-      notFound: 'Paslauga nerasta'
+      notFound: 'Paslauga nerasta',
+      addedToSaved: 'Pridėta prie išsaugotų',
+      removedFromSaved: 'Pašalinta iš išsaugotų'
     },
     account: {
       title: 'Paskyra',
