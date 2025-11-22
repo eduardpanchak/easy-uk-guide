@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, ExternalLink, Phone, Mail, MessageCircle, Heart } from 'lucide-react';
+import { ArrowLeft, ExternalLink, Phone, Mail, Heart } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useApp } from '@/contexts/AppContext';
 import { supabase } from '@/integrations/supabase/client';
@@ -82,10 +82,6 @@ export default function ServiceDetails() {
     if (service?.email) {
       window.location.href = `mailto:${service.email}`;
     }
-  };
-
-  const handleMessage = () => {
-    toast.info(t('serviceDetails.messagingInDevelopment'));
   };
 
   const handleSaveToggle = async () => {
@@ -239,16 +235,6 @@ export default function ServiceDetails() {
                 {t('serviceDetails.emailProvider')}
               </Button>
             )}
-
-            <Button
-              onClick={handleMessage}
-              className="w-full"
-              size="lg"
-              variant="outline"
-            >
-              <MessageCircle className="h-5 w-5 mr-2" />
-              {t('serviceDetails.messageProvider')}
-            </Button>
           </div>
         </div>
       </div>
