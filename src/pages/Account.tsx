@@ -209,6 +209,13 @@ export default function Account() {
             />
             
             <Card
+              title="Statistics"
+              description="View performance metrics for your services"
+              icon={Briefcase}
+              onClick={() => navigate('/statistics')}
+            />
+            
+            <Card
               title={t('account.businessAccount')}
               description={t('account.manageBusinessProfile')}
               icon={Briefcase}
