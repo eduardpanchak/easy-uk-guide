@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Upload, ImagePlus } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { useAuth } from '@/contexts/AuthContext';
+import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -11,6 +13,8 @@ import { toast } from 'sonner';
 export default function AddService() {
   const navigate = useNavigate();
   const { t } = useLanguage();
+  const { user } = useAuth();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     serviceName: '',
     description: '',
@@ -39,7 +43,7 @@ export default function AddService() {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!formData.serviceName || !formData.description) {
@@ -47,10 +51,71 @@ export default function AddService() {
       return;
     }
 
-    // UI only - no database saving yet
-    console.log('Form data:', formData);
-    console.log('Photos:', photos);
-    toast.success('Service form completed! (Database saving not yet implemented)');
+    if (!user) {
+      toast.error('You must be logged in to add a service');
+      navigate('/auth');
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      // Upload photos to storage if any
+      const photoUrls: string[] = [];
+      
+      if (photos.length > 0) {
+        for (const photo of photos) {
+          const fileExt = photo.name.split('.').pop();
+          const fileName = `${user.id}/${Date.now()}-${Math.random()}.${fileExt}`;
+          
+          const { error: uploadError } = await supabase.storage
+            .from('avatars') // Using existing avatars bucket for now
+            .upload(fileName, photo);
+
+          if (uploadError) {
+            console.error('Photo upload error:', uploadError);
+            continue; // Skip failed uploads
+          }
+
+          const { data: urlData } = supabase.storage
+            .from('avatars')
+            .getPublicUrl(fileName);
+
+          photoUrls.push(urlData.publicUrl);
+        }
+      }
+
+      // Insert service into database
+      const { error: insertError } = await supabase
+        .from('services')
+        .insert({
+          user_id: user.id,
+          service_name: formData.serviceName,
+          description: formData.description,
+          address: formData.address || null,
+          pricing: formData.price || null,
+          social_links: formData.website ? { website: formData.website } : {},
+          phone: formData.phone || null,
+          email: formData.email || null,
+          photos: photoUrls.length > 0 ? photoUrls : null,
+          status: 'trial', // Start with 14-day trial
+          subscription_tier: 'standard', // Default tier
+          category: 'general', // Default category
+          languages: ['en'], // Default language
+        });
+
+      if (insertError) {
+        throw insertError;
+      }
+
+      toast.success('Service added successfully! Your 14-day trial has started.');
+      navigate('/account');
+    } catch (error) {
+      console.error('Error adding service:', error);
+      toast.error('Failed to add service. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -201,9 +266,9 @@ export default function AddService() {
         </div>
 
         {/* Submit Button */}
-        <Button type="submit" className="w-full" size="lg">
+        <Button type="submit" className="w-full" size="lg" disabled={isSubmitting}>
           <Upload className="h-5 w-5 mr-2" />
-          {t('addService.submit')}
+          {isSubmitting ? 'Submitting...' : t('addService.submit')}
         </Button>
       </form>
     </div>
