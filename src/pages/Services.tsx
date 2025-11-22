@@ -1,14 +1,54 @@
+import React, { useEffect, useState } from 'react';
 import { Header } from '@/components/Header';
 import { BottomNav } from '@/components/BottomNav';
 import { Card } from '@/components/Card';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { servicesData } from '@/data/servicesData';
+import { supabase } from '@/integrations/supabase/client';
+import { Loader2 } from 'lucide-react';
+
+interface Service {
+  id: string;
+  service_name: string;
+  description: string | null;
+  category: string;
+  pricing: string | null;
+  photos: string[] | null;
+  languages: string[];
+}
 
 export default function Services() {
   const { language, t } = useLanguage();
+  const [services, setServices] = useState<Service[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchServices();
+  }, []);
+
+  const fetchServices = async () => {
+    try {
+      setLoading(true);
+      const { data, error } = await supabase
+        .from('services')
+        .select('id, service_name, description, category, pricing, photos, languages')
+        .in('status', ['active', 'trial'])
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        console.error('Error fetching services:', error);
+        return;
+      }
+
+      setServices(data || []);
+    } catch (error) {
+      console.error('Error fetching services:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // Filter services by current app language
-  const filteredServices = servicesData.filter(
+  const filteredServices = services.filter(
     service => service.languages.includes(language)
   );
 
@@ -17,7 +57,11 @@ export default function Services() {
       <Header title={t('nav.services')} showBack />
       
       <div className="max-w-md mx-auto px-4 py-6 space-y-3">
-        {filteredServices.length === 0 ? (
+        {loading ? (
+          <div className="flex justify-center py-12">
+            <Loader2 className="h-8 w-8 animate-spin text-primary" />
+          </div>
+        ) : filteredServices.length === 0 ? (
           <div className="text-center py-12">
             <p className="text-muted-foreground">
               {t('services.noServices')}
@@ -27,8 +71,8 @@ export default function Services() {
           filteredServices.map((service) => (
             <Card
               key={service.id}
-              icon={service.icon}
-              title={service.name}
+              icon="briefcase"
+              title={service.service_name}
               description={`${service.category} • ${service.pricing || 'Contact for price'}`}
               onClick={() => {
                 // Future: navigate to service details
