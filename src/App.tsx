@@ -8,6 +8,7 @@ import { AppProvider } from "@/contexts/AppContext";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { UserPreferencesProvider, useUserPreferences } from "@/contexts/UserPreferencesContext";
 import { AuthProvider, useAuth } from "@/contexts/AuthContext";
+import Splash from "./pages/Splash";
 import Start from "./pages/Start";
 import Auth from "./pages/Auth";
 import Index from "./pages/Index";
@@ -54,7 +55,7 @@ const ProtectedRoutes = () => {
   }
 
   if (!hasCompletedOnboarding) {
-    return <Navigate to="/start" replace />;
+    return <Navigate to="/splash" replace />;
   }
 
   if (!user) {
@@ -106,6 +107,7 @@ const App = () => (
               <Sonner />
               <BrowserRouter>
                 <Routes>
+                  <Route path="/splash" element={<Splash />} />
                   <Route path="/start" element={<Start />} />
                   <Route path="/auth" element={<Auth />} />
                   <Route path="*" element={<ProtectedRoutes />} />

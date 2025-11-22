@@ -1,5 +1,6 @@
 import { Header } from '@/components/Header';
 import { BottomNav } from '@/components/BottomNav';
+import { useLanguage } from '@/contexts/LanguageContext';
 import {
   Accordion,
   AccordionContent,
@@ -8,6 +9,7 @@ import {
 } from '@/components/ui/accordion';
 
 export default function FAQ() {
+  const { t } = useLanguage();
   const faqs = [
     {
       question: 'What is EasyUK?',
@@ -41,11 +43,11 @@ export default function FAQ() {
 
   return (
     <div className="min-h-screen bg-background pb-20">
-      <Header title="FAQ" showBack />
+      <Header title={t('faq')} showBack />
 
       <div className="container max-w-2xl mx-auto p-4 space-y-6">
         <div className="text-center space-y-2">
-          <h2 className="text-2xl font-bold">Frequently Asked Questions</h2>
+          <h2 className="text-2xl font-bold">{t('faq')}</h2>
           <p className="text-muted-foreground">
             Find answers to common questions about EasyUK
           </p>
