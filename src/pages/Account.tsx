@@ -1,20 +1,29 @@
 import { useNavigate, Navigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { Header } from '@/components/Header';
 import { BottomNav } from '@/components/BottomNav';
 import { Card } from '@/components/Card';
-import { ChevronRight, User, Briefcase, Info, MessageSquare, HelpCircle, LogOut, Crown, Loader2 } from 'lucide-react';
+import { User, Briefcase, Info, MessageSquare, HelpCircle, LogOut, Crown, Loader2, Languages } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { useState, useEffect } from 'react';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 export default function Account() {
   const navigate = useNavigate();
   const { profile, user, subscription, checkSubscription, signOut } = useAuth();
+  const { language, setLanguage, t } = useLanguage();
   const [loading, setLoading] = useState(false);
   const [portalLoading, setPortalLoading] = useState(false);
+  const [languageDialogOpen, setLanguageDialogOpen] = useState(false);
 
   useEffect(() => {
     // Check for success/cancel params
@@ -84,13 +93,27 @@ export default function Account() {
     }
   };
 
+  const handleLanguageChange = (lang: 'en' | 'uk' | 'ru' | 'pl' | 'lt') => {
+    setLanguage(lang);
+    setLanguageDialogOpen(false);
+    toast.success(t('messages.savedItem'));
+  };
+
+  const languageOptions = [
+    { code: 'en' as const, label: 'English', flag: '🇬🇧' },
+    { code: 'uk' as const, label: 'Українська', flag: '🇺🇦' },
+    { code: 'ru' as const, label: 'Русский', flag: '🇷🇺' },
+    { code: 'pl' as const, label: 'Polski', flag: '🇵🇱' },
+    { code: 'lt' as const, label: 'Lietuvių', flag: '🇱🇹' },
+  ];
+
   if (!user) {
     return <Navigate to="/auth" state={{ returnTo: '/account' }} replace />;
   }
 
   return (
     <div className="min-h-screen bg-background pb-20">
-      <Header title="Account" />
+      <Header title={t('account.title')} />
 
       <div className="container mx-auto p-4 space-y-6">
         <div className="flex items-center space-x-4 p-4 bg-card rounded-lg">
@@ -106,16 +129,16 @@ export default function Account() {
         </div>
 
         <div className="space-y-2">
-          <h3 className="text-sm font-medium text-muted-foreground px-4">Subscription</h3>
+          <h3 className="text-sm font-medium text-muted-foreground px-4">{t('account.subscription')}</h3>
           
           <div className="bg-card rounded-lg p-4">
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-3">
                 <Crown className={`w-5 h-5 ${subscription?.subscribed ? 'text-primary' : 'text-muted-foreground'}`} />
                 <div>
-                  <span className="font-medium block">Subscription Status</span>
+                  <span className="font-medium block">{t('account.subscriptionStatus')}</span>
                   <span className={`text-sm ${subscription?.subscribed ? 'text-primary' : 'text-muted-foreground'}`}>
-                    {subscription?.subscribed ? 'Pro' : 'Free'}
+                    {subscription?.subscribed ? t('account.pro') : t('account.free')}
                   </span>
                 </div>
               </div>
@@ -125,7 +148,7 @@ export default function Account() {
               <div className="space-y-3">
                 {subscription.subscription_end && (
                   <p className="text-sm text-muted-foreground">
-                    Renews on {new Date(subscription.subscription_end).toLocaleDateString()}
+                    {t('account.renewsOn')} {new Date(subscription.subscription_end).toLocaleDateString()}
                   </p>
                 )}
                 <Button 
@@ -135,7 +158,7 @@ export default function Account() {
                   disabled={portalLoading}
                 >
                   {portalLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                  Manage Subscription
+                  {t('account.manageSubscription')}
                 </Button>
               </div>
             ) : (
@@ -145,63 +168,59 @@ export default function Account() {
                 disabled={loading}
               >
                 {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                Upgrade to Pro - £9.99/year
+                {t('account.upgradeToPro')}
               </Button>
             )}
           </div>
         </div>
 
         <div className="space-y-2">
-          <h3 className="text-sm font-medium text-muted-foreground px-4">Profile</h3>
+          <h3 className="text-sm font-medium text-muted-foreground px-4">{t('account.profile')}</h3>
           
           <Card
-            title="My Profile"
+            title={t('account.myProfile')}
             icon={User}
             onClick={() => navigate('/my-profile')}
-          >
-            <ChevronRight className="h-5 w-5 text-muted-foreground" />
-          </Card>
+          />
+
+          <Card
+            title={t('account.changeLanguage')}
+            icon={Languages}
+            onClick={() => setLanguageDialogOpen(true)}
+          />
         </div>
 
         <div className="space-y-2">
-          <h3 className="text-sm font-medium text-muted-foreground px-4">Business</h3>
+          <h3 className="text-sm font-medium text-muted-foreground px-4">{t('account.business')}</h3>
           
           <Card
-            title="Business Account"
-            description="Manage your business profile"
+            title={t('account.businessAccount')}
+            description={t('account.manageBusinessProfile')}
             icon={Briefcase}
             onClick={() => navigate('/business-registration')}
-          >
-            <ChevronRight className="h-5 w-5 text-muted-foreground" />
-          </Card>
+          />
         </div>
 
         <div className="space-y-2">
-          <h3 className="text-sm font-medium text-muted-foreground px-4">Support</h3>
+          <h3 className="text-sm font-medium text-muted-foreground px-4">{t('account.support')}</h3>
           
           <Card
-            title="About EasyUK"
+            title={t('account.aboutEasyUK')}
             icon={Info}
             onClick={() => navigate('/about')}
-          >
-            <ChevronRight className="h-5 w-5 text-muted-foreground" />
-          </Card>
+          />
 
           <Card
-            title="Feedback"
+            title={t('account.feedback')}
             icon={MessageSquare}
             onClick={() => navigate('/feedback')}
-          >
-            <ChevronRight className="h-5 w-5 text-muted-foreground" />
-          </Card>
+          />
 
           <Card
-            title="FAQ"
+            title={t('account.faq')}
             icon={HelpCircle}
             onClick={() => navigate('/faq')}
-          >
-            <ChevronRight className="h-5 w-5 text-muted-foreground" />
-          </Card>
+          />
         </div>
 
         <div className="pt-4">
@@ -211,10 +230,34 @@ export default function Account() {
             onClick={handleSignOut}
           >
             <LogOut className="mr-2 h-4 w-4" />
-            Sign Out
+            {t('account.signOut')}
           </Button>
         </div>
       </div>
+
+      <Dialog open={languageDialogOpen} onOpenChange={setLanguageDialogOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>{t('account.selectLanguage')}</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-2">
+            {languageOptions.map((option) => (
+              <button
+                key={option.code}
+                onClick={() => handleLanguageChange(option.code)}
+                className={`w-full p-4 rounded-lg border-2 transition-all text-left flex items-center gap-3 ${
+                  language === option.code
+                    ? 'border-primary bg-primary/5'
+                    : 'border-border hover:border-primary/50'
+                }`}
+              >
+                <span className="text-2xl">{option.flag}</span>
+                <span className="font-medium">{option.label}</span>
+              </button>
+            ))}
+          </div>
+        </DialogContent>
+      </Dialog>
 
       <BottomNav />
     </div>

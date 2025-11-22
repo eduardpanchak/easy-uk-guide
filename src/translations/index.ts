@@ -59,6 +59,28 @@ export const translations = {
     services: {
       noServices: 'No services available in your language yet'
     },
+    account: {
+      title: 'Account',
+      subscription: 'Subscription',
+      subscriptionStatus: 'Subscription Status',
+      pro: 'Pro',
+      free: 'Free',
+      renewsOn: 'Renews on',
+      manageSubscription: 'Manage Subscription',
+      upgradeToPro: 'Upgrade to Pro - £9.99/year',
+      profile: 'Profile',
+      myProfile: 'My Profile',
+      business: 'Business',
+      businessAccount: 'Business Account',
+      manageBusinessProfile: 'Manage your business profile',
+      support: 'Support',
+      aboutEasyUK: 'About EasyUK',
+      feedback: 'Feedback',
+      faq: 'FAQ',
+      signOut: 'Sign Out',
+      changeLanguage: 'Change Language',
+      selectLanguage: 'Select Language'
+    },
     messages: {
       savedItem: 'Saved!',
       removedSaved: 'Removed from saved',
@@ -129,6 +151,28 @@ export const translations = {
     },
     services: {
       noServices: 'Послуг вашою мовою поки немає'
+    },
+    account: {
+      title: 'Акаунт',
+      subscription: 'Підписка',
+      subscriptionStatus: 'Статус підписки',
+      pro: 'Pro',
+      free: 'Безкоштовно',
+      renewsOn: 'Поновлюється',
+      manageSubscription: 'Керувати підпискою',
+      upgradeToPro: 'Оновити до Pro - £9.99/рік',
+      profile: 'Профіль',
+      myProfile: 'Мій профіль',
+      business: 'Бізнес',
+      businessAccount: 'Бізнес-акаунт',
+      manageBusinessProfile: 'Керуйте бізнес-профілем',
+      support: 'Підтримка',
+      aboutEasyUK: 'Про EasyUK',
+      feedback: 'Зворотній зв\'язок',
+      faq: 'Питання та відповіді',
+      signOut: 'Вийти',
+      changeLanguage: 'Змінити мову',
+      selectLanguage: 'Оберіть мову'
     },
     messages: {
       savedItem: 'Збережено!',
@@ -201,6 +245,28 @@ export const translations = {
     services: {
       noServices: 'Услуг на вашем языке пока нет'
     },
+    account: {
+      title: 'Аккаунт',
+      subscription: 'Подписка',
+      subscriptionStatus: 'Статус подписки',
+      pro: 'Pro',
+      free: 'Бесплатно',
+      renewsOn: 'Продлевается',
+      manageSubscription: 'Управлять подпиской',
+      upgradeToPro: 'Обновить до Pro - £9.99/год',
+      profile: 'Профиль',
+      myProfile: 'Мой профиль',
+      business: 'Бизнес',
+      businessAccount: 'Бизнес-аккаунт',
+      manageBusinessProfile: 'Управляйте бизнес-профилем',
+      support: 'Поддержка',
+      aboutEasyUK: 'О EasyUK',
+      feedback: 'Обратная связь',
+      faq: 'Вопросы и ответы',
+      signOut: 'Выйти',
+      changeLanguage: 'Изменить язык',
+      selectLanguage: 'Выберите язык'
+    },
     messages: {
       savedItem: 'Сохранено!',
       removedSaved: 'Удалено из сохранённого',
@@ -272,6 +338,28 @@ export const translations = {
     services: {
       noServices: 'Brak usług w Twoim języku'
     },
+    account: {
+      title: 'Konto',
+      subscription: 'Subskrypcja',
+      subscriptionStatus: 'Status subskrypcji',
+      pro: 'Pro',
+      free: 'Darmowe',
+      renewsOn: 'Odnawia się',
+      manageSubscription: 'Zarządzaj subskrypcją',
+      upgradeToPro: 'Przejdź na Pro - £9.99/rok',
+      profile: 'Profil',
+      myProfile: 'Mój profil',
+      business: 'Biznes',
+      businessAccount: 'Konto biznesowe',
+      manageBusinessProfile: 'Zarządzaj profilem biznesowym',
+      support: 'Wsparcie',
+      aboutEasyUK: 'O EasyUK',
+      feedback: 'Opinia',
+      faq: 'FAQ',
+      signOut: 'Wyloguj się',
+      changeLanguage: 'Zmień język',
+      selectLanguage: 'Wybierz język'
+    },
     messages: {
       savedItem: 'Zapisano!',
       removedSaved: 'Usunięto z zapisanych',
@@ -342,6 +430,28 @@ export const translations = {
     },
     services: {
       noServices: 'Jūsų kalba paslaugų nėra'
+    },
+    account: {
+      title: 'Paskyra',
+      subscription: 'Prenumerata',
+      subscriptionStatus: 'Prenumeratos būsena',
+      pro: 'Pro',
+      free: 'Nemokama',
+      renewsOn: 'Atsinaujina',
+      manageSubscription: 'Valdyti prenumeratą',
+      upgradeToPro: 'Pereiti prie Pro - £9.99/metai',
+      profile: 'Profilis',
+      myProfile: 'Mano profilis',
+      business: 'Verslas',
+      businessAccount: 'Verslo paskyra',
+      manageBusinessProfile: 'Valdykite verslo profilį',
+      support: 'Pagalba',
+      aboutEasyUK: 'Apie EasyUK',
+      feedback: 'Atsiliepimai',
+      faq: 'DUK',
+      signOut: 'Atsijungti',
+      changeLanguage: 'Keisti kalbą',
+      selectLanguage: 'Pasirinkite kalbą'
     },
     messages: {
       savedItem: 'Išsaugota!',
