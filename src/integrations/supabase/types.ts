@@ -166,6 +166,8 @@ export type Database = {
           status: string
           stripe_subscription_id: string | null
           subscription_tier: string
+          trial_end: string | null
+          trial_start: string | null
           updated_at: string
           user_id: string
           view_count: number | null
@@ -187,6 +189,8 @@ export type Database = {
           status?: string
           stripe_subscription_id?: string | null
           subscription_tier: string
+          trial_end?: string | null
+          trial_start?: string | null
           updated_at?: string
           user_id: string
           view_count?: number | null
@@ -208,6 +212,8 @@ export type Database = {
           status?: string
           stripe_subscription_id?: string | null
           subscription_tier?: string
+          trial_end?: string | null
+          trial_start?: string | null
           updated_at?: string
           user_id?: string
           view_count?: number | null
