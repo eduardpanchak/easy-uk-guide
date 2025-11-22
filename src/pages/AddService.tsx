@@ -85,6 +85,11 @@ export default function AddService() {
         }
       }
 
+      // Calculate trial dates (14 days from now)
+      const trialStart = new Date();
+      const trialEnd = new Date();
+      trialEnd.setDate(trialEnd.getDate() + 14);
+
       // Insert service into database
       const { error: insertError } = await supabase
         .from('services')
@@ -99,6 +104,8 @@ export default function AddService() {
           email: formData.email || null,
           photos: photoUrls.length > 0 ? photoUrls : null,
           status: 'trial', // Start with 14-day trial
+          trial_start: trialStart.toISOString(),
+          trial_end: trialEnd.toISOString(),
           subscription_tier: 'standard', // Default tier
           category: 'general', // Default category
           languages: ['en'], // Default language
@@ -108,7 +115,8 @@ export default function AddService() {
         throw insertError;
       }
 
-      toast.success('Service added successfully! Your 14-day trial has started.');
+      const trialEndDate = trialEnd.toLocaleDateString();
+      toast.success(`Service added successfully! Your 14-day trial ends on ${trialEndDate}.`);
       navigate('/account');
     } catch (error) {
       console.error('Error adding service:', error);
