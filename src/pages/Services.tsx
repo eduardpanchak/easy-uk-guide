@@ -28,6 +28,8 @@ export default function Services() {
   const fetchServices = async () => {
     try {
       setLoading(true);
+      // Query all published services - visible to ALL users (regular and business)
+      // Includes both 'active' (paid) and 'trial' (free trial period) services
       const { data, error } = await supabase
         .from('services')
         .select('id, service_name, description, category, pricing, photos, languages')
