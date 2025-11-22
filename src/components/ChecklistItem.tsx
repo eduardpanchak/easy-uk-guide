@@ -6,7 +6,7 @@ interface ChecklistItemProps {
   title: string;
   description?: string;
   completed: boolean;
-  onToggle: (id: string) => void;
+  onToggle: (id: string) => Promise<void>;
   onClick?: () => void;
 }
 

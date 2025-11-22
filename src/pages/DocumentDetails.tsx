@@ -24,8 +24,8 @@ export default function DocumentDetails() {
 
   const saved = isSaved(doc.id);
 
-  const handleSave = () => {
-    toggleSaved({
+  const handleSave = async () => {
+    await toggleSaved({
       id: doc.id,
       type: 'document',
       title: doc.title

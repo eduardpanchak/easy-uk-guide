@@ -24,8 +24,8 @@ export default function BenefitDetails() {
 
   const saved = isSaved(item.id);
 
-  const handleSave = () => {
-    toggleSaved({
+  const handleSave = async () => {
+    await toggleSaved({
       id: item.id,
       type: 'document',
       title: item.title

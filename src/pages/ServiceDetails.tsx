@@ -88,9 +88,9 @@ export default function ServiceDetails() {
     toast.info(t('serviceDetails.messagingInDevelopment'));
   };
 
-  const handleSaveToggle = () => {
+  const handleSaveToggle = async () => {
     if (service) {
-      toggleSaved({ id: service.id, type: 'service', title: service.service_name });
+      await toggleSaved({ id: service.id, type: 'service', title: service.service_name });
       toast.success(
         isSaved(service.id) 
           ? t('serviceDetails.removedFromSaved') 

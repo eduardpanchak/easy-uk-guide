@@ -38,7 +38,7 @@ export default function Checklists() {
               title={item.title}
               description={item.description}
               completed={!!checklistProgress[item.id]}
-              onToggle={toggleChecklistItem}
+              onToggle={async (id) => await toggleChecklistItem(id)}
               onClick={() => navigate(`/checklists/${item.id}`)}
             />
           ))}

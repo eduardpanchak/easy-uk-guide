@@ -49,7 +49,7 @@ export default function ChecklistDetails() {
           </section>
 
           <Button
-            onClick={() => toggleChecklistItem(item.id)}
+            onClick={async () => await toggleChecklistItem(item.id)}
             variant={completed ? "secondary" : "default"}
             className="w-full"
           >
