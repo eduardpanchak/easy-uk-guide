@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { ArrowLeft, Clock, CheckCircle, XCircle, CreditCard } from 'lucide-react';
+import { ArrowLeft, Clock, CheckCircle, XCircle, CreditCard, Edit } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
@@ -185,13 +185,21 @@ export default function MyServices() {
 
             return (
               <Card key={service.id} className="p-4 space-y-3">
-                <div className="flex justify-between items-start">
+                <div className="flex justify-between items-start gap-4">
                   <div className="flex-1">
                     <h3 className="font-semibold text-lg">{service.service_name}</h3>
                     <p className="text-sm text-muted-foreground line-clamp-2 mt-1">
                       {service.description}
                     </p>
                   </div>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => navigate(`/edit-service/${service.id}`)}
+                    className="shrink-0"
+                  >
+                    <Edit className="h-5 w-5" />
+                  </Button>
                 </div>
 
                 <div className="flex items-center justify-between">
