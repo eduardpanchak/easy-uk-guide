@@ -2,23 +2,25 @@ import { useState } from 'react';
 import { Header } from '@/components/Header';
 import { BottomNav } from '@/components/BottomNav';
 import { Card } from '@/components/Card';
-import { PaywallModal } from '@/components/PaywallModal';
+import { ProRegistrationModal } from '@/components/ProRegistrationModal';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { useUserPreferences } from '@/contexts/UserPreferencesContext';
-import { Crown } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
+import { Crown, ChevronRight } from 'lucide-react';
 
 export default function Home() {
   const navigate = useNavigate();
   const { t } = useLanguage();
-  const { isPro } = useUserPreferences();
-  const [showPaywall, setShowPaywall] = useState(false);
+  const { subscription } = useAuth();
+  const [showProModal, setShowProModal] = useState(false);
+
+  const isPro = subscription?.subscribed || false;
 
   const handleProClick = (path: string) => {
     if (isPro) {
       navigate(path);
     } else {
-      setShowPaywall(true);
+      setShowProModal(true);
     }
   };
 
@@ -49,73 +51,92 @@ export default function Home() {
             description={t('home.checklistDesc')}
             onClick={() => navigate('/checklists')}
           />
-
-          <Card
-            icon="🤝"
-            title="Community Services"
-            description="Find services from your community"
-            onClick={() => navigate('/community-services')}
-          />
         </div>
 
         {/* PRO sections */}
         <div className="space-y-3">
-          <div className="flex items-center gap-2 pt-2 pb-1">
-            <Crown className="w-4 h-4 text-primary" />
-            <span className="text-sm font-semibold text-primary uppercase tracking-wide">Pro Features</span>
+          {!isPro && (
+            <div className="flex items-center gap-2 pt-2 pb-1">
+              <Crown className="w-4 h-4 text-primary" />
+              <span className="text-sm font-semibold text-primary uppercase tracking-wide">Pro Features</span>
+            </div>
+          )}
+
+          <div 
+            onClick={() => handleProClick('/jobs')}
+            className="w-full bg-card border border-border rounded-xl p-4 text-left hover:border-primary transition-all active:scale-95 flex items-center gap-3 shadow-sm relative cursor-pointer"
+          >
+            <div className="text-3xl flex-shrink-0">💼</div>
+            <div className="flex-1 min-w-0">
+              <h3 className="font-semibold text-foreground">{t('home.jobs')}</h3>
+              <p className="text-sm text-muted-foreground mt-0.5 line-clamp-1">{t('home.jobsDesc')}</p>
+            </div>
+            {isPro ? (
+              <ChevronRight className="w-5 h-5 text-muted-foreground flex-shrink-0" />
+            ) : (
+              <div className="bg-primary text-primary-foreground text-xs font-bold px-2 py-0.5 rounded">
+                PRO
+              </div>
+            )}
           </div>
 
-          <Card
-            icon="💼"
-            title={t('home.jobs')}
-            description={t('home.jobsDesc')}
-            onClick={() => handleProClick('/jobs')}
-            className="relative"
-          >
-            <div className="absolute top-3 right-3 bg-primary text-primary-foreground text-xs font-bold px-2 py-0.5 rounded">
-              PRO
-            </div>
-          </Card>
-
-          <Card
-            icon="🏠"
-            title={t('home.housing')}
-            description={t('home.housingDesc')}
+          <div 
             onClick={() => handleProClick('/housing')}
-            className="relative"
+            className="w-full bg-card border border-border rounded-xl p-4 text-left hover:border-primary transition-all active:scale-95 flex items-center gap-3 shadow-sm relative cursor-pointer"
           >
-            <div className="absolute top-3 right-3 bg-primary text-primary-foreground text-xs font-bold px-2 py-0.5 rounded">
-              PRO
+            <div className="text-3xl flex-shrink-0">🏠</div>
+            <div className="flex-1 min-w-0">
+              <h3 className="font-semibold text-foreground">{t('home.housing')}</h3>
+              <p className="text-sm text-muted-foreground mt-0.5 line-clamp-1">{t('home.housingDesc')}</p>
             </div>
-          </Card>
+            {isPro ? (
+              <ChevronRight className="w-5 h-5 text-muted-foreground flex-shrink-0" />
+            ) : (
+              <div className="bg-primary text-primary-foreground text-xs font-bold px-2 py-0.5 rounded">
+                PRO
+              </div>
+            )}
+          </div>
 
-          <Card
-            icon="💷"
-            title={t('home.benefits')}
-            description={t('home.benefitsDesc')}
+          <div 
             onClick={() => handleProClick('/benefits')}
-            className="relative"
+            className="w-full bg-card border border-border rounded-xl p-4 text-left hover:border-primary transition-all active:scale-95 flex items-center gap-3 shadow-sm relative cursor-pointer"
           >
-            <div className="absolute top-3 right-3 bg-primary text-primary-foreground text-xs font-bold px-2 py-0.5 rounded">
-              PRO
+            <div className="text-3xl flex-shrink-0">💷</div>
+            <div className="flex-1 min-w-0">
+              <h3 className="font-semibold text-foreground">{t('home.benefits')}</h3>
+              <p className="text-sm text-muted-foreground mt-0.5 line-clamp-1">{t('home.benefitsDesc')}</p>
             </div>
-          </Card>
+            {isPro ? (
+              <ChevronRight className="w-5 h-5 text-muted-foreground flex-shrink-0" />
+            ) : (
+              <div className="bg-primary text-primary-foreground text-xs font-bold px-2 py-0.5 rounded">
+                PRO
+              </div>
+            )}
+          </div>
 
-          <Card
-            icon="🎓"
-            title={t('home.education')}
-            description={t('home.educationDesc')}
+          <div 
             onClick={() => handleProClick('/education')}
-            className="relative"
+            className="w-full bg-card border border-border rounded-xl p-4 text-left hover:border-primary transition-all active:scale-95 flex items-center gap-3 shadow-sm relative cursor-pointer"
           >
-            <div className="absolute top-3 right-3 bg-primary text-primary-foreground text-xs font-bold px-2 py-0.5 rounded">
-              PRO
+            <div className="text-3xl flex-shrink-0">🎓</div>
+            <div className="flex-1 min-w-0">
+              <h3 className="font-semibold text-foreground">{t('home.education')}</h3>
+              <p className="text-sm text-muted-foreground mt-0.5 line-clamp-1">{t('home.educationDesc')}</p>
             </div>
-          </Card>
+            {isPro ? (
+              <ChevronRight className="w-5 h-5 text-muted-foreground flex-shrink-0" />
+            ) : (
+              <div className="bg-primary text-primary-foreground text-xs font-bold px-2 py-0.5 rounded">
+                PRO
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
-      <PaywallModal isOpen={showPaywall} onClose={() => setShowPaywall(false)} />
+      <ProRegistrationModal isOpen={showProModal} onClose={() => setShowProModal(false)} />
       <BottomNav />
     </div>
   );
