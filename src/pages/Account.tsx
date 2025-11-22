@@ -159,9 +159,7 @@ export default function Account() {
             title="My Profile"
             icon={User}
             onClick={() => navigate('/my-profile')}
-          >
-            <ChevronRight className="h-5 w-5 text-muted-foreground" />
-          </Card>
+          />
         </div>
 
         <div className="space-y-2">
@@ -172,9 +170,7 @@ export default function Account() {
             description="Manage your business profile"
             icon={Briefcase}
             onClick={() => navigate('/business-registration')}
-          >
-            <ChevronRight className="h-5 w-5 text-muted-foreground" />
-          </Card>
+          />
         </div>
 
         <div className="space-y-2">
@@ -184,25 +180,19 @@ export default function Account() {
             title="About EasyUK"
             icon={Info}
             onClick={() => navigate('/about')}
-          >
-            <ChevronRight className="h-5 w-5 text-muted-foreground" />
-          </Card>
+          />
 
           <Card
             title="Feedback"
             icon={MessageSquare}
             onClick={() => navigate('/feedback')}
-          >
-            <ChevronRight className="h-5 w-5 text-muted-foreground" />
-          </Card>
+          />
 
           <Card
             title="FAQ"
             icon={HelpCircle}
             onClick={() => navigate('/faq')}
-          >
-            <ChevronRight className="h-5 w-5 text-muted-foreground" />
-          </Card>
+          />
         </div>
 
         <div className="pt-4">
