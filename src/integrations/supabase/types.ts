@@ -297,7 +297,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      cancel_expired_trials: { Args: never; Returns: undefined }
     }
     Enums: {
       [_ in never]: never
