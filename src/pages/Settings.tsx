@@ -19,8 +19,10 @@ export default function Settings() {
 
   const languages = [
     { code: 'en' as const, name: 'English', flag: '🇬🇧' },
+    { code: 'ru' as const, name: 'Русский', flag: '🇷🇺' },
     { code: 'uk' as const, name: 'Українська', flag: '🇺🇦' },
-    { code: 'ru' as const, name: 'Русский', flag: '🇷🇺' }
+    { code: 'pl' as const, name: 'Polski', flag: '🇵🇱' },
+    { code: 'lt' as const, name: 'Lietuvių', flag: '🇱🇹' }
   ];
 
   const nationalities = [
