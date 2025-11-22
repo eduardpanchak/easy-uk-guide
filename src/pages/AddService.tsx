@@ -18,6 +18,7 @@ export default function AddService() {
   const [formData, setFormData] = useState({
     serviceName: '',
     description: '',
+    category: 'repair', // Default category
     address: '',
     price: '',
     website: '',
@@ -27,7 +28,7 @@ export default function AddService() {
   });
   const [photos, setPhotos] = useState<File[]>([]);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
@@ -100,6 +101,7 @@ export default function AddService() {
         user_id: user.id,
         service_name: formData.serviceName,
         description: formData.description,
+        category: formData.category,
         address: formData.address || null,
         pricing: formData.price || null,
         social_links: formData.website ? { website: formData.website } : {},
@@ -110,7 +112,6 @@ export default function AddService() {
         trial_start: trialStart.toISOString(),
         trial_end: trialEnd.toISOString(),
         subscription_tier: formData.subscriptionTier,
-        category: 'general',
         languages: ['en'],
       };
 
@@ -186,6 +187,32 @@ export default function AddService() {
             rows={4}
             required
           />
+        </div>
+
+        {/* Category */}
+        <div className="space-y-2">
+          <Label htmlFor="category" className="text-sm font-medium">
+            {t('addService.category')} <span className="text-destructive">*</span>
+          </Label>
+          <select
+            id="category"
+            name="category"
+            value={formData.category}
+            onChange={handleInputChange}
+            className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+            required
+          >
+            <option value="repair">{t('addService.categories.repair')}</option>
+            <option value="food">{t('addService.categories.food')}</option>
+            <option value="transport">{t('addService.categories.transport')}</option>
+            <option value="legal">{t('addService.categories.legal')}</option>
+            <option value="accounting">{t('addService.categories.accounting')}</option>
+            <option value="translation">{t('addService.categories.translation')}</option>
+            <option value="education">{t('addService.categories.education')}</option>
+            <option value="healthcare">{t('addService.categories.healthcare')}</option>
+            <option value="housing">{t('addService.categories.housing')}</option>
+            <option value="other">{t('addService.categories.other')}</option>
+          </select>
         </div>
 
         {/* Subscription Tier */}
