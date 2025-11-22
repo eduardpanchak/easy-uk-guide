@@ -30,13 +30,90 @@ export default function Start() {
     { value: 'other', label: 'Other 🌍' },
   ];
 
-  const availableLanguages = [
-    { value: 'en', label: 'English 🇬🇧' },
-    { value: 'ru', label: 'Русский 🇷🇺' },
-    { value: 'uk', label: 'Українська 🇺🇦' },
-    { value: 'pl', label: 'Polski 🇵🇱' },
-    { value: 'lt', label: 'Lietuvių 🇱🇹' },
-  ];
+  // Language mapping based on nationality
+  const getAvailableLanguages = (nat: Nationality | ''): Array<{ value: string; label: string }> => {
+    if (!nat) {
+      return [
+        { value: 'en', label: 'English 🇬🇧' },
+        { value: 'uk', label: 'Українська 🇺🇦' },
+        { value: 'ru', label: 'Русский 🇷🇺' },
+      ];
+    }
+
+    const languageMap: Record<Nationality, Array<{ value: string; label: string }>> = {
+      'ukrainian': [
+        { value: 'en', label: 'English 🇬🇧' },
+        { value: 'uk', label: 'Українська 🇺🇦' },
+        { value: 'ru', label: 'Русский 🇷🇺' },
+      ],
+      'russian': [
+        { value: 'en', label: 'English 🇬🇧' },
+        { value: 'ru', label: 'Русский 🇷🇺' },
+      ],
+      'polish': [
+        { value: 'pl', label: 'Polski 🇵🇱' },
+        { value: 'en', label: 'English 🇬🇧' },
+      ],
+      'moldovan': [
+        { value: 'ro', label: 'Română 🇷🇴' },
+        { value: 'ru', label: 'Русский 🇷🇺' },
+        { value: 'en', label: 'English 🇬🇧' },
+      ],
+      'lithuanian': [
+        { value: 'lt', label: 'Lietuvių 🇱🇹' },
+        { value: 'en', label: 'English 🇬🇧' },
+      ],
+      'latvian': [
+        { value: 'lv', label: 'Latviešu 🇱🇻' },
+        { value: 'ru', label: 'Русский 🇷🇺' },
+        { value: 'en', label: 'English 🇬🇧' },
+      ],
+      'romanian': [
+        { value: 'ro', label: 'Română 🇷🇴' },
+        { value: 'en', label: 'English 🇬🇧' },
+      ],
+      // Default for other nationalities
+      'estonian': [
+        { value: 'en', label: 'English 🇬🇧' },
+        { value: 'uk', label: 'Українська 🇺🇦' },
+        { value: 'ru', label: 'Русский 🇷🇺' },
+      ],
+      'bulgarian': [
+        { value: 'en', label: 'English 🇬🇧' },
+        { value: 'uk', label: 'Українська 🇺🇦' },
+        { value: 'ru', label: 'Русский 🇷🇺' },
+      ],
+      'georgian': [
+        { value: 'en', label: 'English 🇬🇧' },
+        { value: 'uk', label: 'Українська 🇺🇦' },
+        { value: 'ru', label: 'Русский 🇷🇺' },
+      ],
+      'armenian': [
+        { value: 'en', label: 'English 🇬🇧' },
+        { value: 'uk', label: 'Українська 🇺🇦' },
+        { value: 'ru', label: 'Русский 🇷🇺' },
+      ],
+      'uzbek': [
+        { value: 'en', label: 'English 🇬🇧' },
+        { value: 'uk', label: 'Українська 🇺🇦' },
+        { value: 'ru', label: 'Русский 🇷🇺' },
+      ],
+      'kazakh': [
+        { value: 'en', label: 'English 🇬🇧' },
+        { value: 'uk', label: 'Українська 🇺🇦' },
+        { value: 'ru', label: 'Русский 🇷🇺' },
+      ],
+      'other': [
+        { value: 'en', label: 'English 🇬🇧' },
+        { value: 'uk', label: 'Українська 🇺🇦' },
+        { value: 'ru', label: 'Русский 🇷🇺' },
+      ],
+    };
+
+    return languageMap[nat] || languageMap['other'];
+  };
+
+  const availableLanguages = getAvailableLanguages(selectedNationality);
 
   const handleContinue = () => {
     if (selectedNationality && selectedLanguage) {

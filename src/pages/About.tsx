@@ -1,13 +1,10 @@
 import { Header } from '@/components/Header';
 import { BottomNav } from '@/components/BottomNav';
-import { useLanguage } from '@/contexts/LanguageContext';
 
 export default function About() {
-  const { t } = useLanguage();
-
   return (
     <div className="min-h-screen bg-background pb-20">
-      <Header title={t('about')} showBack />
+      <Header title="About EasyUK" showBack />
 
       <div className="container max-w-2xl mx-auto p-4 space-y-6">
         <div className="prose prose-sm max-w-none">

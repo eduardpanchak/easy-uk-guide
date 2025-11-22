@@ -7,15 +7,12 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 import { Loader2 } from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
-import { useAuth } from '@/contexts/AuthContext';
 
 export default function Feedback() {
   const [loading, setLoading] = useState(false);
-  const { user } = useAuth();
   const [formData, setFormData] = useState({
     name: '',
-    email: user?.email || '',
+    email: '',
     message: '',
   });
 
@@ -29,24 +26,12 @@ export default function Feedback() {
 
     setLoading(true);
 
-    try {
-      const { error } = await supabase.from('feedback').insert({
-        user_id: user?.id,
-        name: formData.name,
-        email: formData.email,
-        message: formData.message,
-      });
-
-      if (error) throw error;
-
+    // Simulate sending feedback
+    setTimeout(() => {
       toast.success('Thank you for your feedback!');
-      setFormData({ name: '', email: user?.email || '', message: '' });
-    } catch (error) {
-      console.error('Error submitting feedback:', error);
-      toast.error('Failed to submit feedback. Please try again.');
-    } finally {
+      setFormData({ name: '', email: '', message: '' });
       setLoading(false);
-    }
+    }, 1000);
   };
 
   return (

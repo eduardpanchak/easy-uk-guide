@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState, ReactNode } from 'react';
 
 interface SavedItem {
   id: string;
-  type: 'document' | 'nhs' | 'checklist' | 'service';
+  type: 'document' | 'nhs' | 'checklist';
   title: string;
 }
 

@@ -1,4 +1,3 @@
-import React from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -8,7 +7,6 @@ import { AppProvider } from "@/contexts/AppContext";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { UserPreferencesProvider, useUserPreferences } from "@/contexts/UserPreferencesContext";
 import { AuthProvider, useAuth } from "@/contexts/AuthContext";
-import Splash from "./pages/Splash";
 import Start from "./pages/Start";
 import Auth from "./pages/Auth";
 import Index from "./pages/Index";
@@ -31,7 +29,6 @@ import Saved from "./pages/Saved";
 import Search from "./pages/Search";
 import Settings from "./pages/Settings";
 import Services from "./pages/Services";
-import ServiceDetails from "./pages/ServiceDetails";
 import BusinessRegistration from "./pages/BusinessRegistration";
 import Account from "./pages/Account";
 import MyProfile from "./pages/MyProfile";
@@ -44,7 +41,7 @@ const queryClient = new QueryClient();
 
 const ProtectedRoutes = () => {
   const { hasCompletedOnboarding } = useUserPreferences();
-  const { loading } = useAuth();
+  const { user, loading } = useAuth();
 
   if (loading) {
     return (
@@ -55,7 +52,11 @@ const ProtectedRoutes = () => {
   }
 
   if (!hasCompletedOnboarding) {
-    return <Navigate to="/splash" replace />;
+    return <Navigate to="/start" replace />;
+  }
+
+  if (!user) {
+    return <Navigate to="/auth" replace />;
   }
 
   return (
@@ -80,7 +81,6 @@ const ProtectedRoutes = () => {
       <Route path="/search" element={<Search />} />
       <Route path="/settings" element={<Settings />} />
       <Route path="/services" element={<Services />} />
-      <Route path="/services/:id" element={<ServiceDetails />} />
       <Route path="/business-registration" element={<BusinessRegistration />} />
       <Route path="/account" element={<Account />} />
       <Route path="/my-profile" element={<MyProfile />} />
@@ -103,7 +103,6 @@ const App = () => (
               <Sonner />
               <BrowserRouter>
                 <Routes>
-                  <Route path="/splash" element={<Splash />} />
                   <Route path="/start" element={<Start />} />
                   <Route path="/auth" element={<Auth />} />
                   <Route path="*" element={<ProtectedRoutes />} />

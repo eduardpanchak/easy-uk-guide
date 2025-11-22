@@ -76,15 +76,6 @@ export default {
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
-        "fade-in": "fade-in 1s ease-out",
-        "slide-up": "slide-up 0.8s ease-out",
-        "bounce-slow": "bounce-slow 2s ease-in-out infinite",
-      },
-      animationDelay: {
-        '0': '0s',
-        '100': '0.1s',
-        '200': '0.2s',
-        '500': '0.5s',
       },
     },
   },
