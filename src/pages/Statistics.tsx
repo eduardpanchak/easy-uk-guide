@@ -77,7 +77,7 @@ export default function Statistics() {
           >
             <ArrowLeft className="h-5 w-5" />
           </Button>
-          <h1 className="text-xl font-semibold">Statistics</h1>
+          <h1 className="text-xl font-semibold">{t('statistics.title')}</h1>
         </div>
       </header>
 
@@ -90,7 +90,7 @@ export default function Statistics() {
                 <Eye className="h-5 w-5 text-primary" />
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">Total Views</p>
+                <p className="text-sm text-muted-foreground">{t('statistics.totalViews')}</p>
                 <p className="text-2xl font-bold">{getTotalViews()}</p>
               </div>
             </div>
@@ -102,7 +102,7 @@ export default function Statistics() {
                 <MousePointer className="h-5 w-5 text-primary" />
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">Total Clicks</p>
+                <p className="text-sm text-muted-foreground">{t('statistics.totalClicks')}</p>
                 <p className="text-2xl font-bold">{getTotalClicks()}</p>
               </div>
             </div>
@@ -111,13 +111,13 @@ export default function Statistics() {
 
         {/* Services List */}
         <div className="space-y-3">
-          <h2 className="text-lg font-semibold">Services Performance</h2>
+          <h2 className="text-lg font-semibold">{t('statistics.performance')}</h2>
           
           {services.length === 0 ? (
             <div className="text-center py-12">
-              <p className="text-muted-foreground">No services yet</p>
+              <p className="text-muted-foreground">{t('statistics.noServices')}</p>
               <Button onClick={() => navigate('/add-service')} className="mt-4">
-                Add Your First Service
+                {t('myServices.addFirst')}
               </Button>
             </div>
           ) : (
@@ -137,7 +137,7 @@ export default function Statistics() {
                     <div className="flex items-center gap-2">
                       <Eye className="h-4 w-4 text-muted-foreground" />
                       <div>
-                        <p className="text-xs text-muted-foreground">Views</p>
+                        <p className="text-xs text-muted-foreground">{t('statistics.views')}</p>
                         <p className="text-lg font-semibold">{service.view_count || 0}</p>
                       </div>
                     </div>
@@ -145,7 +145,7 @@ export default function Statistics() {
                     <div className="flex items-center gap-2">
                       <MousePointer className="h-4 w-4 text-muted-foreground" />
                       <div>
-                        <p className="text-xs text-muted-foreground">Clicks</p>
+                        <p className="text-xs text-muted-foreground">{t('statistics.clicks')}</p>
                         <p className="text-lg font-semibold">{service.click_count || 0}</p>
                       </div>
                     </div>
@@ -154,7 +154,7 @@ export default function Statistics() {
                   {service.view_count > 0 && (
                     <div className="pt-2 border-t">
                       <div className="flex items-center justify-between text-xs">
-                        <span className="text-muted-foreground">Click Rate</span>
+                        <span className="text-muted-foreground">{t('statistics.clickRate')}</span>
                         <span className="font-medium">
                           {((service.click_count / service.view_count) * 100).toFixed(1)}%
                         </span>

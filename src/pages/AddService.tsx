@@ -40,7 +40,7 @@ export default function AddService() {
     if (files) {
       const newPhotos = Array.from(files);
       setPhotos(prev => [...prev, ...newPhotos]);
-      toast.success(`${newPhotos.length} photo(s) added`);
+      toast.success(`${newPhotos.length} ${t('addService.photosAdded')}`);
     }
   };
 
@@ -117,11 +117,11 @@ export default function AddService() {
       }
 
       const trialEndDate = trialEnd.toLocaleDateString();
-      toast.success(`Service added successfully! Your 14-day trial ends on ${trialEndDate}.`);
+      toast.success(`${t('addService.serviceAdded').replace('{date}', trialEndDate)}`);
       navigate('/account');
     } catch (error) {
       console.error('Error adding service:', error);
-      toast.error('Failed to add service. Please try again.');
+      toast.error(t('addService.failed'));
     } finally {
       setIsSubmitting(false);
     }

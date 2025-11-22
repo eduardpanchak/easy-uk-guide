@@ -195,22 +195,22 @@ export default function Account() {
             <h3 className="text-sm font-medium text-muted-foreground px-4">{t('account.business')}</h3>
             
             <Card
-              title="My Services"
-              description="View and manage your service listings"
+              title={t('account.myServices')}
+              description={t('account.myServicesDesc')}
               icon={Briefcase}
               onClick={() => navigate('/my-services')}
             />
             
             <Card
-              title={t('addService.title')}
-              description="Add a new service listing"
+              title={t('account.addServiceTitle')}
+              description={t('account.addServiceDesc')}
               icon={Briefcase}
               onClick={() => navigate('/add-service')}
             />
             
             <Card
-              title="Statistics"
-              description="View performance metrics for your services"
+              title={t('account.statisticsTitle')}
+              description={t('account.statisticsDesc')}
               icon={Briefcase}
               onClick={() => navigate('/statistics')}
             />

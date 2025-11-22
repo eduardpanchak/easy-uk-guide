@@ -149,11 +149,11 @@ export default function EditService() {
         throw updateError;
       }
 
-      toast.success('Service updated successfully!');
+      toast.success(t('editService.updated'));
       navigate('/my-services');
     } catch (error) {
       console.error('Error updating service:', error);
-      toast.error('Failed to update service. Please try again.');
+      toast.error(t('editService.failed'));
     } finally {
       setIsSubmitting(false);
     }
@@ -179,7 +179,7 @@ export default function EditService() {
           >
             <ArrowLeft className="h-5 w-5" />
           </Button>
-          <h1 className="text-xl font-semibold">Edit Service</h1>
+          <h1 className="text-xl font-semibold">{t('editService.title')}</h1>
         </div>
       </header>
 
@@ -246,7 +246,7 @@ export default function EditService() {
         {/* Existing Photos */}
         {existingPhotos.length > 0 && (
           <div className="space-y-2">
-            <Label className="text-sm font-medium">Current Photos</Label>
+            <Label className="text-sm font-medium">{t('editService.currentPhotos')}</Label>
             <div className="grid grid-cols-3 gap-2">
               {existingPhotos.map((photo, index) => (
                 <div key={index} className="relative aspect-square rounded-lg overflow-hidden border">
@@ -262,7 +262,7 @@ export default function EditService() {
           <Label className="text-sm font-medium">
             {t('addService.photos')}
           </Label>
-          <p className="text-sm text-muted-foreground">Add more photos</p>
+          <p className="text-sm text-muted-foreground">{t('editService.addMore')}</p>
           <div className="relative">
             <input
               type="file"
@@ -278,7 +278,7 @@ export default function EditService() {
             >
               <ImagePlus className="h-6 w-6 text-muted-foreground" />
               <span className="text-sm text-muted-foreground">
-                {newPhotos.length > 0 ? `${newPhotos.length} new photo(s) selected` : 'Tap to upload new photos'}
+                {newPhotos.length > 0 ? `${newPhotos.length} ${t('editService.newPhotos')}` : t('editService.uploadNew')}
               </span>
             </label>
           </div>
@@ -331,7 +331,7 @@ export default function EditService() {
         {/* Submit Button */}
         <Button type="submit" className="w-full" size="lg" disabled={isSubmitting}>
           <Save className="h-5 w-5 mr-2" />
-          {isSubmitting ? 'Saving...' : 'Save Changes'}
+          {isSubmitting ? t('editService.saving') : t('editService.save')}
         </Button>
       </form>
     </div>
