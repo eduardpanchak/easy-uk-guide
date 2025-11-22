@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Header } from '@/components/Header';
 import { BottomNav } from '@/components/BottomNav';
 import { ServiceCard } from '@/components/ServiceCard';
@@ -18,6 +19,7 @@ interface Service {
 
 export default function Services() {
   const { language, t } = useLanguage();
+  const navigate = useNavigate();
   const [services, setServices] = useState<Service[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -75,10 +77,7 @@ export default function Services() {
               category={service.category}
               pricing={service.pricing}
               photo={service.photos?.[0] || null}
-              onClick={() => {
-                // Future: navigate to service details
-                console.log('Service clicked:', service.id);
-              }}
+              onClick={() => navigate(`/services/${service.id}`)}
             />
           ))
         )}
