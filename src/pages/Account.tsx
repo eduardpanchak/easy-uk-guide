@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Navigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { Header } from '@/components/Header';
 import { BottomNav } from '@/components/BottomNav';
@@ -85,8 +85,7 @@ export default function Account() {
   };
 
   if (!user) {
-    navigate('/auth');
-    return null;
+    return <Navigate to="/auth" state={{ returnTo: '/account' }} replace />;
   }
 
   return (
