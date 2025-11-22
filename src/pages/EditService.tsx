@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
+import { BottomNav } from '@/components/BottomNav';
 import { toast } from 'sonner';
 
 export default function EditService() {
@@ -368,6 +369,8 @@ export default function EditService() {
           {isSubmitting ? t('editService.saving') : t('editService.save')}
         </Button>
       </form>
+
+      <BottomNav />
     </div>
   );
 }

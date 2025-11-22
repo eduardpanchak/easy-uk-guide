@@ -1,4 +1,5 @@
 import { Header } from '@/components/Header';
+import { BottomNav } from '@/components/BottomNav';
 import { useLanguage } from '@/contexts/LanguageContext';
 
 export default function ClientMessaging() {
@@ -15,6 +16,8 @@ export default function ClientMessaging() {
           </p>
         </div>
       </div>
+
+      <BottomNav />
     </div>
   );
 }
