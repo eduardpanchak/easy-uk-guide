@@ -33,6 +33,7 @@ import Services from "./pages/Services";
 import BusinessRegistration from "./pages/BusinessRegistration";
 import AddService from "./pages/AddService";
 import MyServices from "./pages/MyServices";
+import EditService from "./pages/EditService";
 import Account from "./pages/Account";
 import MyProfile from "./pages/MyProfile";
 import About from "./pages/About";
@@ -83,6 +84,7 @@ const ProtectedRoutes = () => {
       <Route path="/business-registration" element={<BusinessRegistration />} />
       <Route path="/add-service" element={<AddService />} />
       <Route path="/my-services" element={<MyServices />} />
+      <Route path="/edit-service/:id" element={<EditService />} />
       <Route path="/account" element={<Account />} />
       <Route path="/my-profile" element={<MyProfile />} />
       <Route path="/about" element={<About />} />
