@@ -30,6 +30,7 @@ export default function Services() {
       setLoading(true);
       // Query all published services - visible to ALL users (regular and business)
       // Includes both 'active' (paid) and 'trial' (free trial period) services
+      // NO language or nationality filtering - shows ALL services
       const { data, error } = await supabase
         .from('services')
         .select('id, service_name, description, category, pricing, photos, languages')
@@ -49,11 +50,6 @@ export default function Services() {
     }
   };
 
-  // Filter services by current app language
-  const filteredServices = services.filter(
-    service => service.languages.includes(language)
-  );
-
   return (
     <div className="min-h-screen bg-background pb-20">
       <Header title={t('nav.services')} showBack />
@@ -63,14 +59,14 @@ export default function Services() {
           <div className="flex justify-center py-12">
             <Loader2 className="h-8 w-8 animate-spin text-primary" />
           </div>
-        ) : filteredServices.length === 0 ? (
+        ) : services.length === 0 ? (
           <div className="text-center py-12">
             <p className="text-muted-foreground">
               {t('services.noServices')}
             </p>
           </div>
         ) : (
-          filteredServices.map((service) => (
+          services.map((service) => (
             <Card
               key={service.id}
               icon="briefcase"
