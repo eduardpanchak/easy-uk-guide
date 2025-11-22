@@ -1,4 +1,4 @@
-export type Language = 'en' | 'uk' | 'ru';
+export type Language = 'en' | 'uk' | 'ru' | 'pl' | 'lt';
 
 export const translations = {
   en: {
@@ -212,6 +212,148 @@ export const translations = {
       perYear: 'в год',
       upgradeToPro: 'Обновить до Pro',
       maybeLater: 'Может быть позже'
+    }
+  },
+  pl: {
+    app: {
+      title: 'Easy UK 🇬🇧'
+    },
+    nav: {
+      home: 'Strona główna',
+      checklists: 'Listy kontrolne',
+      saved: 'Zapisane',
+      services: 'Usługi',
+      account: 'Konto'
+    },
+    home: {
+      documents: 'Dokumenty',
+      documentsDesc: 'NIN, Bank, BRP, GP, Podatek lokalny, Prawo jazdy',
+      nhs: 'NHS (Służba zdrowia)',
+      nhsDesc: 'Znajdź lekarza, Rejestracja, Darmowe usługi',
+      checklist: 'Co zrobić po przyjeździe',
+      checklistDesc: 'Kompletna lista dla nowo przybyłych',
+      jobs: 'Praca',
+      jobsDesc: 'CV, poszukiwanie pracy, rozmowy kwalifikacyjne, prawa pracownika',
+      housing: 'Mieszkanie',
+      housingDesc: 'Szukanie mieszkania, koszty, prawa najemcy',
+      benefits: 'Zasiłki i wsparcie',
+      benefitsDesc: 'Universal Credit, zasiłek na dzieci, darmowe usługi',
+      education: 'Edukacja',
+      educationDesc: 'Szkoły, nauka angielskiego, uniwersytety'
+    },
+    common: {
+      back: 'Wstecz',
+      save: 'Zapisz',
+      saved: 'Zapisane',
+      complete: 'Oznacz jako ukończone',
+      completed: 'Ukończone',
+      search: 'Szukaj',
+      searchPlaceholder: 'Szukaj dokumentów, NHS, list...',
+      startTyping: 'Zacznij pisać, aby wyszukać',
+      noResults: 'Brak wyników dla',
+      results: 'wynik',
+      results_plural: 'wyników'
+    },
+    saved: {
+      title: 'Zapisane',
+      noItems: 'Brak zapisanych elementów',
+      noItemsDesc: 'Zapisuj przydatne artykuły dla szybkiego dostępu'
+    },
+    settings: {
+      title: 'Ustawienia',
+      language: 'Język',
+      about: 'O Easy UK',
+      aboutDesc: 'Wersja 1.0.0',
+      feedback: 'Opinia',
+      feedbackDesc: 'Pomóż nam się poprawić',
+      businessMode: 'Tryb biznesowy',
+      businessModeDesc: 'Zarejestruj swoją usługę'
+    },
+    services: {
+      noServices: 'Brak usług w Twoim języku'
+    },
+    messages: {
+      savedItem: 'Zapisane!',
+      removedSaved: 'Usunięto z zapisanych',
+      languageInfo: 'Język: Polski',
+      aboutInfo: 'Prosty asystent dla migrantów mieszkających w UK',
+      feedbackInfo: 'Dziękujemy za zainteresowanie! Funkcja opinii wkrótce.',
+      unlockSection: 'Odblokuj tę sekcję',
+      proDescription: 'Uzyskaj pełny dostęp do zaawansowanych przewodników, w tym Praca, Mieszkanie, Zasiłki i Edukacja.',
+      perYear: 'rocznie',
+      upgradeToPro: 'Przejdź na Pro',
+      maybeLater: 'Może później'
+    }
+  },
+  lt: {
+    app: {
+      title: 'Easy UK 🇬🇧'
+    },
+    nav: {
+      home: 'Pagrindinis',
+      checklists: 'Sąrašai',
+      saved: 'Išsaugota',
+      services: 'Paslaugos',
+      account: 'Paskyra'
+    },
+    home: {
+      documents: 'Dokumentai',
+      documentsDesc: 'NIN, Bankas, BRP, GP, Savivaldybės mokestis, Vairuotojo pažymėjimas',
+      nhs: 'NHS (Sveikatos priežiūra)',
+      nhsDesc: 'Rasti gydytoją, Registracija, Nemokamos paslaugos',
+      checklist: 'Ką daryti atvykus',
+      checklistDesc: 'Išsamus sąrašas naujiems atvykėliams',
+      jobs: 'Darbas',
+      jobsDesc: 'CV rašymas, darbo paieška, interviu, darbuotojų teisės',
+      housing: 'Būstas',
+      housingDesc: 'Būsto paieška, išlaidos, nuomininko teisės',
+      benefits: 'Išmokos ir parama',
+      benefitsDesc: 'Universal Credit, vaiko išmoka, nemokamos paslaugos',
+      education: 'Švietimas',
+      educationDesc: 'Mokyklos, anglų kalbos pamokos, universitetai'
+    },
+    common: {
+      back: 'Atgal',
+      save: 'Išsaugoti',
+      saved: 'Išsaugota',
+      complete: 'Pažymėti kaip atliktą',
+      completed: 'Atlikta',
+      search: 'Paieška',
+      searchPlaceholder: 'Ieškoti dokumentų, NHS, sąrašų...',
+      startTyping: 'Pradėkite rašyti, kad ieškotumėte',
+      noResults: 'Rezultatų nerasta',
+      results: 'rezultatas',
+      results_plural: 'rezultatų'
+    },
+    saved: {
+      title: 'Išsaugota',
+      noItems: 'Dar nėra išsaugotų elementų',
+      noItemsDesc: 'Išsaugokite naudingus straipsnius greičiau prieigai'
+    },
+    settings: {
+      title: 'Nustatymai',
+      language: 'Kalba',
+      about: 'Apie Easy UK',
+      aboutDesc: 'Versija 1.0.0',
+      feedback: 'Atsiliepimai',
+      feedbackDesc: 'Padėkite mums tobulėti',
+      businessMode: 'Verslo režimas',
+      businessModeDesc: 'Registruokite savo paslaugą'
+    },
+    services: {
+      noServices: 'Nėra paslaugų jūsų kalba'
+    },
+    messages: {
+      savedItem: 'Išsaugota!',
+      removedSaved: 'Pašalinta iš išsaugotų',
+      languageInfo: 'Kalba: Lietuvių',
+      aboutInfo: 'Paprastas asistentas migrantams, gyvenantiems JK',
+      feedbackInfo: 'Dėkojame už susidomėjimą! Atsiliepimų funkcija netrukus.',
+      unlockSection: 'Atrakinti šią sekciją',
+      proDescription: 'Gaukite visišką prieigą prie išplėstinių vadovų, įskaitant Darbą, Būstą, Išmokas ir Švietimą.',
+      perYear: 'per metus',
+      upgradeToPro: 'Atnaujinti į Pro',
+      maybeLater: 'Galbūt vėliau'
     }
   }
 };
