@@ -150,12 +150,15 @@ export type Database = {
       }
       services: {
         Row: {
+          address: string | null
           category: string
           click_count: number | null
           created_at: string
           description: string | null
+          email: string | null
           id: string
           languages: string[]
+          phone: string | null
           photos: string[] | null
           pricing: string | null
           service_name: string
@@ -168,12 +171,15 @@ export type Database = {
           view_count: number | null
         }
         Insert: {
+          address?: string | null
           category: string
           click_count?: number | null
           created_at?: string
           description?: string | null
+          email?: string | null
           id?: string
           languages: string[]
+          phone?: string | null
           photos?: string[] | null
           pricing?: string | null
           service_name: string
@@ -186,12 +192,15 @@ export type Database = {
           view_count?: number | null
         }
         Update: {
+          address?: string | null
           category?: string
           click_count?: number | null
           created_at?: string
           description?: string | null
+          email?: string | null
           id?: string
           languages?: string[]
+          phone?: string | null
           photos?: string[] | null
           pricing?: string | null
           service_name?: string
