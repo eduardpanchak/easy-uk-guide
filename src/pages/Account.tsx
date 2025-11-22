@@ -221,13 +221,6 @@ export default function Account() {
               icon={Users}
               onClick={() => navigate('/client-messaging')}
             />
-            
-            <Card
-              title={t('account.businessAccount')}
-              description={t('account.manageBusinessProfile')}
-              icon={Briefcase}
-              onClick={() => navigate('/business-registration')}
-            />
           </div>
         )}
 
