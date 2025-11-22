@@ -1,13 +1,18 @@
+import { useState } from 'react';
 import { Header } from '@/components/Header';
 import { BottomNav } from '@/components/BottomNav';
 import { Card } from '@/components/Card';
 import { useApp } from '@/contexts/AppContext';
 import { useNavigate } from 'react-router-dom';
-import { FileText, Heart, ListChecks } from 'lucide-react';
+import { Heart } from 'lucide-react';
+import { cn } from '@/lib/utils';
+
+type TabType = 'information' | 'services';
 
 export default function Saved() {
   const { savedItems } = useApp();
   const navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState<TabType>('information');
 
   const getIcon = (type: string) => {
     switch (type) {
@@ -19,6 +24,12 @@ export default function Saved() {
     }
   };
 
+  // Separate information items from service items
+  const informationItems = savedItems.filter(item => item.type !== 'service');
+  const serviceItems = savedItems.filter(item => item.type === 'service');
+
+  const displayedItems = activeTab === 'information' ? informationItems : serviceItems;
+
   const handleItemClick = (item: typeof savedItems[0]) => {
     if (item.type === 'document') {
       navigate(`/documents/${item.id}`);
@@ -27,8 +38,7 @@ export default function Saved() {
     } else if (item.type === 'checklist') {
       navigate(`/checklists/${item.id}`);
     } else if (item.type === 'service') {
-      // Future: navigate to service details
-      console.log('Service clicked:', item.id);
+      navigate(`/service/${item.id}`);
     }
   };
 
@@ -37,17 +47,49 @@ export default function Saved() {
       <Header title="Saved" showSearch />
       
       <div className="max-w-md mx-auto px-4 py-6">
-        {savedItems.length === 0 ? (
+        {/* Tab Navigation */}
+        <div className="flex gap-2 mb-6">
+          <button
+            onClick={() => setActiveTab('information')}
+            className={cn(
+              "flex-1 py-2.5 px-4 rounded-lg font-medium transition-all",
+              activeTab === 'information'
+                ? "bg-primary text-primary-foreground shadow-sm"
+                : "bg-card text-muted-foreground border border-border hover:border-primary"
+            )}
+          >
+            Information
+          </button>
+          <button
+            onClick={() => setActiveTab('services')}
+            className={cn(
+              "flex-1 py-2.5 px-4 rounded-lg font-medium transition-all",
+              activeTab === 'services'
+                ? "bg-primary text-primary-foreground shadow-sm"
+                : "bg-card text-muted-foreground border border-border hover:border-primary"
+            )}
+          >
+            Services
+          </button>
+        </div>
+
+        {/* Content Area */}
+        {displayedItems.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-12 text-center">
             <Heart className="w-16 h-16 text-muted-foreground mb-4" />
-            <h2 className="text-lg font-semibold text-foreground mb-2">No saved items yet</h2>
+            <h2 className="text-lg font-semibold text-foreground mb-2">
+              No saved {activeTab === 'information' ? 'information' : 'services'} yet
+            </h2>
             <p className="text-sm text-muted-foreground">
-              Save helpful articles and guides for quick access
+              {activeTab === 'information' 
+                ? 'Save helpful articles and guides for quick access'
+                : 'Save services from providers for easy reference'
+              }
             </p>
           </div>
         ) : (
           <div className="space-y-3">
-            {savedItems.map(item => (
+            {displayedItems.map(item => (
               <Card
                 key={item.id}
                 icon={getIcon(item.type)}
