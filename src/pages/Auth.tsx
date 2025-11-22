@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -7,16 +7,57 @@ import { Label } from '@/components/ui/label';
 import { Card } from '@/components/ui/card';
 import { toast } from 'sonner';
 import { Loader2 } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
 
 export default function Auth() {
-  const [isSignUp, setIsSignUp] = useState(false);
+  const [isSignUp, setIsSignUp] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [name, setName] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const { signIn, signUp, signInWithGoogle, signInWithApple } = useAuth();
+  const location = useLocation();
+  const { signIn, signUp, signInWithGoogle, signInWithApple, user } = useAuth();
+  
+  const returnTo = (location.state as any)?.returnTo || '/';
+  const showCheckout = (location.state as any)?.showCheckout || false;
+
+  // Handle OAuth redirect
+  useEffect(() => {
+    if (user) {
+      const pendingCheckout = localStorage.getItem('pendingCheckout');
+      const pendingReturn = localStorage.getItem('pendingReturnTo');
+      
+      if (pendingCheckout === 'true') {
+        localStorage.removeItem('pendingCheckout');
+        localStorage.removeItem('pendingReturnTo');
+        handleCheckout();
+      } else if (pendingReturn) {
+        localStorage.removeItem('pendingReturnTo');
+        navigate(pendingReturn);
+      } else if (showCheckout) {
+        handleCheckout();
+      } else {
+        navigate(returnTo);
+      }
+    }
+  }, [user]);
+
+  const handleCheckout = async () => {
+    try {
+      const { data, error } = await supabase.functions.invoke('create-checkout');
+      if (error) throw error;
+      if (data?.url) {
+        window.open(data.url, '_blank');
+        navigate(returnTo);
+      }
+    } catch (error) {
+      console.error('Error creating checkout:', error);
+      toast.error('Failed to start checkout. Please try again.');
+      navigate(returnTo);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -47,11 +88,20 @@ export default function Auth() {
       if (isSignUp) {
         const { error } = await signUp(email, password, name);
         if (error) throw error;
-        navigate('/');
+        toast.success('Account created successfully!');
+        if (showCheckout) {
+          await handleCheckout();
+        } else {
+          navigate(returnTo);
+        }
       } else {
         const { error } = await signIn(email, password);
         if (error) throw error;
-        navigate('/');
+        if (showCheckout) {
+          await handleCheckout();
+        } else {
+          navigate(returnTo);
+        }
       }
     } catch (error: any) {
       toast.error(error.message || 'An error occurred');
@@ -62,6 +112,13 @@ export default function Auth() {
 
   const handleGoogleSignIn = async () => {
     setLoading(true);
+    // Store pending actions for OAuth redirect
+    if (showCheckout) {
+      localStorage.setItem('pendingCheckout', 'true');
+      localStorage.setItem('pendingReturnTo', returnTo);
+    } else if (returnTo !== '/') {
+      localStorage.setItem('pendingReturnTo', returnTo);
+    }
     try {
       const { error } = await signInWithGoogle();
       if (error) throw error;
@@ -73,6 +130,13 @@ export default function Auth() {
 
   const handleAppleSignIn = async () => {
     setLoading(true);
+    // Store pending actions for OAuth redirect
+    if (showCheckout) {
+      localStorage.setItem('pendingCheckout', 'true');
+      localStorage.setItem('pendingReturnTo', returnTo);
+    } else if (returnTo !== '/') {
+      localStorage.setItem('pendingReturnTo', returnTo);
+    }
     try {
       const { error } = await signInWithApple();
       if (error) throw error;

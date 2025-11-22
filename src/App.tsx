@@ -42,7 +42,7 @@ const queryClient = new QueryClient();
 
 const ProtectedRoutes = () => {
   const { hasCompletedOnboarding } = useUserPreferences();
-  const { user, loading } = useAuth();
+  const { loading } = useAuth();
 
   if (loading) {
     return (
@@ -54,10 +54,6 @@ const ProtectedRoutes = () => {
 
   if (!hasCompletedOnboarding) {
     return <Navigate to="/start" replace />;
-  }
-
-  if (!user) {
-    return <Navigate to="/auth" replace />;
   }
 
   return (

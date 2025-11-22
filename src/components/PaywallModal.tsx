@@ -27,7 +27,7 @@ export const PaywallModal = ({ isOpen, onClose }: PaywallModalProps) => {
 
   const handleUpgrade = async () => {
     if (!user) {
-      navigate('/auth');
+      navigate('/auth', { state: { returnTo: '/', showCheckout: true } });
       onClose();
       return;
     }
