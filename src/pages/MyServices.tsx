@@ -6,6 +6,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
+import { BottomNav } from '@/components/BottomNav';
 import { toast } from 'sonner';
 
 interface Service {
@@ -256,6 +257,8 @@ export default function MyServices() {
           })
         )}
       </div>
+
+      <BottomNav />
     </div>
   );
 }

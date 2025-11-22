@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
+import { BottomNav } from '@/components/BottomNav';
 import { toast } from 'sonner';
 
 export default function AddService() {
@@ -369,6 +370,8 @@ export default function AddService() {
           {isSubmitting ? 'Submitting...' : t('addService.submit')}
         </Button>
       </form>
+
+      <BottomNav />
     </div>
   );
 }

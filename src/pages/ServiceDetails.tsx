@@ -4,6 +4,7 @@ import { ArrowLeft, ExternalLink, Phone, Mail, MessageCircle } from 'lucide-reac
 import { useLanguage } from '@/contexts/LanguageContext';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
+import { BottomNav } from '@/components/BottomNav';
 import { toast } from 'sonner';
 
 interface Service {
@@ -219,6 +220,8 @@ export default function ServiceDetails() {
           </div>
         </div>
       </div>
+
+      <BottomNav />
     </div>
   );
 }
