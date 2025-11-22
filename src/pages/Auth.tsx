@@ -10,18 +10,21 @@ import { Loader2 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 
 export default function Auth() {
-  const [isSignUp, setIsSignUp] = useState(true);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [name, setName] = useState('');
-  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const { signIn, signUp, signInWithGoogle, signInWithApple, user } = useAuth();
   
   const returnTo = (location.state as any)?.returnTo || '/';
   const showCheckout = (location.state as any)?.showCheckout || false;
+  const accountType = (location.state as any)?.accountType as 'regular' | 'business' | undefined;
+  const isSignUpFromSelection = (location.state as any)?.isSignUp || false;
+
+  const [isSignUp, setIsSignUp] = useState(isSignUpFromSelection);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [name, setName] = useState('');
+  const [loading, setLoading] = useState(false);
 
   // Handle OAuth redirect
   useEffect(() => {
@@ -35,7 +38,7 @@ export default function Auth() {
             .eq('id', user.id)
             .single();
 
-          // If is_business_user is null/undefined, redirect to account type selection
+          // If is_business_user is null/undefined, redirect to account type selection (OAuth users)
           if (profile && profile.is_business_user === null) {
             navigate('/account-type-selection', { 
               state: { returnTo, showCheckout } 
@@ -112,11 +115,30 @@ export default function Auth() {
       if (isSignUp) {
         const { error } = await signUp(email, password, name);
         if (error) throw error;
+
+        // Get the current user after signup
+        const { data: { session } } = await supabase.auth.getSession();
+        const newUser = session?.user;
+
+        // Set is_business_user based on account type selection
+        if (accountType && newUser) {
+          const { error: updateError } = await supabase
+            .from('profiles')
+            .update({ is_business_user: accountType === 'business' })
+            .eq('id', newUser.id);
+
+          if (updateError) {
+            console.error('Error updating account type:', updateError);
+          }
+        }
+
         toast.success('Account created successfully!');
-        // Redirect to account type selection after signup
-        navigate('/account-type-selection', { 
-          state: { returnTo, showCheckout } 
-        });
+        
+        if (showCheckout) {
+          await handleCheckout();
+        } else {
+          navigate(returnTo);
+        }
       } else {
         const { error } = await signIn(email, password);
         if (error) throw error;
@@ -272,7 +294,13 @@ export default function Auth() {
         <div className="text-center text-sm">
           <button
             type="button"
-            onClick={() => setIsSignUp(!isSignUp)}
+            onClick={() => {
+              if (isSignUp) {
+                setIsSignUp(false);
+              } else {
+                navigate('/select-account-type', { state: { returnTo, showCheckout } });
+              }
+            }}
             className="text-primary hover:underline"
           >
             {isSignUp
