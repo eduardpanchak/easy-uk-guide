@@ -14,6 +14,42 @@ export type Database = {
   }
   public: {
     Tables: {
+      business_profiles: {
+        Row: {
+          business_type: string | null
+          city_area: string | null
+          created_at: string
+          id: string
+          languages: string[] | null
+          services_provided: string | null
+          updated_at: string
+          user_id: string
+          years_experience: number | null
+        }
+        Insert: {
+          business_type?: string | null
+          city_area?: string | null
+          created_at?: string
+          id?: string
+          languages?: string[] | null
+          services_provided?: string | null
+          updated_at?: string
+          user_id: string
+          years_experience?: number | null
+        }
+        Update: {
+          business_type?: string | null
+          city_area?: string | null
+          created_at?: string
+          id?: string
+          languages?: string[] | null
+          services_provided?: string | null
+          updated_at?: string
+          user_id?: string
+          years_experience?: number | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -44,6 +80,63 @@ export type Database = {
           name?: string | null
           phone?: string | null
           updated_at?: string
+        }
+        Relationships: []
+      }
+      services: {
+        Row: {
+          category: string
+          click_count: number | null
+          created_at: string
+          description: string | null
+          id: string
+          languages: string[]
+          photos: string[] | null
+          pricing: string | null
+          service_name: string
+          social_links: Json | null
+          status: string
+          stripe_subscription_id: string | null
+          subscription_tier: string
+          updated_at: string
+          user_id: string
+          view_count: number | null
+        }
+        Insert: {
+          category: string
+          click_count?: number | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          languages: string[]
+          photos?: string[] | null
+          pricing?: string | null
+          service_name: string
+          social_links?: Json | null
+          status?: string
+          stripe_subscription_id?: string | null
+          subscription_tier: string
+          updated_at?: string
+          user_id: string
+          view_count?: number | null
+        }
+        Update: {
+          category?: string
+          click_count?: number | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          languages?: string[]
+          photos?: string[] | null
+          pricing?: string | null
+          service_name?: string
+          social_links?: Json | null
+          status?: string
+          stripe_subscription_id?: string | null
+          subscription_tier?: string
+          updated_at?: string
+          user_id?: string
+          view_count?: number | null
         }
         Relationships: []
       }
