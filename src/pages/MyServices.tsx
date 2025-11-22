@@ -112,28 +112,28 @@ export default function MyServices() {
           return (
             <div className="flex items-center gap-2 text-destructive">
               <Clock className="h-4 w-4" />
-              <span className="text-sm font-medium">Trial Expired</span>
+              <span className="text-sm font-medium">{t('myServices.trialExpired')}</span>
             </div>
           );
         }
         return (
           <div className="flex items-center gap-2 text-orange-600">
             <Clock className="h-4 w-4" />
-            <span className="text-sm font-medium">{daysLeft} days left in trial</span>
+            <span className="text-sm font-medium">{daysLeft} {t('myServices.daysLeft')}</span>
           </div>
         );
       case 'active':
         return (
           <div className="flex items-center gap-2 text-green-600">
             <CheckCircle className="h-4 w-4" />
-            <span className="text-sm font-medium">Active</span>
+            <span className="text-sm font-medium">{t('myServices.active')}</span>
           </div>
         );
       case 'cancelled':
         return (
           <div className="flex items-center gap-2 text-muted-foreground">
             <XCircle className="h-4 w-4" />
-            <span className="text-sm font-medium">Cancelled</span>
+            <span className="text-sm font-medium">{t('myServices.cancelled')}</span>
           </div>
         );
       default:
@@ -165,16 +165,16 @@ export default function MyServices() {
           >
             <ArrowLeft className="h-5 w-5" />
           </Button>
-          <h1 className="text-xl font-semibold">My Services</h1>
+          <h1 className="text-xl font-semibold">{t('myServices.title')}</h1>
         </div>
       </header>
 
       <div className="p-4 space-y-4">
         {services.length === 0 ? (
           <div className="text-center py-12">
-            <p className="text-muted-foreground mb-4">You haven't added any services yet</p>
+            <p className="text-muted-foreground mb-4">{t('myServices.noServices')}</p>
             <Button onClick={() => navigate('/add-service')}>
-              Add Your First Service
+              {t('myServices.addFirst')}
             </Button>
           </div>
         ) : (
@@ -205,7 +205,7 @@ export default function MyServices() {
                 <div className="flex items-center justify-between">
                   {getStatusBadge(service)}
                   <span className="text-sm text-muted-foreground capitalize">
-                    {service.subscription_tier} Plan
+                    {service.subscription_tier} {t('myServices.plan')}
                   </span>
                 </div>
 
@@ -213,11 +213,11 @@ export default function MyServices() {
                   <div className="pt-3 border-t space-y-2">
                     {isTrialExpired ? (
                       <p className="text-sm text-destructive">
-                        Your trial has expired. Subscribe to keep your service active.
+                        {t('myServices.trialExpired')}. {t('myServices.subscribeNow').toLowerCase()}.
                       </p>
                     ) : (
                       <p className="text-sm text-muted-foreground">
-                        Trial ends on {new Date(service.trial_end).toLocaleDateString()}
+                        {t('myServices.trialEnds')} {new Date(service.trial_end).toLocaleDateString()}
                       </p>
                     )}
                     <Button
@@ -226,7 +226,7 @@ export default function MyServices() {
                       size="sm"
                     >
                       <CreditCard className="h-4 w-4 mr-2" />
-                      Subscribe Now - {getPriceForTier(service.subscription_tier)}/month
+                      {t('myServices.subscribeNow')} - {getPriceForTier(service.subscription_tier)}/month
                     </Button>
                   </div>
                 )}
@@ -234,7 +234,7 @@ export default function MyServices() {
                 {service.status === 'active' && (
                   <div className="pt-3 border-t">
                     <p className="text-sm text-muted-foreground">
-                      Subscription active - {getPriceForTier(service.subscription_tier)}/month
+                      {t('myServices.subscriptionActive')} - {getPriceForTier(service.subscription_tier)}/month
                     </p>
                   </div>
                 )}
@@ -247,7 +247,7 @@ export default function MyServices() {
                       className="w-full"
                       size="sm"
                     >
-                      Reactivate Service - {getPriceForTier(service.subscription_tier)}/month
+                      {t('myServices.reactivate')} - {getPriceForTier(service.subscription_tier)}/month
                     </Button>
                   </div>
                 )}
