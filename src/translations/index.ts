@@ -79,6 +79,8 @@ export const translations = {
       addServiceDesc: 'Add a new service listing',
       statisticsTitle: 'Statistics',
       statisticsDesc: 'View performance metrics for your services',
+      clients: 'Client Messaging',
+      clientsDesc: 'Message your clients',
       support: 'Support',
       aboutEasyUK: 'About EasyUK',
       feedback: 'Feedback',
@@ -153,6 +155,10 @@ export const translations = {
       clicks: 'Clicks',
       clickRate: 'Click Rate',
       noServices: 'No services yet'
+    },
+    clientMessaging: {
+      title: 'Client Messaging',
+      placeholder: 'Client messaging service in development.'
     },
     messages: {
       savedItem: 'Saved!',
@@ -245,6 +251,8 @@ export const translations = {
       addServiceDesc: 'Додайте нову послугу',
       statisticsTitle: 'Статистика',
       statisticsDesc: 'Переглядайте показники ефективності ваших послуг',
+      clients: 'Листування з клієнтами',
+      clientsDesc: 'Обмінюйтесь повідомленнями з вашими клієнтами',
       support: 'Підтримка',
       aboutEasyUK: 'Про EasyUK',
       feedback: 'Зворотній зв\'язок',
@@ -319,6 +327,10 @@ export const translations = {
       clicks: 'Кліки',
       clickRate: 'Конверсія кліків',
       noServices: 'Послуг поки немає'
+    },
+    clientMessaging: {
+      title: 'Листування з клієнтами',
+      placeholder: 'Сервіс листування з клієнтами в розробці.'
     },
     messages: {
       savedItem: 'Збережено!',
@@ -411,6 +423,8 @@ export const translations = {
       addServiceDesc: 'Добавьте новую услугу',
       statisticsTitle: 'Статистика',
       statisticsDesc: 'Просматривайте показатели эффективности ваших услуг',
+      clients: 'Переписка с клиентами',
+      clientsDesc: 'Обменивайтесь сообщениями с вашими клиентами',
       support: 'Поддержка',
       aboutEasyUK: 'О EasyUK',
       feedback: 'Обратная связь',
@@ -485,6 +499,10 @@ export const translations = {
       clicks: 'Клики',
       clickRate: 'Конверсия кликов',
       noServices: 'Услуг пока нет'
+    },
+    clientMessaging: {
+      title: 'Переписка с клиентами',
+      placeholder: 'Сервис переписки с клиентами в разработке.'
     },
     messages: {
       savedItem: 'Сохранено!',
@@ -577,6 +595,8 @@ export const translations = {
       addServiceDesc: 'Dodaj nową usługę',
       statisticsTitle: 'Statystyki',
       statisticsDesc: 'Zobacz wskaźniki wydajności swoich usług',
+      clients: 'Wiadomości od klientów',
+      clientsDesc: 'Wymieniaj wiadomości ze swoimi klientami',
       support: 'Wsparcie',
       aboutEasyUK: 'O EasyUK',
       feedback: 'Opinia',
@@ -651,6 +671,10 @@ export const translations = {
       clicks: 'Kliknięcia',
       clickRate: 'Wskaźnik kliknięć',
       noServices: 'Brak usług'
+    },
+    clientMessaging: {
+      title: 'Wiadomości od klientów',
+      placeholder: 'Usługa wiadomości od klientów w rozwoju.'
     },
     messages: {
       savedItem: 'Zapisano!',
@@ -743,6 +767,8 @@ export const translations = {
       addServiceDesc: 'Pridėkite naują paslaugą',
       statisticsTitle: 'Statistika',
       statisticsDesc: 'Peržiūrėkite savo paslaugų efektyvumo rodiklius',
+      clients: 'Pranešimai klientams',
+      clientsDesc: 'Keiskitės žinutėmis su klientais',
       support: 'Pagalba',
       aboutEasyUK: 'Apie EasyUK',
       feedback: 'Atsiliepimai',
@@ -817,6 +843,10 @@ export const translations = {
       clicks: 'Paspaudimai',
       clickRate: 'Paspaudimų dažnis',
       noServices: 'Paslaugų nėra'
+    },
+    clientMessaging: {
+      title: 'Pranešimai klientams',
+      placeholder: 'Pranešimų klientams paslauga kuriama.'
     },
     messages: {
       savedItem: 'Išsaugota!',
