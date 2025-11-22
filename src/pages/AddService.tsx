@@ -203,6 +203,10 @@ export default function AddService() {
             required
           >
             <option value="repair">{t('addService.categories.repair')}</option>
+            <option value="beauty">{t('addService.categories.beauty')}</option>
+            <option value="construction">{t('addService.categories.construction')}</option>
+            <option value="cleaning">{t('addService.categories.cleaning')}</option>
+            <option value="delivery">{t('addService.categories.delivery')}</option>
             <option value="food">{t('addService.categories.food')}</option>
             <option value="transport">{t('addService.categories.transport')}</option>
             <option value="legal">{t('addService.categories.legal')}</option>
@@ -211,6 +215,7 @@ export default function AddService() {
             <option value="education">{t('addService.categories.education')}</option>
             <option value="healthcare">{t('addService.categories.healthcare')}</option>
             <option value="housing">{t('addService.categories.housing')}</option>
+            <option value="car_services">{t('addService.categories.car_services')}</option>
             <option value="other">{t('addService.categories.other')}</option>
           </select>
         </div>

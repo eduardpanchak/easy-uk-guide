@@ -110,6 +110,10 @@ export const translations = {
       category: 'Category',
       categories: {
         repair: 'Repair',
+        beauty: 'Beauty Industry',
+        construction: 'Construction',
+        cleaning: 'Cleaning',
+        delivery: 'Delivery',
         food: 'Food & Catering',
         transport: 'Transport',
         legal: 'Legal Services',
@@ -118,6 +122,7 @@ export const translations = {
         education: 'Education',
         healthcare: 'Healthcare',
         housing: 'Housing',
+        car_services: 'Car Services',
         other: 'Other'
       },
       subscriptionTier: 'Subscription Plan',
@@ -318,6 +323,10 @@ export const translations = {
       category: 'Категорія',
       categories: {
         repair: 'Ремонт',
+        beauty: 'Краса',
+        construction: 'Будівництво',
+        cleaning: 'Прибирання',
+        delivery: 'Доставка',
         food: 'Їжа та кейтеринг',
         transport: 'Транспорт',
         legal: 'Юридичні послуги',
@@ -326,6 +335,7 @@ export const translations = {
         education: 'Освіта',
         healthcare: 'Медицина',
         housing: 'Житло',
+        car_services: 'Автосервіс',
         other: 'Інше'
       },
       subscriptionTier: 'Тарифний план',
@@ -526,6 +536,10 @@ export const translations = {
       category: 'Категория',
       categories: {
         repair: 'Ремонт',
+        beauty: 'Индустрия красоты',
+        construction: 'Строительство',
+        cleaning: 'Уборка',
+        delivery: 'Доставка',
         food: 'Еда и кейтеринг',
         transport: 'Транспорт',
         legal: 'Юридические услуги',
@@ -534,6 +548,7 @@ export const translations = {
         education: 'Образование',
         healthcare: 'Медицина',
         housing: 'Жилье',
+        car_services: 'Автосервис',
         other: 'Другое'
       },
       subscriptionTier: 'Тарифный план',
@@ -734,6 +749,10 @@ export const translations = {
       category: 'Kategoria',
       categories: {
         repair: 'Naprawa',
+        beauty: 'Branża beauty',
+        construction: 'Budownictwo',
+        cleaning: 'Sprzątanie',
+        delivery: 'Dostawa',
         food: 'Jedzenie i catering',
         transport: 'Transport',
         legal: 'Usługi prawne',
@@ -742,6 +761,7 @@ export const translations = {
         education: 'Edukacja',
         healthcare: 'Opieka zdrowotna',
         housing: 'Mieszkanie',
+        car_services: 'Serwis samochodowy',
         other: 'Inne'
       },
       subscriptionTier: 'Plan subskrypcji',
@@ -942,6 +962,10 @@ export const translations = {
       category: 'Kategorija',
       categories: {
         repair: 'Remontas',
+        beauty: 'Grožio industrija',
+        construction: 'Statyba',
+        cleaning: 'Valymas',
+        delivery: 'Pristatymas',
         food: 'Maistas ir maitinimas',
         transport: 'Transportas',
         legal: 'Teisinės paslaugos',
@@ -950,6 +974,7 @@ export const translations = {
         education: 'Švietimas',
         healthcare: 'Sveikatos priežiūra',
         housing: 'Būstas',
+        car_services: 'Automobilių servisas',
         other: 'Kita'
       },
       subscriptionTier: 'Prenumeratos planas',
