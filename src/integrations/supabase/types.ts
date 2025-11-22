@@ -83,7 +83,7 @@ export type Database = {
           created_at: string
           email: string | null
           id: string
-          is_business_user: boolean
+          is_business_user: boolean | null
           location: string | null
           name: string | null
           phone: string | null
@@ -94,7 +94,7 @@ export type Database = {
           created_at?: string
           email?: string | null
           id: string
-          is_business_user?: boolean
+          is_business_user?: boolean | null
           location?: string | null
           name?: string | null
           phone?: string | null
@@ -105,7 +105,7 @@ export type Database = {
           created_at?: string
           email?: string | null
           id?: string
-          is_business_user?: boolean
+          is_business_user?: boolean | null
           location?: string | null
           name?: string | null
           phone?: string | null
