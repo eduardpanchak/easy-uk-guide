@@ -26,21 +26,45 @@ export default function Auth() {
   // Handle OAuth redirect
   useEffect(() => {
     if (user) {
-      const pendingCheckout = localStorage.getItem('pendingCheckout');
-      const pendingReturn = localStorage.getItem('pendingReturnTo');
-      
-      if (pendingCheckout === 'true') {
-        localStorage.removeItem('pendingCheckout');
-        localStorage.removeItem('pendingReturnTo');
-        handleCheckout();
-      } else if (pendingReturn) {
-        localStorage.removeItem('pendingReturnTo');
-        navigate(pendingReturn);
-      } else if (showCheckout) {
-        handleCheckout();
-      } else {
-        navigate(returnTo);
-      }
+      // Check if this is a new user who hasn't selected account type yet
+      const checkAccountType = async () => {
+        try {
+          const { data: profile } = await supabase
+            .from('profiles')
+            .select('is_business_user')
+            .eq('id', user.id)
+            .single();
+
+          // If is_business_user is null/undefined, redirect to account type selection
+          if (profile && profile.is_business_user === null) {
+            navigate('/account-type-selection', { 
+              state: { returnTo, showCheckout } 
+            });
+            return;
+          }
+        } catch (error) {
+          console.error('Error checking account type:', error);
+        }
+
+        // If account type is set, proceed with normal flow
+        const pendingCheckout = localStorage.getItem('pendingCheckout');
+        const pendingReturn = localStorage.getItem('pendingReturnTo');
+        
+        if (pendingCheckout === 'true') {
+          localStorage.removeItem('pendingCheckout');
+          localStorage.removeItem('pendingReturnTo');
+          handleCheckout();
+        } else if (pendingReturn) {
+          localStorage.removeItem('pendingReturnTo');
+          navigate(pendingReturn);
+        } else if (showCheckout) {
+          handleCheckout();
+        } else {
+          navigate(returnTo);
+        }
+      };
+
+      checkAccountType();
     }
   }, [user]);
 

@@ -83,6 +83,7 @@ export type Database = {
           created_at: string
           email: string | null
           id: string
+          is_business_user: boolean
           location: string | null
           name: string | null
           phone: string | null
@@ -93,6 +94,7 @@ export type Database = {
           created_at?: string
           email?: string | null
           id: string
+          is_business_user?: boolean
           location?: string | null
           name?: string | null
           phone?: string | null
@@ -103,6 +105,7 @@ export type Database = {
           created_at?: string
           email?: string | null
           id?: string
+          is_business_user?: boolean
           location?: string | null
           name?: string | null
           phone?: string | null
