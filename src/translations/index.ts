@@ -160,6 +160,17 @@ export const translations = {
       title: 'Client Messaging',
       placeholder: 'Client messaging service in development.'
     },
+    accountType: {
+      title: 'Choose Your Account Type',
+      subtitle: 'Select the type of account you want to create',
+      regular: 'Regular User Account',
+      regularDesc: 'Access all information and guides for living in the UK',
+      business: 'Business Account',
+      businessDesc: 'Offer services and connect with clients',
+      continue: 'Continue',
+      pleaseSelect: 'Please select an account type',
+      success: 'Account type set successfully!'
+    },
     messages: {
       savedItem: 'Saved!',
       removedSaved: 'Removed from saved',
@@ -331,6 +342,17 @@ export const translations = {
     clientMessaging: {
       title: 'Листування з клієнтами',
       placeholder: 'Сервіс листування з клієнтами в розробці.'
+    },
+    accountType: {
+      title: 'Оберіть тип акаунту',
+      subtitle: 'Виберіть тип акаунту, який ви хочете створити',
+      regular: 'Звичайний акаунт',
+      regularDesc: 'Доступ до всієї інформації та посібників для життя у Великобританії',
+      business: 'Бізнес-акаунт',
+      businessDesc: 'Пропонуйте послуги та контактуйте з клієнтами',
+      continue: 'Продовжити',
+      pleaseSelect: 'Будь ласка, оберіть тип акаунту',
+      success: 'Тип акаунту успішно встановлено!'
     },
     messages: {
       savedItem: 'Збережено!',
@@ -504,6 +526,17 @@ export const translations = {
       title: 'Переписка с клиентами',
       placeholder: 'Сервис переписки с клиентами в разработке.'
     },
+    accountType: {
+      title: 'Выберите тип аккаунта',
+      subtitle: 'Выберите тип аккаунта, который хотите создать',
+      regular: 'Обычный аккаунт',
+      regularDesc: 'Доступ ко всей информации и руководствам для жизни в Великобритании',
+      business: 'Бизнес-аккаунт',
+      businessDesc: 'Предлагайте услуги и связывайтесь с клиентами',
+      continue: 'Продолжить',
+      pleaseSelect: 'Пожалуйста, выберите тип аккаунта',
+      success: 'Тип аккаунта успешно установлен!'
+    },
     messages: {
       savedItem: 'Сохранено!',
       removedSaved: 'Удалено из сохранённого',
@@ -676,6 +709,17 @@ export const translations = {
       title: 'Wiadomości od klientów',
       placeholder: 'Usługa wiadomości od klientów w rozwoju.'
     },
+    accountType: {
+      title: 'Wybierz typ konta',
+      subtitle: 'Wybierz typ konta, które chcesz utworzyć',
+      regular: 'Zwykłe konto użytkownika',
+      regularDesc: 'Dostęp do wszystkich informacji i poradników dotyczących życia w Wielkiej Brytanii',
+      business: 'Konto biznesowe',
+      businessDesc: 'Oferuj usługi i łącz się z klientami',
+      continue: 'Kontynuuj',
+      pleaseSelect: 'Proszę wybrać typ konta',
+      success: 'Typ konta został pomyślnie ustawiony!'
+    },
     messages: {
       savedItem: 'Zapisano!',
       removedSaved: 'Usunięto z zapisanych',
@@ -847,6 +891,17 @@ export const translations = {
     clientMessaging: {
       title: 'Pranešimai klientams',
       placeholder: 'Pranešimų klientams paslauga kuriama.'
+    },
+    accountType: {
+      title: 'Pasirinkite paskyros tipą',
+      subtitle: 'Pasirinkite paskyros tipą, kurį norite sukurti',
+      regular: 'Įprasta naudotojo paskyra',
+      regularDesc: 'Prieiga prie visos informacijos ir gidų gyvenimui Jungtinėje Karalystėje',
+      business: 'Verslo paskyra',
+      businessDesc: 'Siūlykite paslaugas ir bendraukite su klientais',
+      continue: 'Tęsti',
+      pleaseSelect: 'Prašome pasirinkti paskyros tipą',
+      success: 'Paskyros tipas sėkmingai nustatytas!'
     },
     messages: {
       savedItem: 'Išsaugota!',

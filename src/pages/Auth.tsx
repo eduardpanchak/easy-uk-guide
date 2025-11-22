@@ -89,11 +89,10 @@ export default function Auth() {
         const { error } = await signUp(email, password, name);
         if (error) throw error;
         toast.success('Account created successfully!');
-        if (showCheckout) {
-          await handleCheckout();
-        } else {
-          navigate(returnTo);
-        }
+        // Redirect to account type selection after signup
+        navigate('/account-type-selection', { 
+          state: { returnTo, showCheckout } 
+        });
       } else {
         const { error } = await signIn(email, password);
         if (error) throw error;
