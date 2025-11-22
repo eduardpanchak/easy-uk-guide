@@ -61,20 +61,24 @@ export default function AddService() {
     setIsSubmitting(true);
 
     try {
+      console.log('Starting service creation for user:', user.id);
+      
       // Upload photos to storage if any
       const photoUrls: string[] = [];
       
       if (photos.length > 0) {
+        console.log(`Uploading ${photos.length} photos...`);
         for (const photo of photos) {
           const fileExt = photo.name.split('.').pop();
-          const fileName = `${user.id}/${Date.now()}-${Math.random()}.${fileExt}`;
+          const fileName = `services/${user.id}/${Date.now()}-${Math.random()}.${fileExt}`;
           
           const { error: uploadError } = await supabase.storage
-            .from('avatars') // Using existing avatars bucket for now
+            .from('avatars')
             .upload(fileName, photo);
 
           if (uploadError) {
             console.error('Photo upload error:', uploadError);
+            toast.error(`Failed to upload photo: ${photo.name}`);
             continue; // Skip failed uploads
           }
 
@@ -84,6 +88,7 @@ export default function AddService() {
 
           photoUrls.push(urlData.publicUrl);
         }
+        console.log(`Successfully uploaded ${photoUrls.length} photos`);
       }
 
       // Calculate trial dates (14 days from now)
@@ -91,37 +96,45 @@ export default function AddService() {
       const trialEnd = new Date();
       trialEnd.setDate(trialEnd.getDate() + 14);
 
+      const serviceData = {
+        user_id: user.id,
+        service_name: formData.serviceName,
+        description: formData.description,
+        address: formData.address || null,
+        pricing: formData.price || null,
+        social_links: formData.website ? { website: formData.website } : {},
+        phone: formData.phone || null,
+        email: formData.email || null,
+        photos: photoUrls.length > 0 ? photoUrls : null,
+        status: 'trial',
+        trial_start: trialStart.toISOString(),
+        trial_end: trialEnd.toISOString(),
+        subscription_tier: formData.subscriptionTier,
+        category: 'general',
+        languages: ['en'],
+      };
+
+      console.log('Inserting service with data:', serviceData);
+
       // Insert service into database
-      const { error: insertError } = await supabase
+      const { data: insertedData, error: insertError } = await supabase
         .from('services')
-        .insert({
-          user_id: user.id,
-          service_name: formData.serviceName,
-          description: formData.description,
-          address: formData.address || null,
-          pricing: formData.price || null,
-          social_links: formData.website ? { website: formData.website } : {},
-          phone: formData.phone || null,
-          email: formData.email || null,
-          photos: photoUrls.length > 0 ? photoUrls : null,
-          status: 'trial', // Start with 14-day trial
-          trial_start: trialStart.toISOString(),
-          trial_end: trialEnd.toISOString(),
-          subscription_tier: formData.subscriptionTier,
-          category: 'general', // Default category
-          languages: ['en'], // Default language
-        });
+        .insert(serviceData)
+        .select();
 
       if (insertError) {
-        throw insertError;
+        console.error('Service insert error:', insertError);
+        throw new Error(insertError.message || 'Failed to insert service');
       }
 
+      console.log('Service created successfully:', insertedData);
       const trialEndDate = trialEnd.toLocaleDateString();
-      toast.success(`${t('addService.serviceAdded').replace('{date}', trialEndDate)}`);
+      toast.success(`Service added! Trial ends on ${trialEndDate}`);
       navigate('/account');
     } catch (error) {
       console.error('Error adding service:', error);
-      toast.error(t('addService.failed'));
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+      toast.error(`Failed to add service: ${errorMessage}`);
     } finally {
       setIsSubmitting(false);
     }
