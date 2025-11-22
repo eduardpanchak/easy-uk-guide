@@ -4,7 +4,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { Header } from '@/components/Header';
 import { BottomNav } from '@/components/BottomNav';
 import { Card } from '@/components/Card';
-import { User, Briefcase, Info, MessageSquare, HelpCircle, LogOut, Crown, Loader2, Languages, BarChart, Users } from 'lucide-react';
+import { User, Briefcase, Info, MessageSquare, HelpCircle, LogOut, Crown, Loader2, Languages, BarChart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { supabase } from '@/integrations/supabase/client';
@@ -213,13 +213,6 @@ export default function Account() {
               description={t('account.statisticsDesc')}
               icon={BarChart}
               onClick={() => navigate('/statistics')}
-            />
-            
-            <Card
-              title={t('account.clients')}
-              description={t('account.clientsDesc')}
-              icon={Users}
-              onClick={() => navigate('/client-messaging')}
             />
           </div>
         )}
