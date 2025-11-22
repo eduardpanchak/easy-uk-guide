@@ -30,6 +30,7 @@ import Saved from "./pages/Saved";
 import Search from "./pages/Search";
 import Settings from "./pages/Settings";
 import Services from "./pages/Services";
+import ServiceDetails from "./pages/ServiceDetails";
 import BusinessRegistration from "./pages/BusinessRegistration";
 import Account from "./pages/Account";
 import MyProfile from "./pages/MyProfile";
@@ -82,6 +83,7 @@ const ProtectedRoutes = () => {
       <Route path="/search" element={<Search />} />
       <Route path="/settings" element={<Settings />} />
       <Route path="/services" element={<Services />} />
+      <Route path="/services/:id" element={<ServiceDetails />} />
       <Route path="/business-registration" element={<BusinessRegistration />} />
       <Route path="/account" element={<Account />} />
       <Route path="/my-profile" element={<MyProfile />} />
