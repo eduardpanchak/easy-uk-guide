@@ -24,6 +24,14 @@ export default function Account() {
   const [loading, setLoading] = useState(false);
   const [portalLoading, setPortalLoading] = useState(false);
   const [languageDialogOpen, setLanguageDialogOpen] = useState(false);
+  const [confirmBusinessDialogOpen, setConfirmBusinessDialogOpen] = useState(false);
+  const [successBusinessDialogOpen, setSuccessBusinessDialogOpen] = useState(false);
+  const [isBusinessUser, setIsBusinessUser] = useState(profile?.is_business_user || false);
+
+  useEffect(() => {
+    // Sync local state with profile
+    setIsBusinessUser(profile?.is_business_user || false);
+  }, [profile?.is_business_user]);
 
   useEffect(() => {
     // Check for success/cancel params
@@ -97,6 +105,30 @@ export default function Account() {
     setLanguage(lang);
     setLanguageDialogOpen(false);
     toast.success(t('messages.savedItem'));
+  };
+
+  const handleEnableBusinessAccount = async () => {
+    try {
+      const { error } = await supabase
+        .from('profiles')
+        .update({ is_business_user: true })
+        .eq('id', user!.id);
+
+      if (error) throw error;
+
+      // Update local state immediately
+      setIsBusinessUser(true);
+      
+      // Refresh profile data
+      await checkSubscription();
+      
+      // Close confirmation and show success
+      setConfirmBusinessDialogOpen(false);
+      setSuccessBusinessDialogOpen(true);
+    } catch (error) {
+      console.error('Error enabling business account:', error);
+      toast.error('Failed to enable business account');
+    }
   };
 
   const languageOptions = [
@@ -190,7 +222,7 @@ export default function Account() {
           />
         </div>
 
-        {!profile?.is_business_user && (
+        {!isBusinessUser && (
           <div className="space-y-2">
             <h3 className="text-sm font-medium text-muted-foreground px-4">{t('account.upgrade')}</h3>
             
@@ -198,27 +230,12 @@ export default function Account() {
               title={t('account.enableBusiness')}
               description={t('account.enableBusinessDesc')}
               icon={Briefcase}
-              onClick={async () => {
-                try {
-                  const { error } = await supabase
-                    .from('profiles')
-                    .update({ is_business_user: true })
-                    .eq('id', user!.id);
-
-                  if (error) throw error;
-
-                  await checkSubscription();
-                  toast.success(t('account.businessEnabled'));
-                } catch (error) {
-                  console.error('Error enabling business account:', error);
-                  toast.error('Failed to enable business account');
-                }
-              }}
+              onClick={() => setConfirmBusinessDialogOpen(true)}
             />
           </div>
         )}
 
-        {profile?.is_business_user && (
+        {isBusinessUser && (
           <div className="space-y-2">
             <h3 className="text-sm font-medium text-muted-foreground px-4">{t('account.business')}</h3>
             
@@ -300,6 +317,49 @@ export default function Account() {
               </button>
             ))}
           </div>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={confirmBusinessDialogOpen} onOpenChange={setConfirmBusinessDialogOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>{t('account.businessConfirmTitle')}</DialogTitle>
+          </DialogHeader>
+          <p className="text-sm text-muted-foreground mb-4">
+            {t('account.businessConfirmBody')}
+          </p>
+          <div className="flex gap-3">
+            <Button
+              variant="outline"
+              className="flex-1"
+              onClick={() => setConfirmBusinessDialogOpen(false)}
+            >
+              {t('account.businessConfirmCancel')}
+            </Button>
+            <Button
+              className="flex-1"
+              onClick={handleEnableBusinessAccount}
+            >
+              {t('account.businessConfirmYes')}
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={successBusinessDialogOpen} onOpenChange={setSuccessBusinessDialogOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>{t('account.businessSuccessTitle')}</DialogTitle>
+          </DialogHeader>
+          <p className="text-sm text-muted-foreground mb-4">
+            {t('account.businessSuccessBody')}
+          </p>
+          <Button
+            className="w-full"
+            onClick={() => setSuccessBusinessDialogOpen(false)}
+          >
+            {t('account.businessSuccessContinue')}
+          </Button>
         </DialogContent>
       </Dialog>
 
