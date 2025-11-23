@@ -45,6 +45,15 @@ export default function AddService() {
 
     if (!user) {
       toast.error('You must be logged in to upload photos');
+      navigate('/auth');
+      return;
+    }
+
+    // Verify user is authenticated
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
+      toast.error('Session expired. Please log in again.');
+      navigate('/auth');
       return;
     }
 
@@ -57,6 +66,7 @@ export default function AddService() {
       const fileName = `services/${user.id}/${Date.now()}-${Math.random()}.${fileExt}`;
       
       console.log('Uploading photo to:', fileName);
+      console.log('User authenticated as:', user.id);
       
       const { error: uploadError } = await supabase.storage
         .from('avatars')
@@ -112,10 +122,19 @@ export default function AddService() {
       return;
     }
 
+    // Verify user session is still valid
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
+      toast.error('Session expired. Please log in again.');
+      navigate('/auth');
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
       console.log('Starting service creation for user:', user.id);
+      console.log('User authenticated:', session.user.id);
       console.log('Using uploaded photo URL:', uploadedPhotoUrl);
 
       // Calculate trial dates (14 days from now)
