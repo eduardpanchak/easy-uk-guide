@@ -18,6 +18,7 @@ interface Service {
   trial_start: string;
   trial_end: string;
   stripe_subscription_id: string | null;
+  photos: string[] | null;
   created_at: string;
 }
 
@@ -186,21 +187,34 @@ export default function MyServices() {
 
             return (
               <Card key={service.id} className="p-4 space-y-3">
-                <div className="flex justify-between items-start gap-4">
-                  <div className="flex-1">
-                    <h3 className="font-semibold text-lg">{service.service_name}</h3>
-                    <p className="text-sm text-muted-foreground line-clamp-2 mt-1">
-                      {service.description}
-                    </p>
+                <div className="flex gap-4">
+                  {/* Service thumbnail */}
+                  {service.photos && service.photos.length > 0 && (
+                    <div className="w-20 h-20 rounded-lg overflow-hidden shrink-0 border">
+                      <img 
+                        src={service.photos[0]} 
+                        alt={service.service_name}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  )}
+                  
+                  <div className="flex-1 flex justify-between items-start gap-4">
+                    <div className="flex-1">
+                      <h3 className="font-semibold text-lg">{service.service_name}</h3>
+                      <p className="text-sm text-muted-foreground line-clamp-2 mt-1">
+                        {service.description}
+                      </p>
+                    </div>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => navigate(`/edit-service/${service.id}`)}
+                      className="shrink-0"
+                    >
+                      <Edit className="h-5 w-5" />
+                    </Button>
                   </div>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => navigate(`/edit-service/${service.id}`)}
-                    className="shrink-0"
-                  >
-                    <Edit className="h-5 w-5" />
-                  </Button>
                 </div>
 
                 <div className="flex items-center justify-between">
