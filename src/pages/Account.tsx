@@ -190,6 +190,34 @@ export default function Account() {
           />
         </div>
 
+        {!profile?.is_business_user && (
+          <div className="space-y-2">
+            <h3 className="text-sm font-medium text-muted-foreground px-4">{t('account.upgrade')}</h3>
+            
+            <Card
+              title={t('account.enableBusiness')}
+              description={t('account.enableBusinessDesc')}
+              icon={Briefcase}
+              onClick={async () => {
+                try {
+                  const { error } = await supabase
+                    .from('profiles')
+                    .update({ is_business_user: true })
+                    .eq('id', user!.id);
+
+                  if (error) throw error;
+
+                  await checkSubscription();
+                  toast.success(t('account.businessEnabled'));
+                } catch (error) {
+                  console.error('Error enabling business account:', error);
+                  toast.error('Failed to enable business account');
+                }
+              }}
+            />
+          </div>
+        )}
+
         {profile?.is_business_user && (
           <div className="space-y-2">
             <h3 className="text-sm font-medium text-muted-foreground px-4">{t('account.business')}</h3>
