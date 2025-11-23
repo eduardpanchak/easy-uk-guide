@@ -120,15 +120,15 @@ export default function Auth() {
         const { data: { session } } = await supabase.auth.getSession();
         const newUser = session?.user;
 
-        // Set is_business_user based on account type selection
-        if (accountType && newUser) {
+        // All new users start as regular users
+        if (newUser) {
           const { error: updateError } = await supabase
             .from('profiles')
-            .update({ is_business_user: accountType === 'business' })
+            .update({ is_business_user: false })
             .eq('id', newUser.id);
 
           if (updateError) {
-            console.error('Error updating account type:', updateError);
+            console.error('Error setting account type:', updateError);
           }
         }
 
@@ -294,13 +294,7 @@ export default function Auth() {
         <div className="text-center text-sm">
           <button
             type="button"
-            onClick={() => {
-              if (isSignUp) {
-                setIsSignUp(false);
-              } else {
-                navigate('/select-account-type', { state: { returnTo, showCheckout } });
-              }
-            }}
+            onClick={() => setIsSignUp(!isSignUp)}
             className="text-primary hover:underline"
           >
             {isSignUp
