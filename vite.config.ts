@@ -17,14 +17,7 @@ export default defineConfig(({ mode }) => ({
     dedupe: ["react", "react-dom"],
   },
   optimizeDeps: {
-    include: ["react", "react-dom"],
-    esbuildOptions: {
-      mainFields: ["module", "main"],
-    },
-  },
-  build: {
-    commonjsOptions: {
-      include: [/node_modules/],
-    },
+    include: ["react", "react-dom", "react/jsx-runtime"],
+    force: true,
   },
 }));
