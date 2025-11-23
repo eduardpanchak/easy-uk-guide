@@ -54,6 +54,12 @@ export default function AddService() {
       return;
     }
 
+    // Validate that at least one photo is selected
+    if (photos.length === 0) {
+      toast.error('Please upload at least one image before adding a service.');
+      return;
+    }
+
     if (!user) {
       toast.error('You must be logged in to add a service');
       navigate('/auth');
@@ -65,32 +71,39 @@ export default function AddService() {
     try {
       console.log('Starting service creation for user:', user.id);
       
-      // Upload photos to storage if any
+      // Upload photos to storage - MUST complete before creating service
       const photoUrls: string[] = [];
       
-      if (photos.length > 0) {
-        console.log(`Uploading ${photos.length} photos...`);
-        for (const photo of photos) {
-          const fileExt = photo.name.split('.').pop();
-          const fileName = `services/${user.id}/${Date.now()}-${Math.random()}.${fileExt}`;
-          
-          const { error: uploadError } = await supabase.storage
-            .from('avatars')
-            .upload(fileName, photo);
+      console.log(`Uploading ${photos.length} photos...`);
+      for (const photo of photos) {
+        const fileExt = photo.name.split('.').pop();
+        const fileName = `services/${user.id}/${Date.now()}-${Math.random()}.${fileExt}`;
+        
+        const { error: uploadError } = await supabase.storage
+          .from('avatars')
+          .upload(fileName, photo);
 
-          if (uploadError) {
-            console.error('Photo upload error:', uploadError);
-            toast.error(`Failed to upload photo: ${photo.name}`);
-            continue; // Skip failed uploads
-          }
-
-          const { data: urlData } = supabase.storage
-            .from('avatars')
-            .getPublicUrl(fileName);
-
-          photoUrls.push(urlData.publicUrl);
+        if (uploadError) {
+          console.error('Photo upload error:', uploadError);
+          toast.error(`Failed to upload photo: ${photo.name}`);
+          setIsSubmitting(false);
+          return; // Stop if upload fails
         }
-        console.log(`Successfully uploaded ${photoUrls.length} photos`);
+
+        const { data: urlData } = supabase.storage
+          .from('avatars')
+          .getPublicUrl(fileName);
+
+        photoUrls.push(urlData.publicUrl);
+      }
+      
+      console.log(`Successfully uploaded ${photoUrls.length} photos`);
+      
+      // Verify at least one photo was uploaded successfully
+      if (photoUrls.length === 0) {
+        toast.error('Failed to upload images. Please try again.');
+        setIsSubmitting(false);
+        return;
       }
 
       // Calculate trial dates (14 days from now)
@@ -296,7 +309,7 @@ export default function AddService() {
         {/* Photos */}
         <div className="space-y-2">
           <Label className="text-sm font-medium">
-            {t('addService.photos')}
+            {t('addService.photos')} <span className="text-destructive">*</span>
           </Label>
           <p className="text-sm text-muted-foreground">{t('addService.photosDesc')}</p>
           <div className="relative">
@@ -307,6 +320,7 @@ export default function AddService() {
               accept="image/*"
               onChange={handlePhotoUpload}
               className="sr-only"
+              required
             />
             <label
               htmlFor="photos"
@@ -314,7 +328,7 @@ export default function AddService() {
             >
               <ImagePlus className="h-6 w-6 text-muted-foreground" />
               <span className="text-sm text-muted-foreground">
-                {photos.length > 0 ? `${photos.length} photo(s) selected` : 'Tap to upload photos'}
+                {photos.length > 0 ? `${photos.length} photo(s) selected` : 'Tap to upload photos (Required)'}
               </span>
             </label>
           </div>

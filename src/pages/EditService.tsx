@@ -98,6 +98,12 @@ export default function EditService() {
       return;
     }
 
+    // Validate that service has at least one photo
+    if (existingPhotos.length === 0 && newPhotos.length === 0) {
+      toast.error('Please upload at least one image before saving the service.');
+      return;
+    }
+
     if (!user || !id) {
       toast.error('You must be logged in to edit a service');
       return;
@@ -106,13 +112,15 @@ export default function EditService() {
     setIsSubmitting(true);
 
     try {
-      // Upload new photos if any
+      // Start with existing photos
       const photoUrls: string[] = [...existingPhotos];
       
+      // Upload new photos if any
       if (newPhotos.length > 0) {
+        console.log(`Uploading ${newPhotos.length} new photos...`);
         for (const photo of newPhotos) {
           const fileExt = photo.name.split('.').pop();
-          const fileName = `${user.id}/${Date.now()}-${Math.random()}.${fileExt}`;
+          const fileName = `services/${user.id}/${Date.now()}-${Math.random()}.${fileExt}`;
           
           const { error: uploadError } = await supabase.storage
             .from('avatars')
@@ -120,7 +128,9 @@ export default function EditService() {
 
           if (uploadError) {
             console.error('Photo upload error:', uploadError);
-            continue;
+            toast.error(`Failed to upload photo: ${photo.name}`);
+            setIsSubmitting(false);
+            return; // Stop if upload fails
           }
 
           const { data: urlData } = supabase.storage
@@ -129,6 +139,14 @@ export default function EditService() {
 
           photoUrls.push(urlData.publicUrl);
         }
+        console.log(`Successfully uploaded ${newPhotos.length} photos`);
+      }
+      
+      // Verify at least one photo exists
+      if (photoUrls.length === 0) {
+        toast.error('Service must have at least one image.');
+        setIsSubmitting(false);
+        return;
       }
 
       // Update service in database
