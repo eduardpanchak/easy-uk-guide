@@ -92,6 +92,15 @@ export default function EditService() {
 
     if (!user) {
       toast.error('You must be logged in to upload photos');
+      navigate('/auth');
+      return;
+    }
+
+    // Verify user is authenticated
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
+      toast.error('Session expired. Please log in again.');
+      navigate('/auth');
       return;
     }
 
@@ -104,6 +113,7 @@ export default function EditService() {
       const fileName = `services/${user.id}/${Date.now()}-${Math.random()}.${fileExt}`;
       
       console.log('Uploading new photo to:', fileName);
+      console.log('User authenticated as:', user.id);
       
       const { error: uploadError } = await supabase.storage
         .from('avatars')
@@ -156,6 +166,15 @@ export default function EditService() {
 
     if (!user || !id) {
       toast.error('You must be logged in to edit a service');
+      navigate('/auth');
+      return;
+    }
+
+    // Verify user session is still valid
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
+      toast.error('Session expired. Please log in again.');
+      navigate('/auth');
       return;
     }
 
@@ -163,6 +182,7 @@ export default function EditService() {
 
     try {
       console.log('Updating service with photo:', finalPhotoUrl);
+      console.log('User authenticated:', session.user.id);
 
       // Update service in database
       const { error: updateError } = await supabase
