@@ -27,7 +27,9 @@ export default function AddService() {
     email: '',
     subscriptionTier: 'standard' as 'standard' | 'top', // Default to standard
   });
-  const [photos, setPhotos] = useState<File[]>([]);
+  const [selectedPhoto, setSelectedPhoto] = useState<File | null>(null);
+  const [uploadedPhotoUrl, setUploadedPhotoUrl] = useState<string | null>(null);
+  const [isUploadingPhoto, setIsUploadingPhoto] = useState(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -37,12 +39,50 @@ export default function AddService() {
     }));
   };
 
-  const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-    if (files) {
-      const newPhotos = Array.from(files);
-      setPhotos(prev => [...prev, ...newPhotos]);
-      toast.success(`${newPhotos.length} ${t('addService.photosAdded')}`);
+  const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!user) {
+      toast.error('You must be logged in to upload photos');
+      return;
+    }
+
+    // Start upload immediately
+    setIsUploadingPhoto(true);
+    setSelectedPhoto(file);
+    
+    try {
+      const fileExt = file.name.split('.').pop();
+      const fileName = `services/${user.id}/${Date.now()}-${Math.random()}.${fileExt}`;
+      
+      console.log('Uploading photo to:', fileName);
+      
+      const { error: uploadError } = await supabase.storage
+        .from('avatars')
+        .upload(fileName, file);
+
+      if (uploadError) {
+        console.error('Photo upload error:', uploadError);
+        toast.error(`Failed to upload photo: ${uploadError.message}`);
+        setSelectedPhoto(null);
+        setIsUploadingPhoto(false);
+        return;
+      }
+
+      const { data: urlData } = supabase.storage
+        .from('avatars')
+        .getPublicUrl(fileName);
+
+      setUploadedPhotoUrl(urlData.publicUrl);
+      toast.success('Photo uploaded successfully!');
+      console.log('Photo uploaded successfully:', urlData.publicUrl);
+    } catch (error) {
+      console.error('Upload error:', error);
+      toast.error('Failed to upload photo');
+      setSelectedPhoto(null);
+    } finally {
+      setIsUploadingPhoto(false);
     }
   };
 
@@ -54,9 +94,15 @@ export default function AddService() {
       return;
     }
 
-    // Validate that at least one photo is selected
-    if (photos.length === 0) {
-      toast.error('Please upload at least one image before adding a service.');
+    // Check if photo is still uploading
+    if (isUploadingPhoto) {
+      toast.error('Please wait until the image is uploaded.');
+      return;
+    }
+
+    // Validate that photo was uploaded
+    if (!uploadedPhotoUrl) {
+      toast.error('Please upload an image before adding a service.');
       return;
     }
 
@@ -70,41 +116,7 @@ export default function AddService() {
 
     try {
       console.log('Starting service creation for user:', user.id);
-      
-      // Upload photos to storage - MUST complete before creating service
-      const photoUrls: string[] = [];
-      
-      console.log(`Uploading ${photos.length} photos...`);
-      for (const photo of photos) {
-        const fileExt = photo.name.split('.').pop();
-        const fileName = `services/${user.id}/${Date.now()}-${Math.random()}.${fileExt}`;
-        
-        const { error: uploadError } = await supabase.storage
-          .from('avatars')
-          .upload(fileName, photo);
-
-        if (uploadError) {
-          console.error('Photo upload error:', uploadError);
-          toast.error(`Failed to upload photo: ${photo.name}`);
-          setIsSubmitting(false);
-          return; // Stop if upload fails
-        }
-
-        const { data: urlData } = supabase.storage
-          .from('avatars')
-          .getPublicUrl(fileName);
-
-        photoUrls.push(urlData.publicUrl);
-      }
-      
-      console.log(`Successfully uploaded ${photoUrls.length} photos`);
-      
-      // Verify at least one photo was uploaded successfully
-      if (photoUrls.length === 0) {
-        toast.error('Failed to upload images. Please try again.');
-        setIsSubmitting(false);
-        return;
-      }
+      console.log('Using uploaded photo URL:', uploadedPhotoUrl);
 
       // Calculate trial dates (14 days from now)
       const trialStart = new Date();
@@ -121,7 +133,7 @@ export default function AddService() {
         social_links: formData.website ? { website: formData.website } : {},
         phone: formData.phone || null,
         email: formData.email || null,
-        photos: photoUrls.length > 0 ? photoUrls : null,
+        photos: [uploadedPhotoUrl], // Store as array with single photo
         status: 'trial',
         trial_start: trialStart.toISOString(),
         trial_end: trialEnd.toISOString(),
@@ -312,26 +324,61 @@ export default function AddService() {
             {t('addService.photos')} <span className="text-destructive">*</span>
           </Label>
           <p className="text-sm text-muted-foreground">{t('addService.photosDesc')}</p>
-          <div className="relative">
-            <input
-              type="file"
-              id="photos"
-              multiple
-              accept="image/*"
-              onChange={handlePhotoUpload}
-              className="sr-only"
-              required
-            />
-            <label
-              htmlFor="photos"
-              className="flex items-center justify-center gap-2 p-6 border-2 border-dashed border-border rounded-lg cursor-pointer hover:border-primary transition-colors"
-            >
-              <ImagePlus className="h-6 w-6 text-muted-foreground" />
-              <span className="text-sm text-muted-foreground">
-                {photos.length > 0 ? `${photos.length} photo(s) selected` : 'Tap to upload photos (Required)'}
-              </span>
-            </label>
-          </div>
+          
+          {/* Show uploaded photo preview or upload button */}
+          {uploadedPhotoUrl ? (
+            <div className="space-y-2">
+              <div className="relative w-full h-48 rounded-lg overflow-hidden border-2 border-primary">
+                <img 
+                  src={uploadedPhotoUrl} 
+                  alt="Service preview" 
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  setUploadedPhotoUrl(null);
+                  setSelectedPhoto(null);
+                }}
+                className="w-full"
+              >
+                Change Photo
+              </Button>
+            </div>
+          ) : (
+            <div className="relative">
+              <input
+                type="file"
+                id="photos"
+                accept="image/*"
+                onChange={handlePhotoUpload}
+                className="sr-only"
+                disabled={isUploadingPhoto}
+              />
+              <label
+                htmlFor="photos"
+                className={`flex flex-col items-center justify-center gap-2 p-6 border-2 border-dashed border-border rounded-lg cursor-pointer hover:border-primary transition-colors ${
+                  isUploadingPhoto ? 'opacity-50 cursor-not-allowed' : ''
+                }`}
+              >
+                {isUploadingPhoto ? (
+                  <>
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+                    <span className="text-sm text-muted-foreground">Uploading photo...</span>
+                  </>
+                ) : (
+                  <>
+                    <ImagePlus className="h-8 w-8 text-muted-foreground" />
+                    <span className="text-sm text-muted-foreground">Tap to upload photo (Required)</span>
+                    <span className="text-xs text-muted-foreground">Photo will upload immediately</span>
+                  </>
+                )}
+              </label>
+            </div>
+          )}
         </div>
 
         {/* Website / Social Media */}
@@ -379,10 +426,20 @@ export default function AddService() {
         </div>
 
         {/* Submit Button */}
-        <Button type="submit" className="w-full" size="lg" disabled={isSubmitting}>
+        <Button 
+          type="submit" 
+          className="w-full" 
+          size="lg" 
+          disabled={isSubmitting || isUploadingPhoto || !uploadedPhotoUrl}
+        >
           <Upload className="h-5 w-5 mr-2" />
-          {isSubmitting ? 'Submitting...' : t('addService.submit')}
+          {isSubmitting ? 'Submitting...' : isUploadingPhoto ? 'Uploading photo...' : t('addService.submit')}
         </Button>
+        {!uploadedPhotoUrl && !isUploadingPhoto && (
+          <p className="text-xs text-center text-muted-foreground">
+            Please upload a photo before submitting
+          </p>
+        )}
       </form>
 
       <BottomNav />

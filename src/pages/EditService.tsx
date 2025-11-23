@@ -28,8 +28,10 @@ export default function EditService() {
     phone: '',
     email: '',
   });
-  const [existingPhotos, setExistingPhotos] = useState<string[]>([]);
-  const [newPhotos, setNewPhotos] = useState<File[]>([]);
+  const [existingPhotoUrl, setExistingPhotoUrl] = useState<string | null>(null);
+  const [selectedPhoto, setSelectedPhoto] = useState<File | null>(null);
+  const [uploadedPhotoUrl, setUploadedPhotoUrl] = useState<string | null>(null);
+  const [isUploadingPhoto, setIsUploadingPhoto] = useState(false);
 
   useEffect(() => {
     if (user && id) {
@@ -62,7 +64,10 @@ export default function EditService() {
           phone: data.phone || '',
           email: data.email || '',
         });
-        setExistingPhotos(data.photos || []);
+        // Set existing photo (first photo from array)
+        if (data.photos && data.photos.length > 0) {
+          setExistingPhotoUrl(data.photos[0]);
+        }
       }
     } catch (error) {
       console.error('Error fetching service:', error);
@@ -81,12 +86,50 @@ export default function EditService() {
     }));
   };
 
-  const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-    if (files) {
-      const newPhotosList = Array.from(files);
-      setNewPhotos(prev => [...prev, ...newPhotosList]);
-      toast.success(`${newPhotosList.length} photo(s) added`);
+  const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!user) {
+      toast.error('You must be logged in to upload photos');
+      return;
+    }
+
+    // Start upload immediately
+    setIsUploadingPhoto(true);
+    setSelectedPhoto(file);
+    
+    try {
+      const fileExt = file.name.split('.').pop();
+      const fileName = `services/${user.id}/${Date.now()}-${Math.random()}.${fileExt}`;
+      
+      console.log('Uploading new photo to:', fileName);
+      
+      const { error: uploadError } = await supabase.storage
+        .from('avatars')
+        .upload(fileName, file);
+
+      if (uploadError) {
+        console.error('Photo upload error:', uploadError);
+        toast.error(`Failed to upload photo: ${uploadError.message}`);
+        setSelectedPhoto(null);
+        setIsUploadingPhoto(false);
+        return;
+      }
+
+      const { data: urlData } = supabase.storage
+        .from('avatars')
+        .getPublicUrl(fileName);
+
+      setUploadedPhotoUrl(urlData.publicUrl);
+      toast.success('Photo uploaded successfully!');
+      console.log('New photo uploaded successfully:', urlData.publicUrl);
+    } catch (error) {
+      console.error('Upload error:', error);
+      toast.error('Failed to upload photo');
+      setSelectedPhoto(null);
+    } finally {
+      setIsUploadingPhoto(false);
     }
   };
 
@@ -98,9 +141,16 @@ export default function EditService() {
       return;
     }
 
-    // Validate that service has at least one photo
-    if (existingPhotos.length === 0 && newPhotos.length === 0) {
-      toast.error('Please upload at least one image before saving the service.');
+    // Check if photo is still uploading
+    if (isUploadingPhoto) {
+      toast.error('Please wait until the image is uploaded.');
+      return;
+    }
+
+    // Validate that service has a photo (either existing or newly uploaded)
+    const finalPhotoUrl = uploadedPhotoUrl || existingPhotoUrl;
+    if (!finalPhotoUrl) {
+      toast.error('Please upload an image before saving the service.');
       return;
     }
 
@@ -112,42 +162,7 @@ export default function EditService() {
     setIsSubmitting(true);
 
     try {
-      // Start with existing photos
-      const photoUrls: string[] = [...existingPhotos];
-      
-      // Upload new photos if any
-      if (newPhotos.length > 0) {
-        console.log(`Uploading ${newPhotos.length} new photos...`);
-        for (const photo of newPhotos) {
-          const fileExt = photo.name.split('.').pop();
-          const fileName = `services/${user.id}/${Date.now()}-${Math.random()}.${fileExt}`;
-          
-          const { error: uploadError } = await supabase.storage
-            .from('avatars')
-            .upload(fileName, photo);
-
-          if (uploadError) {
-            console.error('Photo upload error:', uploadError);
-            toast.error(`Failed to upload photo: ${photo.name}`);
-            setIsSubmitting(false);
-            return; // Stop if upload fails
-          }
-
-          const { data: urlData } = supabase.storage
-            .from('avatars')
-            .getPublicUrl(fileName);
-
-          photoUrls.push(urlData.publicUrl);
-        }
-        console.log(`Successfully uploaded ${newPhotos.length} photos`);
-      }
-      
-      // Verify at least one photo exists
-      if (photoUrls.length === 0) {
-        toast.error('Service must have at least one image.');
-        setIsSubmitting(false);
-        return;
-      }
+      console.log('Updating service with photo:', finalPhotoUrl);
 
       // Update service in database
       const { error: updateError } = await supabase
@@ -161,7 +176,7 @@ export default function EditService() {
           social_links: formData.website ? { website: formData.website } : {},
           phone: formData.phone || null,
           email: formData.email || null,
-          photos: photoUrls.length > 0 ? photoUrls : null,
+          photos: [finalPhotoUrl], // Store as array with single photo
           updated_at: new Date().toISOString(),
         })
         .eq('id', id)
@@ -296,45 +311,72 @@ export default function EditService() {
           />
         </div>
 
-        {/* Existing Photos */}
-        {existingPhotos.length > 0 && (
-          <div className="space-y-2">
-            <Label className="text-sm font-medium">{t('editService.currentPhotos')}</Label>
-            <div className="grid grid-cols-3 gap-2">
-              {existingPhotos.map((photo, index) => (
-                <div key={index} className="relative aspect-square rounded-lg overflow-hidden border">
-                  <img src={photo} alt={`Service photo ${index + 1}`} className="w-full h-full object-cover" />
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Add New Photos */}
+        {/* Photo Upload Section */}
         <div className="space-y-2">
           <Label className="text-sm font-medium">
-            {t('addService.photos')}
+            {t('addService.photos')} <span className="text-destructive">*</span>
           </Label>
-          <p className="text-sm text-muted-foreground">{t('editService.addMore')}</p>
-          <div className="relative">
-            <input
-              type="file"
-              id="photos"
-              multiple
-              accept="image/*"
-              onChange={handlePhotoUpload}
-              className="sr-only"
-            />
-            <label
-              htmlFor="photos"
-              className="flex items-center justify-center gap-2 p-6 border-2 border-dashed border-border rounded-lg cursor-pointer hover:border-primary transition-colors"
-            >
-              <ImagePlus className="h-6 w-6 text-muted-foreground" />
-              <span className="text-sm text-muted-foreground">
-                {newPhotos.length > 0 ? `${newPhotos.length} ${t('editService.newPhotos')}` : t('editService.uploadNew')}
-              </span>
-            </label>
-          </div>
+          
+          {/* Show current or new photo */}
+          {(uploadedPhotoUrl || existingPhotoUrl) ? (
+            <div className="space-y-2">
+              <div className="relative w-full h-48 rounded-lg overflow-hidden border-2 border-primary">
+                <img 
+                  src={uploadedPhotoUrl || existingPhotoUrl || ''} 
+                  alt="Service preview" 
+                  className="w-full h-full object-cover"
+                />
+                {uploadedPhotoUrl && (
+                  <div className="absolute top-2 right-2 bg-primary text-primary-foreground px-2 py-1 rounded text-xs">
+                    New Photo
+                  </div>
+                )}
+              </div>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  setUploadedPhotoUrl(null);
+                  setExistingPhotoUrl(null);
+                  setSelectedPhoto(null);
+                }}
+                className="w-full"
+              >
+                Change Photo
+              </Button>
+            </div>
+          ) : (
+            <div className="relative">
+              <input
+                type="file"
+                id="photos"
+                accept="image/*"
+                onChange={handlePhotoUpload}
+                className="sr-only"
+                disabled={isUploadingPhoto}
+              />
+              <label
+                htmlFor="photos"
+                className={`flex flex-col items-center justify-center gap-2 p-6 border-2 border-dashed border-border rounded-lg cursor-pointer hover:border-primary transition-colors ${
+                  isUploadingPhoto ? 'opacity-50 cursor-not-allowed' : ''
+                }`}
+              >
+                {isUploadingPhoto ? (
+                  <>
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+                    <span className="text-sm text-muted-foreground">Uploading photo...</span>
+                  </>
+                ) : (
+                  <>
+                    <ImagePlus className="h-8 w-8 text-muted-foreground" />
+                    <span className="text-sm text-muted-foreground">Tap to upload new photo (Required)</span>
+                    <span className="text-xs text-muted-foreground">Photo will upload immediately</span>
+                  </>
+                )}
+              </label>
+            </div>
+          )}
         </div>
 
         {/* Website / Social Media */}
@@ -382,10 +424,20 @@ export default function EditService() {
         </div>
 
         {/* Submit Button */}
-        <Button type="submit" className="w-full" size="lg" disabled={isSubmitting}>
+        <Button 
+          type="submit" 
+          className="w-full" 
+          size="lg" 
+          disabled={isSubmitting || isUploadingPhoto}
+        >
           <Save className="h-5 w-5 mr-2" />
-          {isSubmitting ? t('editService.saving') : t('editService.save')}
+          {isSubmitting ? t('editService.saving') : isUploadingPhoto ? 'Uploading photo...' : t('editService.save')}
         </Button>
+        {!existingPhotoUrl && !uploadedPhotoUrl && !isUploadingPhoto && (
+          <p className="text-xs text-center text-muted-foreground">
+            Please upload a photo before saving
+          </p>
+        )}
       </form>
 
       <BottomNav />
