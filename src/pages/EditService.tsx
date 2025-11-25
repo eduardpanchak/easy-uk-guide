@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeft, Save, ImagePlus } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useAuth } from '@/contexts/AuthContext';
-import { supabase } from '@/integrations/supabase/client';
+import { authService, dbService, storageService } from '@/services';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -43,16 +43,11 @@ export default function EditService() {
     if (!user || !id) return;
 
     try {
-      const { data, error } = await supabase
-        .from('services')
-        .select('*')
-        .eq('id', id)
-        .eq('user_id', user.id)
-        .single();
+      const { data, error } = await dbService.getService(id);
 
       if (error) throw error;
 
-      if (data) {
+      if (data && data.user_id === user.id) {
         const socialLinks = data.social_links as { website?: string } | null;
         setFormData({
           serviceName: data.service_name || '',
@@ -64,7 +59,6 @@ export default function EditService() {
           phone: data.phone || '',
           email: data.email || '',
         });
-        // Set existing photo (first photo from array)
         if (data.photos && data.photos.length > 0) {
           setExistingPhotoUrl(data.photos[0]);
         }
@@ -97,7 +91,7 @@ export default function EditService() {
     }
 
     // Verify user is authenticated
-    const { data: { session } } = await supabase.auth.getSession();
+    const { session } = await authService.getSession();
     if (!session) {
       toast.error('Session expired. Please log in again.');
       navigate('/auth');
@@ -109,31 +103,19 @@ export default function EditService() {
     setSelectedPhoto(file);
     
     try {
-      const fileExt = file.name.split('.').pop();
-      const fileName = `services/${user.id}/${Date.now()}-${Math.random()}.${fileExt}`;
-      
-      console.log('Uploading new photo to:', fileName);
-      console.log('User authenticated as:', user.id);
-      
-      const { error: uploadError } = await supabase.storage
-        .from('avatars')
-        .upload(fileName, file);
+      const { url, error } = await storageService.uploadServicePhoto(user.id, file);
 
-      if (uploadError) {
-        console.error('Photo upload error:', uploadError);
-        toast.error(`Failed to upload photo: ${uploadError.message}`);
+      if (error) {
+        console.error('Photo upload error:', error);
+        toast.error(`Failed to upload photo: ${error.message}`);
         setSelectedPhoto(null);
         setIsUploadingPhoto(false);
         return;
       }
 
-      const { data: urlData } = supabase.storage
-        .from('avatars')
-        .getPublicUrl(fileName);
-
-      setUploadedPhotoUrl(urlData.publicUrl);
+      setUploadedPhotoUrl(url);
       toast.success('Photo uploaded successfully!');
-      console.log('New photo uploaded successfully:', urlData.publicUrl);
+      console.log('New photo uploaded successfully:', url);
     } catch (error) {
       console.error('Upload error:', error);
       toast.error('Failed to upload photo');
@@ -171,7 +153,7 @@ export default function EditService() {
     }
 
     // Verify user session is still valid
-    const { data: { session } } = await supabase.auth.getSession();
+    const { session } = await authService.getSession();
     if (!session) {
       toast.error('Session expired. Please log in again.');
       navigate('/auth');
@@ -185,22 +167,18 @@ export default function EditService() {
       console.log('User authenticated:', session.user.id);
 
       // Update service in database
-      const { error: updateError } = await supabase
-        .from('services')
-        .update({
-          service_name: formData.serviceName,
-          description: formData.description,
-          category: formData.category,
-          address: formData.address || null,
-          pricing: formData.price || null,
-          social_links: formData.website ? { website: formData.website } : {},
-          phone: formData.phone || null,
-          email: formData.email || null,
-          photos: [finalPhotoUrl], // Store as array with single photo
-          updated_at: new Date().toISOString(),
-        })
-        .eq('id', id)
-        .eq('user_id', user.id);
+      const { error: updateError } = await dbService.updateService(id, {
+        service_name: formData.serviceName,
+        description: formData.description,
+        category: formData.category,
+        address: formData.address || null,
+        pricing: formData.price || null,
+        social_links: formData.website ? { website: formData.website } : {},
+        phone: formData.phone || null,
+        email: formData.email || null,
+        photos: [finalPhotoUrl],
+        updated_at: new Date().toISOString(),
+      });
 
       if (updateError) {
         throw updateError;

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Upload, ImagePlus } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useAuth } from '@/contexts/AuthContext';
-import { supabase } from '@/integrations/supabase/client';
+import { authService, dbService, storageService } from '@/services';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -50,7 +50,7 @@ export default function AddService() {
     }
 
     // Verify user is authenticated
-    const { data: { session } } = await supabase.auth.getSession();
+    const { session } = await authService.getSession();
     if (!session) {
       toast.error('Session expired. Please log in again.');
       navigate('/auth');
@@ -62,31 +62,19 @@ export default function AddService() {
     setSelectedPhoto(file);
     
     try {
-      const fileExt = file.name.split('.').pop();
-      const fileName = `services/${user.id}/${Date.now()}-${Math.random()}.${fileExt}`;
-      
-      console.log('Uploading photo to:', fileName);
-      console.log('User authenticated as:', user.id);
-      
-      const { error: uploadError } = await supabase.storage
-        .from('avatars')
-        .upload(fileName, file);
+      const { url, error } = await storageService.uploadServicePhoto(user.id, file);
 
-      if (uploadError) {
-        console.error('Photo upload error:', uploadError);
-        toast.error(`Failed to upload photo: ${uploadError.message}`);
+      if (error) {
+        console.error('Photo upload error:', error);
+        toast.error(`Failed to upload photo: ${error.message}`);
         setSelectedPhoto(null);
         setIsUploadingPhoto(false);
         return;
       }
 
-      const { data: urlData } = supabase.storage
-        .from('avatars')
-        .getPublicUrl(fileName);
-
-      setUploadedPhotoUrl(urlData.publicUrl);
+      setUploadedPhotoUrl(url);
       toast.success('Photo uploaded successfully!');
-      console.log('Photo uploaded successfully:', urlData.publicUrl);
+      console.log('Photo uploaded successfully:', url);
     } catch (error) {
       console.error('Upload error:', error);
       toast.error('Failed to upload photo');
@@ -123,7 +111,7 @@ export default function AddService() {
     }
 
     // Verify user session is still valid
-    const { data: { session } } = await supabase.auth.getSession();
+    const { session } = await authService.getSession();
     if (!session) {
       toast.error('Session expired. Please log in again.');
       navigate('/auth');
@@ -162,11 +150,8 @@ export default function AddService() {
 
       console.log('Inserting service with data:', serviceData);
 
-      // Insert service into database
-      const { data: insertedData, error: insertError } = await supabase
-        .from('services')
-        .insert(serviceData)
-        .select();
+      // Insert service into database using service layer
+      const { data: insertedData, error: insertError } = await dbService.createService(serviceData);
 
       if (insertError) {
         console.error('Service insert error:', insertError);
