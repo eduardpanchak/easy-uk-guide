@@ -215,6 +215,8 @@ export type Database = {
           email: string | null
           id: string
           languages: string[]
+          latitude: number | null
+          longitude: number | null
           phone: string | null
           photos: string[] | null
           pricing: string | null
@@ -238,6 +240,8 @@ export type Database = {
           email?: string | null
           id?: string
           languages: string[]
+          latitude?: number | null
+          longitude?: number | null
           phone?: string | null
           photos?: string[] | null
           pricing?: string | null
@@ -261,6 +265,8 @@ export type Database = {
           email?: string | null
           id?: string
           languages?: string[]
+          latitude?: number | null
+          longitude?: number | null
           phone?: string | null
           photos?: string[] | null
           pricing?: string | null

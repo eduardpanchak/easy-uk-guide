@@ -125,6 +125,21 @@ export default function AddService() {
       console.log('User authenticated:', session.user.id);
       console.log('Using uploaded photo URL:', uploadedPhotoUrl);
 
+      // Get current location
+      let latitude = null;
+      let longitude = null;
+      
+      try {
+        const position = await new Promise<GeolocationPosition>((resolve, reject) => {
+          navigator.geolocation.getCurrentPosition(resolve, reject);
+        });
+        latitude = position.coords.latitude;
+        longitude = position.coords.longitude;
+        console.log('Location captured:', { latitude, longitude });
+      } catch (geoError) {
+        console.log('Geolocation not available or denied:', geoError);
+      }
+
       // Calculate trial dates (14 days from now)
       const trialStart = new Date();
       const trialEnd = new Date();
@@ -146,6 +161,8 @@ export default function AddService() {
         trial_end: trialEnd.toISOString(),
         subscription_tier: formData.subscriptionTier,
         languages: ['en'],
+        latitude,
+        longitude,
       };
 
       console.log('Inserting service with data:', serviceData);
