@@ -10,6 +10,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { BottomNav } from '@/components/BottomNav';
 import { toast } from 'sonner';
+import LocationPicker from '@/components/LocationPicker';
 
 export default function AddService() {
   const navigate = useNavigate();
@@ -30,6 +31,7 @@ export default function AddService() {
   const [selectedPhoto, setSelectedPhoto] = useState<File | null>(null);
   const [uploadedPhotoUrl, setUploadedPhotoUrl] = useState<string | null>(null);
   const [isUploadingPhoto, setIsUploadingPhoto] = useState(false);
+  const [location, setLocation] = useState<{ lat: number; lng: number } | null>(null);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -125,21 +127,6 @@ export default function AddService() {
       console.log('User authenticated:', session.user.id);
       console.log('Using uploaded photo URL:', uploadedPhotoUrl);
 
-      // Get current location
-      let latitude = null;
-      let longitude = null;
-      
-      try {
-        const position = await new Promise<GeolocationPosition>((resolve, reject) => {
-          navigator.geolocation.getCurrentPosition(resolve, reject);
-        });
-        latitude = position.coords.latitude;
-        longitude = position.coords.longitude;
-        console.log('Location captured:', { latitude, longitude });
-      } catch (geoError) {
-        console.log('Geolocation not available or denied:', geoError);
-      }
-
       // Calculate trial dates (14 days from now)
       const trialStart = new Date();
       const trialEnd = new Date();
@@ -161,8 +148,8 @@ export default function AddService() {
         trial_end: trialEnd.toISOString(),
         subscription_tier: formData.subscriptionTier,
         languages: ['en'],
-        latitude,
-        longitude,
+        latitude: location?.lat || null,
+        longitude: location?.lng || null,
       };
 
       console.log('Inserting service with data:', serviceData);
@@ -309,6 +296,21 @@ export default function AddService() {
             </button>
           </div>
           <p className="text-xs text-muted-foreground italic">{t('addService.trialNote')}</p>
+        </div>
+
+        {/* Location Picker */}
+        <div className="space-y-2">
+          <Label className="text-sm font-medium">
+            {t('addService.location') || 'Service Location'}
+          </Label>
+          <LocationPicker 
+            onLocationSelect={(lat, lng, address) => {
+              setLocation({ lat, lng });
+              if (address && !formData.address) {
+                setFormData(prev => ({ ...prev, address }));
+              }
+            }}
+          />
         </div>
 
         {/* Address */}
