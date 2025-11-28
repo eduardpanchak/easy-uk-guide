@@ -1,6 +1,8 @@
-import { Heart } from 'lucide-react';
+import { Heart, Star } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useApp } from '@/contexts/AppContext';
+import { useEffect, useState } from 'react';
+import { supabase } from '@/integrations/supabase/client';
 
 interface ServiceCardProps {
   id: string;
@@ -26,6 +28,29 @@ export const ServiceCard = ({
   const { toggleSaved, isSaved } = useApp();
   const saved = isSaved(id);
   const isPremium = subscriptionTier === 'top' || subscriptionTier === 'premium';
+  const [averageRating, setAverageRating] = useState(0);
+  const [reviewCount, setReviewCount] = useState(0);
+
+  useEffect(() => {
+    fetchRating();
+  }, [id]);
+
+  const fetchRating = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('service_reviews')
+        .select('rating')
+        .eq('service_id', id);
+
+      if (!error && data && data.length > 0) {
+        const avg = data.reduce((sum, review) => sum + review.rating, 0) / data.length;
+        setAverageRating(Math.round(avg * 10) / 10);
+        setReviewCount(data.length);
+      }
+    } catch (error) {
+      console.error('Error fetching rating:', error);
+    }
+  };
 
   const handleFavoriteClick = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -77,6 +102,17 @@ export const ServiceCard = ({
             <span className="text-sm font-semibold text-foreground">
               £{pricing}
             </span>
+          )}
+          {reviewCount > 0 && (
+            <div className="flex items-center gap-1">
+              <Star className="h-3 w-3 fill-amber-500 text-amber-500" />
+              <span className="text-xs font-medium text-foreground">
+                {averageRating.toFixed(1)}
+              </span>
+              <span className="text-xs text-muted-foreground">
+                ({reviewCount})
+              </span>
+            </div>
           )}
         </div>
       </div>

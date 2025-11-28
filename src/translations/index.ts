@@ -40,7 +40,8 @@ export const translations = {
       noResults: 'No results found for',
       results: 'result',
       results_plural: 'results',
-      loading: 'Loading...'
+      loading: 'Loading...',
+      cancel: 'Cancel'
     },
     saved: {
       title: 'Saved',
@@ -83,6 +84,26 @@ export const translations = {
       notFound: 'Service not found',
       addedToSaved: 'Added to saved',
       removedFromSaved: 'Removed from saved'
+    },
+    reviews: {
+      title: 'Reviews',
+      noReviews: 'No reviews yet',
+      beFirst: 'Be the first to review this service',
+      addReview: 'Add Review',
+      editReview: 'Edit Review',
+      yourRating: 'Your Rating',
+      yourReview: 'Your Review',
+      optional: 'optional',
+      reviewPlaceholder: 'Share your experience with this service...',
+      submitReview: 'Submit Review',
+      updateReview: 'Update Review',
+      deleteConfirm: 'Are you sure you want to delete your review?',
+      reviewAdded: 'Review added successfully',
+      reviewUpdated: 'Review updated successfully',
+      reviewDeleted: 'Review deleted successfully',
+      signInToReview: 'Sign in to leave a review',
+      averageRating: 'Average Rating',
+      basedOnReviews: 'reviews'
     },
     account: {
       title: 'Account',
@@ -277,7 +298,8 @@ export const translations = {
       noResults: 'Нічого не знайдено для',
       results: 'результат',
       results_plural: 'результатів',
-      loading: 'Завантаження...'
+      loading: 'Завантаження...',
+      cancel: 'Скасувати'
     },
     saved: {
       title: 'Збережене',
@@ -320,6 +342,26 @@ export const translations = {
       notFound: 'Послугу не знайдено',
       addedToSaved: 'Додано до збережених',
       removedFromSaved: 'Видалено зі збережених'
+    },
+    reviews: {
+      title: 'Відгуки',
+      noReviews: 'Ще немає відгуків',
+      beFirst: 'Будьте першим, хто залишить відгук',
+      addReview: 'Додати відгук',
+      editReview: 'Редагувати відгук',
+      yourRating: 'Ваша оцінка',
+      yourReview: 'Ваш відгук',
+      optional: 'необов\'язково',
+      reviewPlaceholder: 'Поділіться своїм досвідом...',
+      submitReview: 'Відправити відгук',
+      updateReview: 'Оновити відгук',
+      deleteConfirm: 'Ви впевнені, що хочете видалити свій відгук?',
+      reviewAdded: 'Відгук успішно додано',
+      reviewUpdated: 'Відгук успішно оновлено',
+      reviewDeleted: 'Відгук успішно видалено',
+      signInToReview: 'Увійдіть, щоб залишити відгук',
+      averageRating: 'Середня оцінка',
+      basedOnReviews: 'відгуків'
     },
     account: {
       title: 'Акаунт',
@@ -514,7 +556,8 @@ export const translations = {
       noResults: 'Ничего не найдено для',
       results: 'результат',
       results_plural: 'результатов',
-      loading: 'Загрузка...'
+      loading: 'Загрузка...',
+      cancel: 'Отмена'
     },
     saved: {
       title: 'Сохранённое',
@@ -557,6 +600,26 @@ export const translations = {
       notFound: 'Услуга не найдена',
       addedToSaved: 'Добавлено в сохранённые',
       removedFromSaved: 'Удалено из сохранённых'
+    },
+    reviews: {
+      title: 'Отзывы',
+      noReviews: 'Пока нет отзывов',
+      beFirst: 'Станьте первым, кто оставит отзыв',
+      addReview: 'Добавить отзыв',
+      editReview: 'Редактировать отзыв',
+      yourRating: 'Ваша оценка',
+      yourReview: 'Ваш отзыв',
+      optional: 'необязательно',
+      reviewPlaceholder: 'Поделитесь своим опытом...',
+      submitReview: 'Отправить отзыв',
+      updateReview: 'Обновить отзыв',
+      deleteConfirm: 'Вы уверены, что хотите удалить свой отзыв?',
+      reviewAdded: 'Отзыв успешно добавлен',
+      reviewUpdated: 'Отзыв успешно обновлён',
+      reviewDeleted: 'Отзыв успешно удалён',
+      signInToReview: 'Войдите, чтобы оставить отзыв',
+      averageRating: 'Средняя оценка',
+      basedOnReviews: 'отзывов'
     },
     account: {
       title: 'Аккаунт',
@@ -751,7 +814,8 @@ export const translations = {
       noResults: 'Nie znaleziono wyników dla',
       results: 'wynik',
       results_plural: 'wyników',
-      loading: 'Ładowanie...'
+      loading: 'Ładowanie...',
+      cancel: 'Anuluj'
     },
     saved: {
       title: 'Zapisane',
@@ -794,6 +858,26 @@ export const translations = {
       notFound: 'Usługa nie znaleziona',
       addedToSaved: 'Dodano do zapisanych',
       removedFromSaved: 'Usunięto z zapisanych'
+    },
+    reviews: {
+      title: 'Opinie',
+      noReviews: 'Brak opinii',
+      beFirst: 'Bądź pierwszy, który wystawi opinię',
+      addReview: 'Dodaj opinię',
+      editReview: 'Edytuj opinię',
+      yourRating: 'Twoja ocena',
+      yourReview: 'Twoja opinia',
+      optional: 'opcjonalne',
+      reviewPlaceholder: 'Podziel się swoim doświadczeniem...',
+      submitReview: 'Wyślij opinię',
+      updateReview: 'Zaktualizuj opinię',
+      deleteConfirm: 'Czy na pewno chcesz usunąć swoją opinię?',
+      reviewAdded: 'Opinia została dodana',
+      reviewUpdated: 'Opinia została zaktualizowana',
+      reviewDeleted: 'Opinia została usunięta',
+      signInToReview: 'Zaloguj się, aby wystawić opinię',
+      averageRating: 'Średnia ocena',
+      basedOnReviews: 'opinii'
     },
     account: {
       title: 'Konto',
@@ -988,7 +1072,8 @@ export const translations = {
       noResults: 'Nerasta rezultatų',
       results: 'rezultatas',
       results_plural: 'rezultatų',
-      loading: 'Kraunama...'
+      loading: 'Kraunama...',
+      cancel: 'Atšaukti'
     },
     saved: {
       title: 'Išsaugota',
@@ -1031,6 +1116,26 @@ export const translations = {
       notFound: 'Paslauga nerasta',
       addedToSaved: 'Pridėta prie išsaugotų',
       removedFromSaved: 'Pašalinta iš išsaugotų'
+    },
+    reviews: {
+      title: 'Atsiliepimai',
+      noReviews: 'Dar nėra atsiliepimų',
+      beFirst: 'Būkite pirmas palikęs atsiliepimą',
+      addReview: 'Pridėti atsiliepimą',
+      editReview: 'Redaguoti atsiliepimą',
+      yourRating: 'Jūsų įvertinimas',
+      yourReview: 'Jūsų atsiliepimas',
+      optional: 'neprivaloma',
+      reviewPlaceholder: 'Pasidalinkite savo patirtimi...',
+      submitReview: 'Pateikti atsiliepimą',
+      updateReview: 'Atnaujinti atsiliepimą',
+      deleteConfirm: 'Ar tikrai norite ištrinti savo atsiliepimą?',
+      reviewAdded: 'Atsiliepimas sėkmingai pridėtas',
+      reviewUpdated: 'Atsiliepimas sėkmingai atnaujintas',
+      reviewDeleted: 'Atsiliepimas sėkmingai ištrintas',
+      signInToReview: 'Prisijunkite, kad paliktumėte atsiliepimą',
+      averageRating: 'Vidutinis įvertinimas',
+      basedOnReviews: 'atsiliepimų'
     },
     account: {
       title: 'Paskyra',
