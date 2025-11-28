@@ -58,7 +58,18 @@ export const translations = {
       businessModeDesc: 'Register your service'
     },
     services: {
-      noServices: 'No services available in your language yet'
+      noServices: 'No services available in your language yet',
+      saveFilter: 'Save Filter',
+      clearSavedFilter: 'Clear Saved',
+      nearby: 'Nearby (10 km)',
+      allCategories: 'All Categories',
+      newest: 'Newest',
+      priceLowToHigh: 'Price: Low to High',
+      searchPlaceholder: 'Search services...',
+      noNearbyServices: 'No services found nearby',
+      category: 'Category',
+      filterSaved: 'Filter saved',
+      filterCleared: 'Filter cleared'
     },
     serviceDetails: {
       description: 'Description',
@@ -284,7 +295,18 @@ export const translations = {
       businessModeDesc: 'Зареєструйте свою послугу'
     },
     services: {
-      noServices: 'Послуг вашою мовою поки немає'
+      noServices: 'Послуг вашою мовою поки немає',
+      saveFilter: 'Зберегти фільтр',
+      clearSavedFilter: 'Очистити збережений',
+      nearby: 'Поблизу (10 км)',
+      allCategories: 'Всі категорії',
+      newest: 'Найновіші',
+      priceLowToHigh: 'Ціна: від низької до високої',
+      searchPlaceholder: 'Пошук послуг...',
+      noNearbyServices: 'Поблизу послуг не знайдено',
+      category: 'Категорія',
+      filterSaved: 'Фільтр збережено',
+      filterCleared: 'Фільтр очищено'
     },
     serviceDetails: {
       description: 'Опис',
@@ -510,7 +532,18 @@ export const translations = {
       businessModeDesc: 'Зарегистрируйте свою услугу'
     },
     services: {
-      noServices: 'Услуг на вашем языке пока нет'
+      noServices: 'Услуг на вашем языке пока нет',
+      saveFilter: 'Сохранить фильтр',
+      clearSavedFilter: 'Очистить сохранённый',
+      nearby: 'Рядом (10 км)',
+      allCategories: 'Все категории',
+      newest: 'Новейшие',
+      priceLowToHigh: 'Цена: от низкой к высокой',
+      searchPlaceholder: 'Поиск услуг...',
+      noNearbyServices: 'Рядом услуг не найдено',
+      category: 'Категория',
+      filterSaved: 'Фильтр сохранён',
+      filterCleared: 'Фильтр очищен'
     },
     serviceDetails: {
       description: 'Описание',
@@ -736,7 +769,18 @@ export const translations = {
       businessModeDesc: 'Zarejestruj swoją usługę'
     },
     services: {
-      noServices: 'Brak usług w Twoim języku'
+      noServices: 'Brak usług w Twoim języku',
+      saveFilter: 'Zapisz filtr',
+      clearSavedFilter: 'Wyczyść zapisany',
+      nearby: 'W pobliżu (10 km)',
+      allCategories: 'Wszystkie kategorie',
+      newest: 'Najnowsze',
+      priceLowToHigh: 'Cena: od niskiej do wysokiej',
+      searchPlaceholder: 'Wyszukaj usługi...',
+      noNearbyServices: 'Brak usług w pobliżu',
+      category: 'Kategoria',
+      filterSaved: 'Filtr zapisany',
+      filterCleared: 'Filtr wyczyszczony'
     },
     serviceDetails: {
       description: 'Opis',
@@ -962,7 +1006,18 @@ export const translations = {
       businessModeDesc: 'Registruoti savo paslaugą'
     },
     services: {
-      noServices: 'Jūsų kalba paslaugų nėra'
+      noServices: 'Jūsų kalba paslaugų nėra',
+      saveFilter: 'Išsaugoti filtrą',
+      clearSavedFilter: 'Išvalyti išsaugotą',
+      nearby: 'Netoliese (10 km)',
+      allCategories: 'Visos kategorijos',
+      newest: 'Naujausi',
+      priceLowToHigh: 'Kaina: nuo žemiausios iki aukščiausios',
+      searchPlaceholder: 'Ieškoti paslaugų...',
+      noNearbyServices: 'Netoliese paslaugų nerasta',
+      category: 'Kategorija',
+      filterSaved: 'Filtras išsaugotas',
+      filterCleared: 'Filtras išvalytas'
     },
     serviceDetails: {
       description: 'Aprašymas',
