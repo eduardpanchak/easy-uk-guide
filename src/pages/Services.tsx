@@ -4,12 +4,14 @@ import { Header } from '@/components/Header';
 import { BottomNav } from '@/components/BottomNav';
 import { ServiceCard } from '@/components/ServiceCard';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { useFilters } from '@/contexts/FilterContext';
 import { supabase } from '@/integrations/supabase/client';
-import { Loader2, MapPin, Search } from 'lucide-react';
+import { Loader2, MapPin, Search, Save, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { calculateDistance } from '@/lib/geolocation';
+import { useToast } from '@/hooks/use-toast';
 
 interface Service {
   id: string;
@@ -24,21 +26,85 @@ interface Service {
   longitude: number | null;
 }
 
+const SAVED_FILTERS_KEY = 'savedFilters';
+
 export default function Services() {
   const { language, t } = useLanguage();
+  const { filters, setFilters } = useFilters();
   const navigate = useNavigate();
+  const { toast } = useToast();
   const [services, setServices] = useState<Service[]>([]);
   const [loading, setLoading] = useState(true);
-  const [showNearby, setShowNearby] = useState(false);
   const [userLocation, setUserLocation] = useState<{ lat: number; lon: number } | null>(null);
-  const [searchText, setSearchText] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState<string>('all');
-  const [sortBy, setSortBy] = useState<'newest' | 'price'>('newest');
+  
+  // Local state synced with context
+  const [searchText, setSearchText] = useState(filters.searchText);
+  const [selectedCategory, setSelectedCategory] = useState(filters.selectedCategory);
+  const [sortBy, setSortBy] = useState(filters.sortBy);
+  const [showNearby, setShowNearby] = useState(filters.showNearby);
 
   useEffect(() => {
     fetchServices();
     getUserLocation();
+    loadSavedFilters();
   }, []);
+
+  // Sync local state with context on change
+  useEffect(() => {
+    setFilters({
+      searchText,
+      selectedCategory,
+      sortBy,
+      showNearby,
+    });
+  }, [searchText, selectedCategory, sortBy, showNearby, setFilters]);
+
+  const loadSavedFilters = () => {
+    try {
+      const saved = localStorage.getItem(SAVED_FILTERS_KEY);
+      if (saved) {
+        const savedFilters = JSON.parse(saved);
+        setSearchText(savedFilters.searchText || '');
+        setSelectedCategory(savedFilters.selectedCategory || 'all');
+        setSortBy(savedFilters.sortBy || 'newest');
+        setShowNearby(savedFilters.showNearby || false);
+      }
+    } catch (error) {
+      console.error('Error loading saved filters:', error);
+    }
+  };
+
+  const handleSaveFilter = () => {
+    try {
+      const filterData = {
+        searchText,
+        selectedCategory,
+        sortBy,
+        showNearby,
+      };
+      localStorage.setItem(SAVED_FILTERS_KEY, JSON.stringify(filterData));
+      toast({
+        title: t('services.filterSaved'),
+      });
+    } catch (error) {
+      console.error('Error saving filter:', error);
+    }
+  };
+
+  const handleClearSavedFilter = () => {
+    try {
+      localStorage.removeItem(SAVED_FILTERS_KEY);
+      setSearchText('');
+      setSelectedCategory('all');
+      setSortBy('newest');
+      setShowNearby(false);
+      toast({
+        title: t('services.filterCleared'),
+      });
+    } catch (error) {
+      console.error('Error clearing saved filter:', error);
+    }
+  };
 
   const getUserLocation = () => {
     if (navigator.geolocation) {
@@ -143,7 +209,7 @@ export default function Services() {
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
-              placeholder="Search services..."
+              placeholder={t('services.searchPlaceholder')}
               value={searchText}
               onChange={(e) => setSearchText(e.target.value)}
               className="pl-10"
@@ -159,45 +225,67 @@ export default function Services() {
                 onClick={() => setShowNearby(!showNearby)}
               >
                 <MapPin className="h-4 w-4 mr-2" />
-                Nearby (10 km)
+                {t('services.nearby')}
               </Button>
             )}
             
             {/* Category Filter */}
             <Select value={selectedCategory} onValueChange={setSelectedCategory}>
               <SelectTrigger className="w-[140px] h-9">
-                <SelectValue placeholder="Category" />
+                <SelectValue placeholder={t('services.category')} />
               </SelectTrigger>
               <SelectContent className="bg-background z-50">
-                <SelectItem value="all">All Categories</SelectItem>
-                <SelectItem value="repair">Repair</SelectItem>
-                <SelectItem value="beauty">Beauty</SelectItem>
-                <SelectItem value="construction">Construction</SelectItem>
-                <SelectItem value="cleaning">Cleaning</SelectItem>
-                <SelectItem value="delivery">Delivery</SelectItem>
-                <SelectItem value="food">Food</SelectItem>
-                <SelectItem value="transport">Transport</SelectItem>
-                <SelectItem value="legal">Legal</SelectItem>
-                <SelectItem value="accounting">Accounting</SelectItem>
-                <SelectItem value="translation">Translation</SelectItem>
-                <SelectItem value="education">Education</SelectItem>
-                <SelectItem value="healthcare">Healthcare</SelectItem>
-                <SelectItem value="housing">Housing</SelectItem>
-                <SelectItem value="car_services">Car Services</SelectItem>
-                <SelectItem value="other">Other</SelectItem>
+                <SelectItem value="all">{t('services.allCategories')}</SelectItem>
+                <SelectItem value="repair">{t('addService.categories.repair')}</SelectItem>
+                <SelectItem value="beauty">{t('addService.categories.beauty')}</SelectItem>
+                <SelectItem value="construction">{t('addService.categories.construction')}</SelectItem>
+                <SelectItem value="cleaning">{t('addService.categories.cleaning')}</SelectItem>
+                <SelectItem value="delivery">{t('addService.categories.delivery')}</SelectItem>
+                <SelectItem value="food">{t('addService.categories.food')}</SelectItem>
+                <SelectItem value="transport">{t('addService.categories.transport')}</SelectItem>
+                <SelectItem value="legal">{t('addService.categories.legal')}</SelectItem>
+                <SelectItem value="accounting">{t('addService.categories.accounting')}</SelectItem>
+                <SelectItem value="translation">{t('addService.categories.translation')}</SelectItem>
+                <SelectItem value="education">{t('addService.categories.education')}</SelectItem>
+                <SelectItem value="healthcare">{t('addService.categories.healthcare')}</SelectItem>
+                <SelectItem value="housing">{t('addService.categories.housing')}</SelectItem>
+                <SelectItem value="car_services">{t('addService.categories.car_services')}</SelectItem>
+                <SelectItem value="other">{t('addService.categories.other')}</SelectItem>
               </SelectContent>
             </Select>
             
             {/* Sort Filter */}
             <Select value={sortBy} onValueChange={(val) => setSortBy(val as 'newest' | 'price')}>
-              <SelectTrigger className="w-[130px] h-9">
+              <SelectTrigger className="w-[160px] h-9">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent className="bg-background z-50">
-                <SelectItem value="newest">Newest</SelectItem>
-                <SelectItem value="price">Price: Low to High</SelectItem>
+                <SelectItem value="newest">{t('services.newest')}</SelectItem>
+                <SelectItem value="price">{t('services.priceLowToHigh')}</SelectItem>
               </SelectContent>
             </Select>
+          </div>
+
+          {/* Save/Clear Filter Buttons */}
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleSaveFilter}
+              className="flex-1"
+            >
+              <Save className="h-4 w-4 mr-2" />
+              {t('services.saveFilter')}
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleClearSavedFilter}
+              className="flex-1"
+            >
+              <X className="h-4 w-4 mr-2" />
+              {t('services.clearSavedFilter')}
+            </Button>
           </div>
         </div>
 
@@ -208,7 +296,7 @@ export default function Services() {
         ) : filteredServices.length === 0 ? (
           <div className="text-center py-12">
             <p className="text-muted-foreground">
-              {showNearby ? 'No services found nearby' : t('services.noServices')}
+              {showNearby ? t('services.noNearbyServices') : t('services.noServices')}
             </p>
           </div>
         ) : (

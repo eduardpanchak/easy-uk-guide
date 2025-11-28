@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AppProvider } from "@/contexts/AppContext";
 import { LanguageProvider } from "@/contexts/LanguageContext";
+import { FilterProvider } from "@/contexts/FilterContext";
 import { UserPreferencesProvider, useUserPreferences } from "@/contexts/UserPreferencesContext";
 import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 import Start from "./pages/Start";
@@ -104,25 +105,27 @@ const ProtectedRoutes = () => {
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <LanguageProvider>
-      <AuthProvider>
-        <UserPreferencesProvider>
-          <AppProvider>
-            <TooltipProvider>
-              <Toaster />
-              <Sonner />
-              <BrowserRouter>
-                <Routes>
-                  <Route path="/start" element={<Start />} />
-                  <Route path="/select-account-type" element={<SelectAccountType />} />
-                  <Route path="/auth" element={<Auth />} />
-                  <Route path="/account-type-selection" element={<AccountTypeSelection />} />
-                  <Route path="*" element={<ProtectedRoutes />} />
-                </Routes>
-              </BrowserRouter>
-            </TooltipProvider>
-          </AppProvider>
-        </UserPreferencesProvider>
-      </AuthProvider>
+      <FilterProvider>
+        <AuthProvider>
+          <UserPreferencesProvider>
+            <AppProvider>
+              <TooltipProvider>
+                <Toaster />
+                <Sonner />
+                <BrowserRouter>
+                  <Routes>
+                    <Route path="/start" element={<Start />} />
+                    <Route path="/select-account-type" element={<SelectAccountType />} />
+                    <Route path="/auth" element={<Auth />} />
+                    <Route path="/account-type-selection" element={<AccountTypeSelection />} />
+                    <Route path="*" element={<ProtectedRoutes />} />
+                  </Routes>
+                </BrowserRouter>
+              </TooltipProvider>
+            </AppProvider>
+          </UserPreferencesProvider>
+        </AuthProvider>
+      </FilterProvider>
     </LanguageProvider>
   </QueryClientProvider>
 );
