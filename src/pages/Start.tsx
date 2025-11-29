@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useUserPreferences } from '@/contexts/UserPreferencesContext';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { Language } from '@/translations';
+import { Language } from '@/i18n';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
