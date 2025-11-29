@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { createContext, useContext, useState, ReactNode } from 'react';
-import { translations, Language } from '@/translations';
+import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { translations, Language, getStoredLanguage, setStoredLanguage } from '@/i18n';
 
 interface LanguageContextType {
   language: Language;
@@ -11,7 +11,12 @@ interface LanguageContextType {
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
-  const [language, setLanguage] = useState<Language>('en');
+  const [language, setLanguage] = useState<Language>(getStoredLanguage);
+
+  const handleSetLanguage = (lang: Language) => {
+    setLanguage(lang);
+    setStoredLanguage(lang);
+  };
 
   const t = (key: string): string => {
     const keys = key.split('.');
@@ -25,7 +30,7 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <LanguageContext.Provider value={{ language, setLanguage, t }}>
+    <LanguageContext.Provider value={{ language, setLanguage: handleSetLanguage, t }}>
       {children}
     </LanguageContext.Provider>
   );
