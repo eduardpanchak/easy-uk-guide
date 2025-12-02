@@ -4,6 +4,7 @@
   },
   "nav": {
     "home": "Home",
+    "lists": "Lists",
     "checklists": "Checklists",
     "saved": "Saved",
     "services": "Services",
@@ -39,6 +40,105 @@
     "results_plural": "results",
     "loading": "Loading...",
     "cancel": "Cancel"
+  },
+  "lists": {
+    "myLists": "My Lists",
+    "archived": "Archived",
+    "archivedLists": "Archived Lists",
+    "noListsYet": "You don't have any lists yet.",
+    "noArchivedLists": "No archived lists.",
+    "listsYouCanAdd": "Lists you can add",
+    "addOwnList": "+ Add your own list",
+    "createNewList": "Create New List",
+    "listNamePlaceholder": "Enter list name",
+    "create": "Create",
+    "editList": "Edit List",
+    "edit": "Edit",
+    "archive": "Archive",
+    "delete": "Delete",
+    "restore": "Restore",
+    "deleteForever": "Delete Forever",
+    "close": "Close",
+    "share": "Share",
+    "itemsCompleted": "completed",
+    "addItemPlaceholder": "Add new item...",
+    "congratulations": "Congratulations!",
+    "completedMessage": "You finished the list \"{listName}\"! Would you like to share it?",
+    "shareMessage": "With the help of {appName} I completed the list: {listName}!",
+    "copiedToClipboard": "Copied to clipboard",
+    "listCreated": "List created",
+    "listUpdated": "List updated",
+    "listArchived": "List archived",
+    "listRestored": "List restored",
+    "listDeleted": "List deleted",
+    "errorCreating": "Error creating list",
+    "errorUpdating": "Error updating list",
+    "errorArchiving": "Error archiving list",
+    "errorRestoring": "Error restoring list",
+    "errorDeleting": "Error deleting list",
+    "errorLoading": "Error loading list",
+    "errorAdding": "Error adding item",
+    "notFound": "List not found",
+    "deleteConfirmTitle": "Delete List",
+    "deleteConfirmMessage": "Are you sure you want to delete this list?",
+    "deleteForeverConfirm": "This will permanently delete the list. This action cannot be undone.",
+    "templates": {
+      "firstDays": {
+        "title": "First Days in the UK",
+        "description": "Essential tasks for the first week",
+        "items": {
+          "accommodation": "Find temporary accommodation",
+          "simCard": "Get a UK SIM card",
+          "bankAccount": "Open a bank account",
+          "nin": "Apply for National Insurance Number",
+          "gpRegister": "Register with a GP",
+          "transport": "Set up transport (Oyster/contactless)"
+        }
+      },
+      "documents": {
+        "title": "Important Documents",
+        "description": "Key documents you need to obtain",
+        "items": {
+          "passport": "Valid passport",
+          "brp": "BRP card (if applicable)",
+          "nin": "National Insurance Number",
+          "proofOfAddress": "Proof of address",
+          "bankStatements": "Bank statements"
+        }
+      },
+      "housing": {
+        "title": "Finding Housing",
+        "description": "Steps for finding and renting property",
+        "items": {
+          "budget": "Set your budget",
+          "search": "Search on Rightmove/Zoopla",
+          "viewing": "Attend viewings",
+          "deposit": "Pay deposit",
+          "utilities": "Set up utilities"
+        }
+      },
+      "jobSearch": {
+        "title": "Job Search",
+        "description": "Steps for finding work in the UK",
+        "items": {
+          "cv": "Prepare UK-style CV",
+          "linkedin": "Update LinkedIn profile",
+          "jobSites": "Register on job sites",
+          "applications": "Send applications",
+          "interview": "Prepare for interviews"
+        }
+      },
+      "healthcare": {
+        "title": "Healthcare Setup",
+        "description": "Register with the NHS",
+        "items": {
+          "gp": "Register with a GP",
+          "dentist": "Find an NHS dentist",
+          "prescriptions": "Understand prescriptions",
+          "optician": "Register with an optician"
+        }
+      }
+    }
   },
   "saved": {
     "title": "Saved",
