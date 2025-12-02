@@ -16,8 +16,9 @@ import Documents from "./pages/Documents";
 import DocumentDetails from "./pages/DocumentDetails";
 import NHS from "./pages/NHS";
 import NHSDetails from "./pages/NHSDetails";
-import Checklists from "./pages/Checklists";
-import ChecklistDetails from "./pages/ChecklistDetails";
+import Lists from "./pages/Lists";
+import ListDetail from "./pages/ListDetail";
+import ArchivedLists from "./pages/ArchivedLists";
 import Jobs from "./pages/Jobs";
 import JobDetails from "./pages/JobDetails";
 import Housing from "./pages/Housing";
@@ -71,8 +72,10 @@ const ProtectedRoutes = () => {
       <Route path="/documents/:id" element={<DocumentDetails />} />
       <Route path="/nhs" element={<NHS />} />
       <Route path="/nhs/:id" element={<NHSDetails />} />
-      <Route path="/checklists" element={<Checklists />} />
-      <Route path="/checklists/:id" element={<ChecklistDetails />} />
+      <Route path="/lists" element={<Lists />} />
+      <Route path="/lists/:id" element={<ListDetail />} />
+      <Route path="/lists/archived" element={<ArchivedLists />} />
+      <Route path="/checklists" element={<Lists />} />
       <Route path="/jobs" element={<Jobs />} />
       <Route path="/jobs/:id" element={<JobDetails />} />
       <Route path="/housing" element={<Housing />} />

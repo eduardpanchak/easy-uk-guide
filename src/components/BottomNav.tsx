@@ -1,4 +1,4 @@
-import { Home, CheckSquare, Bookmark, User, Briefcase } from 'lucide-react';
+import { Home, ListChecks, Bookmark, User, Briefcase } from 'lucide-react';
 import { NavLink } from '@/components/NavLink';
 import { useLanguage } from '@/contexts/LanguageContext';
 
@@ -18,12 +18,12 @@ export const BottomNav = () => {
         </NavLink>
         
         <NavLink
-          to="/checklists"
+          to="/lists"
           className="flex flex-col items-center justify-center flex-1 h-full text-muted-foreground transition-colors"
           activeClassName="text-primary"
         >
-          <CheckSquare className="w-5 h-5 mb-1" />
-          <span className="text-xs font-medium">{t('nav.checklists')}</span>
+          <ListChecks className="w-5 h-5 mb-1" />
+          <span className="text-xs font-medium">{t('nav.lists')}</span>
         </NavLink>
         
         <NavLink
