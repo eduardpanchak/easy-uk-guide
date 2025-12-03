@@ -31,7 +31,10 @@ export default function Lists() {
   const [selectedList, setSelectedList] = useState<List | null>(null);
 
   const fetchLists = useCallback(async () => {
-    if (!user) return;
+    if (!user) {
+      setLoading(false);
+      return;
+    }
     try {
       const data = await listsService.getLists(user.id);
       setLists(data);
@@ -58,6 +61,24 @@ export default function Lists() {
   useEffect(() => {
     fetchLists();
   }, [fetchLists]);
+
+  // Show sign-in prompt if not authenticated
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-background pb-20">
+        <Header title={t('lists.myLists')} />
+        <div className="max-w-md mx-auto px-4 py-12 flex flex-col items-center justify-center">
+          <p className="text-center text-muted-foreground mb-6">
+            {t('lists.signInRequired')}
+          </p>
+          <Button onClick={() => navigate('/auth')}>
+            {t('lists.signInButton')}
+          </Button>
+        </div>
+        <BottomNav />
+      </div>
+    );
+  }
 
   const handleCreateList = async (title: string) => {
     if (!user) return;
