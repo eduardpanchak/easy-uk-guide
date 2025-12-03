@@ -4,6 +4,7 @@
   },
   "nav": {
     "home": "Strona główna",
+    "lists": "Listy",
     "checklists": "Listy kontrolne",
     "saved": "Zapisane",
     "services": "Usługi",
@@ -39,6 +40,105 @@
     "results_plural": "wyników",
     "loading": "Ładowanie...",
     "cancel": "Anuluj"
+  },
+  "lists": {
+    "myLists": "Moje listy",
+    "archived": "Zarchiwizowane",
+    "archivedLists": "Zarchiwizowane listy",
+    "noListsYet": "Nie masz jeszcze żadnych list.",
+    "noArchivedLists": "Brak zarchiwizowanych list.",
+    "listsYouCanAdd": "Listy, które możesz dodać",
+    "addOwnList": "+ Dodaj własną listę",
+    "createNewList": "Utwórz nową listę",
+    "listNamePlaceholder": "Wprowadź nazwę listy",
+    "create": "Utwórz",
+    "editList": "Edytuj listę",
+    "edit": "Edytuj",
+    "archive": "Archiwizuj",
+    "delete": "Usuń",
+    "restore": "Przywróć",
+    "deleteForever": "Usuń na zawsze",
+    "close": "Zamknij",
+    "share": "Udostępnij",
+    "itemsCompleted": "ukończono",
+    "addItemPlaceholder": "Dodaj nowy element...",
+    "congratulations": "Gratulacje!",
+    "completedMessage": "Ukończyłeś listę \"{listName}\"! Chcesz się podzielić?",
+    "shareMessage": "Z pomocą {appName} ukończyłem listę: {listName}!",
+    "copiedToClipboard": "Skopiowano do schowka",
+    "listCreated": "Lista utworzona",
+    "listUpdated": "Lista zaktualizowana",
+    "listArchived": "Lista zarchiwizowana",
+    "listRestored": "Lista przywrócona",
+    "listDeleted": "Lista usunięta",
+    "errorCreating": "Błąd tworzenia listy",
+    "errorUpdating": "Błąd aktualizacji listy",
+    "errorArchiving": "Błąd archiwizacji listy",
+    "errorRestoring": "Błąd przywracania listy",
+    "errorDeleting": "Błąd usuwania listy",
+    "errorLoading": "Błąd ładowania listy",
+    "errorAdding": "Błąd dodawania elementu",
+    "notFound": "Nie znaleziono listy",
+    "deleteConfirmTitle": "Usuń listę",
+    "deleteConfirmMessage": "Czy na pewno chcesz usunąć tę listę?",
+    "deleteForeverConfirm": "To trwale usunie listę. Tej akcji nie można cofnąć.",
+    "templates": {
+      "firstDays": {
+        "title": "Pierwsze dni w Wielkiej Brytanii",
+        "description": "Podstawowe zadania na pierwszy tydzień",
+        "items": {
+          "accommodation": "Znaleźć tymczasowe zakwaterowanie",
+          "simCard": "Kupić brytyjską kartę SIM",
+          "bankAccount": "Otworzyć konto bankowe",
+          "nin": "Złożyć wniosek o National Insurance Number",
+          "gpRegister": "Zarejestrować się u lekarza GP",
+          "transport": "Skonfigurować transport (Oyster/płatność zbliżeniowa)"
+        }
+      },
+      "documents": {
+        "title": "Ważne dokumenty",
+        "description": "Kluczowe dokumenty do uzyskania",
+        "items": {
+          "passport": "Ważny paszport",
+          "brp": "Karta BRP (jeśli dotyczy)",
+          "nin": "National Insurance Number",
+          "proofOfAddress": "Dowód adresu",
+          "bankStatements": "Wyciągi bankowe"
+        }
+      },
+      "housing": {
+        "title": "Szukanie mieszkania",
+        "description": "Kroki do znalezienia i wynajęcia nieruchomości",
+        "items": {
+          "budget": "Ustalić budżet",
+          "search": "Szukać na Rightmove/Zoopla",
+          "viewing": "Uczestniczyć w oglądaniach",
+          "deposit": "Wpłacić depozyt",
+          "utilities": "Skonfigurować media"
+        }
+      },
+      "jobSearch": {
+        "title": "Szukanie pracy",
+        "description": "Kroki do znalezienia pracy w Wielkiej Brytanii",
+        "items": {
+          "cv": "Przygotować CV w stylu brytyjskim",
+          "linkedin": "Zaktualizować profil LinkedIn",
+          "jobSites": "Zarejestrować się na portalach pracy",
+          "applications": "Wysłać aplikacje",
+          "interview": "Przygotować się do rozmów kwalifikacyjnych"
+        }
+      },
+      "healthcare": {
+        "title": "Konfiguracja opieki zdrowotnej",
+        "description": "Rejestracja w NHS",
+        "items": {
+          "gp": "Zarejestrować się u lekarza GP",
+          "dentist": "Znaleźć dentystę NHS",
+          "prescriptions": "Zrozumieć system recept",
+          "optician": "Zarejestrować się u optyka"
+        }
+      }
+    }
   },
   "saved": {
     "title": "Zapisane",

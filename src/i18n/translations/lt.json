@@ -4,6 +4,7 @@
   },
   "nav": {
     "home": "Pagrindinis",
+    "lists": "Sąrašai",
     "checklists": "Sąrašai",
     "saved": "Išsaugota",
     "services": "Paslaugos",
@@ -39,6 +40,105 @@
     "results_plural": "rezultatų",
     "loading": "Kraunama...",
     "cancel": "Atšaukti"
+  },
+  "lists": {
+    "myLists": "Mano sąrašai",
+    "archived": "Archyvuota",
+    "archivedLists": "Archyvuoti sąrašai",
+    "noListsYet": "Jūs dar neturite sąrašų.",
+    "noArchivedLists": "Nėra archyvuotų sąrašų.",
+    "listsYouCanAdd": "Sąrašai, kuriuos galite pridėti",
+    "addOwnList": "+ Pridėti savo sąrašą",
+    "createNewList": "Sukurti naują sąrašą",
+    "listNamePlaceholder": "Įveskite sąrašo pavadinimą",
+    "create": "Sukurti",
+    "editList": "Redaguoti sąrašą",
+    "edit": "Redaguoti",
+    "archive": "Archyvuoti",
+    "delete": "Ištrinti",
+    "restore": "Atkurti",
+    "deleteForever": "Ištrinti visam laikui",
+    "close": "Uždaryti",
+    "share": "Dalintis",
+    "itemsCompleted": "užbaigta",
+    "addItemPlaceholder": "Pridėti naują elementą...",
+    "congratulations": "Sveikiname!",
+    "completedMessage": "Jūs užbaigėte sąrašą \"{listName}\"! Ar norite pasidalinti?",
+    "shareMessage": "Su {appName} pagalba užbaigiau sąrašą: {listName}!",
+    "copiedToClipboard": "Nukopijuota į iškarpinę",
+    "listCreated": "Sąrašas sukurtas",
+    "listUpdated": "Sąrašas atnaujintas",
+    "listArchived": "Sąrašas archyvuotas",
+    "listRestored": "Sąrašas atkurtas",
+    "listDeleted": "Sąrašas ištrintas",
+    "errorCreating": "Sąrašo kūrimo klaida",
+    "errorUpdating": "Sąrašo atnaujinimo klaida",
+    "errorArchiving": "Sąrašo archyvavimo klaida",
+    "errorRestoring": "Sąrašo atkūrimo klaida",
+    "errorDeleting": "Sąrašo ištrynimo klaida",
+    "errorLoading": "Sąrašo įkėlimo klaida",
+    "errorAdding": "Elemento pridėjimo klaida",
+    "notFound": "Sąrašas nerastas",
+    "deleteConfirmTitle": "Ištrinti sąrašą",
+    "deleteConfirmMessage": "Ar tikrai norite ištrinti šį sąrašą?",
+    "deleteForeverConfirm": "Tai visam laikui ištrins sąrašą. Šio veiksmo negalima atšaukti.",
+    "templates": {
+      "firstDays": {
+        "title": "Pirmosios dienos JK",
+        "description": "Pagrindinės užduotys pirmajai savaitei",
+        "items": {
+          "accommodation": "Rasti laikiną būstą",
+          "simCard": "Gauti britišką SIM kortelę",
+          "bankAccount": "Atidaryti banko sąskaitą",
+          "nin": "Pateikti paraišką National Insurance Number",
+          "gpRegister": "Užsiregistruoti pas GP gydytoją",
+          "transport": "Nustatyti transportą (Oyster/bekontaktis mokėjimas)"
+        }
+      },
+      "documents": {
+        "title": "Svarbūs dokumentai",
+        "description": "Pagrindiniai dokumentai, kuriuos reikia gauti",
+        "items": {
+          "passport": "Galiojantis pasas",
+          "brp": "BRP kortelė (jei taikoma)",
+          "nin": "National Insurance Number",
+          "proofOfAddress": "Adreso patvirtinimas",
+          "bankStatements": "Banko išrašai"
+        }
+      },
+      "housing": {
+        "title": "Būsto paieška",
+        "description": "Žingsniai nekilnojamojo turto paieškai ir nuomai",
+        "items": {
+          "budget": "Nustatyti biudžetą",
+          "search": "Ieškoti Rightmove/Zoopla",
+          "viewing": "Dalyvauti apžiūrose",
+          "deposit": "Sumokėti depozitą",
+          "utilities": "Prijungti komunalines paslaugas"
+        }
+      },
+      "jobSearch": {
+        "title": "Darbo paieška",
+        "description": "Žingsniai darbui rasti JK",
+        "items": {
+          "cv": "Paruošti britišką CV",
+          "linkedin": "Atnaujinti LinkedIn profilį",
+          "jobSites": "Užsiregistruoti darbo svetainėse",
+          "applications": "Siųsti paraiškas",
+          "interview": "Pasiruošti pokalbiams"
+        }
+      },
+      "healthcare": {
+        "title": "Sveikatos priežiūros nustatymas",
+        "description": "Registracija NHS",
+        "items": {
+          "gp": "Užsiregistruoti pas GP gydytoją",
+          "dentist": "Rasti NHS odontologą",
+          "prescriptions": "Suprasti receptų sistemą",
+          "optician": "Užsiregistruoti pas optiką"
+        }
+      }
+    }
   },
   "saved": {
     "title": "Išsaugota",

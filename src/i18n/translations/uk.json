@@ -4,6 +4,7 @@
   },
   "nav": {
     "home": "Головна",
+    "lists": "Списки",
     "checklists": "Списки",
     "saved": "Збережене",
     "services": "Послуги",
@@ -39,6 +40,105 @@
     "results_plural": "результатів",
     "loading": "Завантаження...",
     "cancel": "Скасувати"
+  },
+  "lists": {
+    "myLists": "Мої списки",
+    "archived": "Архів",
+    "archivedLists": "Архівовані списки",
+    "noListsYet": "У вас ще немає списків.",
+    "noArchivedLists": "Немає архівованих списків.",
+    "listsYouCanAdd": "Списки, які ви можете додати",
+    "addOwnList": "+ Додати власний список",
+    "createNewList": "Створити новий список",
+    "listNamePlaceholder": "Введіть назву списку",
+    "create": "Створити",
+    "editList": "Редагувати список",
+    "edit": "Редагувати",
+    "archive": "Архівувати",
+    "delete": "Видалити",
+    "restore": "Відновити",
+    "deleteForever": "Видалити назавжди",
+    "close": "Закрити",
+    "share": "Поділитися",
+    "itemsCompleted": "виконано",
+    "addItemPlaceholder": "Додати новий пункт...",
+    "congratulations": "Вітаємо!",
+    "completedMessage": "Ви завершили список \"{listName}\"! Бажаєте поділитися?",
+    "shareMessage": "За допомогою {appName} я завершив(ла) список: {listName}!",
+    "copiedToClipboard": "Скопійовано в буфер обміну",
+    "listCreated": "Список створено",
+    "listUpdated": "Список оновлено",
+    "listArchived": "Список архівовано",
+    "listRestored": "Список відновлено",
+    "listDeleted": "Список видалено",
+    "errorCreating": "Помилка створення списку",
+    "errorUpdating": "Помилка оновлення списку",
+    "errorArchiving": "Помилка архівування списку",
+    "errorRestoring": "Помилка відновлення списку",
+    "errorDeleting": "Помилка видалення списку",
+    "errorLoading": "Помилка завантаження списку",
+    "errorAdding": "Помилка додавання пункту",
+    "notFound": "Список не знайдено",
+    "deleteConfirmTitle": "Видалити список",
+    "deleteConfirmMessage": "Ви впевнені, що хочете видалити цей список?",
+    "deleteForeverConfirm": "Це назавжди видалить список. Цю дію неможливо скасувати.",
+    "templates": {
+      "firstDays": {
+        "title": "Перші дні у Великобританії",
+        "description": "Основні завдання на перший тиждень",
+        "items": {
+          "accommodation": "Знайти тимчасове житло",
+          "simCard": "Отримати британську SIM-карту",
+          "bankAccount": "Відкрити банківський рахунок",
+          "nin": "Подати заявку на National Insurance Number",
+          "gpRegister": "Зареєструватися у лікаря GP",
+          "transport": "Налаштувати транспорт (Oyster/безконтактна оплата)"
+        }
+      },
+      "documents": {
+        "title": "Важливі документи",
+        "description": "Ключові документи, які потрібно отримати",
+        "items": {
+          "passport": "Дійсний паспорт",
+          "brp": "BRP картка (якщо потрібно)",
+          "nin": "National Insurance Number",
+          "proofOfAddress": "Підтвердження адреси",
+          "bankStatements": "Банківські виписки"
+        }
+      },
+      "housing": {
+        "title": "Пошук житла",
+        "description": "Кроки для пошуку та оренди нерухомості",
+        "items": {
+          "budget": "Визначити бюджет",
+          "search": "Шукати на Rightmove/Zoopla",
+          "viewing": "Відвідати огляди",
+          "deposit": "Сплатити депозит",
+          "utilities": "Підключити комунальні послуги"
+        }
+      },
+      "jobSearch": {
+        "title": "Пошук роботи",
+        "description": "Кроки для пошуку роботи у Великобританії",
+        "items": {
+          "cv": "Підготувати CV британського зразка",
+          "linkedin": "Оновити профіль LinkedIn",
+          "jobSites": "Зареєструватися на сайтах роботи",
+          "applications": "Надіслати заявки",
+          "interview": "Підготуватися до співбесід"
+        }
+      },
+      "healthcare": {
+        "title": "Налаштування медицини",
+        "description": "Реєстрація в NHS",
+        "items": {
+          "gp": "Зареєструватися у лікаря GP",
+          "dentist": "Знайти стоматолога NHS",
+          "prescriptions": "Розібратися з рецептами",
+          "optician": "Зареєструватися в оптиці"
+        }
+      }
+    }
   },
   "saved": {
     "title": "Збережене",
