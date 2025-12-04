@@ -105,7 +105,8 @@
     "results": "result",
     "results_plural": "results",
     "loading": "Loading...",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "delete": "Delete"
   },
   "lists": {
     "myLists": "My Lists",
@@ -260,11 +261,15 @@
     "reviewPlaceholder": "Share your experience with this service...",
     "submitReview": "Submit Review",
     "updateReview": "Update Review",
-    "deleteConfirm": "Are you sure you want to delete your review?",
+    "deleteConfirm": "Delete your review?",
+    "deleteCannotUndo": "This action cannot be undone.",
     "reviewAdded": "Review added successfully",
     "reviewUpdated": "Review updated successfully",
     "reviewDeleted": "Review deleted successfully",
     "signInToReview": "Sign in to leave a review",
+    "alreadyReviewed": "You have already reviewed this service",
+    "submitError": "Failed to submit review",
+    "deleteError": "Failed to delete review",
     "averageRating": "Average Rating",
     "basedOnReviews": "reviews"
   },

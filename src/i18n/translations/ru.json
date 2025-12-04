@@ -105,7 +105,8 @@
     "results": "результат",
     "results_plural": "результатов",
     "loading": "Загрузка...",
-    "cancel": "Отмена"
+    "cancel": "Отмена",
+    "delete": "Удалить"
   },
   "lists": {
     "myLists": "Мои списки",
@@ -260,11 +261,15 @@
     "reviewPlaceholder": "Поделитесь своим опытом...",
     "submitReview": "Отправить отзыв",
     "updateReview": "Обновить отзыв",
-    "deleteConfirm": "Вы уверены, что хотите удалить свой отзыв?",
+    "deleteConfirm": "Удалить ваш отзыв?",
+    "deleteCannotUndo": "Это действие нельзя отменить.",
     "reviewAdded": "Отзыв успешно добавлен",
     "reviewUpdated": "Отзыв успешно обновлён",
     "reviewDeleted": "Отзыв успешно удалён",
     "signInToReview": "Войдите, чтобы оставить отзыв",
+    "alreadyReviewed": "Вы уже оставили отзыв для этой услуги",
+    "submitError": "Не удалось отправить отзыв",
+    "deleteError": "Не удалось удалить отзыв",
     "averageRating": "Средняя оценка",
     "basedOnReviews": "отзывов"
   },

@@ -105,7 +105,8 @@
     "results": "rezultatas",
     "results_plural": "rezultatų",
     "loading": "Kraunama...",
-    "cancel": "Atšaukti"
+    "cancel": "Atšaukti",
+    "delete": "Ištrinti"
   },
   "lists": {
     "myLists": "Mano sąrašai",
@@ -260,11 +261,15 @@
     "reviewPlaceholder": "Pasidalinkite savo patirtimi...",
     "submitReview": "Pateikti atsiliepimą",
     "updateReview": "Atnaujinti atsiliepimą",
-    "deleteConfirm": "Ar tikrai norite ištrinti savo atsiliepimą?",
+    "deleteConfirm": "Ištrinti atsiliepimą?",
+    "deleteCannotUndo": "Šio veiksmo negalima atšaukti.",
     "reviewAdded": "Atsiliepimas sėkmingai pridėtas",
     "reviewUpdated": "Atsiliepimas sėkmingai atnaujintas",
     "reviewDeleted": "Atsiliepimas sėkmingai ištrintas",
     "signInToReview": "Prisijunkite, kad paliktumėte atsiliepimą",
+    "alreadyReviewed": "Jūs jau palikote atsiliepimą šiai paslaugai",
+    "submitError": "Nepavyko pateikti atsiliepimo",
+    "deleteError": "Nepavyko ištrinti atsiliepimo",
     "averageRating": "Vidutinis įvertinimas",
     "basedOnReviews": "atsiliepimų"
   },
