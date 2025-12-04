@@ -106,7 +106,8 @@
     "results_plural": "results",
     "loading": "Loading...",
     "cancel": "Cancel",
-    "delete": "Delete"
+    "delete": "Delete",
+    "edit": "Edit"
   },
   "lists": {
     "myLists": "My Lists",
@@ -271,7 +272,9 @@
     "submitError": "Failed to submit review",
     "deleteError": "Failed to delete review",
     "averageRating": "Average Rating",
-    "basedOnReviews": "reviews"
+    "basedOnReviews": "reviews",
+    "anonymousUser": "Anonymous User",
+    "you": "You"
   },
   "account": {
     "title": "Account",
