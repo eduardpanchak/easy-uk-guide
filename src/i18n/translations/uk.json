@@ -105,7 +105,8 @@
     "results": "результат",
     "results_plural": "результатів",
     "loading": "Завантаження...",
-    "cancel": "Скасувати"
+    "cancel": "Скасувати",
+    "delete": "Видалити"
   },
   "lists": {
     "myLists": "Мої списки",
@@ -260,11 +261,15 @@
     "reviewPlaceholder": "Поділіться своїм досвідом...",
     "submitReview": "Відправити відгук",
     "updateReview": "Оновити відгук",
-    "deleteConfirm": "Ви впевнені, що хочете видалити свій відгук?",
+    "deleteConfirm": "Видалити ваш відгук?",
+    "deleteCannotUndo": "Цю дію неможливо скасувати.",
     "reviewAdded": "Відгук успішно додано",
     "reviewUpdated": "Відгук успішно оновлено",
     "reviewDeleted": "Відгук успішно видалено",
     "signInToReview": "Увійдіть, щоб залишити відгук",
+    "alreadyReviewed": "Ви вже залишили відгук для цієї послуги",
+    "submitError": "Не вдалося відправити відгук",
+    "deleteError": "Не вдалося видалити відгук",
     "averageRating": "Середня оцінка",
     "basedOnReviews": "відгуків"
   },

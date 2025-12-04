@@ -151,6 +151,13 @@ export default function ServiceDetails() {
         if (error) throw error;
         toast.success(t('reviews.reviewUpdated'));
       } else {
+        // Check if user already has a review (prevent duplicate key errors)
+        if (userReview) {
+          toast.error(t('reviews.alreadyReviewed'));
+          setShowReviewForm(false);
+          return;
+        }
+
         // Create new review
         const { error } = await supabase
           .from('service_reviews')
@@ -161,7 +168,16 @@ export default function ServiceDetails() {
             review_text: reviewText,
           });
 
-        if (error) throw error;
+        if (error) {
+          // Handle duplicate key constraint error
+          if (error.code === '23505') {
+            toast.error(t('reviews.alreadyReviewed'));
+            fetchReviews(id); // Refresh to show existing review
+            setShowReviewForm(false);
+            return;
+          }
+          throw error;
+        }
         toast.success(t('reviews.reviewAdded'));
       }
 
@@ -170,7 +186,7 @@ export default function ServiceDetails() {
       fetchReviews(id);
     } catch (error) {
       console.error('Error submitting review:', error);
-      toast.error('Failed to submit review');
+      toast.error(t('reviews.submitError'));
     }
   };
 
@@ -186,11 +202,12 @@ export default function ServiceDetails() {
       if (error) throw error;
 
       toast.success(t('reviews.reviewDeleted'));
+      setUserReview(null);
       setDeleteDialogOpen(false);
       if (id) fetchReviews(id);
     } catch (error) {
       console.error('Error deleting review:', error);
-      toast.error('Failed to delete review');
+      toast.error(t('reviews.deleteError'));
     }
   };
 
@@ -473,13 +490,13 @@ export default function ServiceDetails() {
           <AlertDialogHeader>
             <AlertDialogTitle>{t('reviews.deleteConfirm')}</AlertDialogTitle>
             <AlertDialogDescription>
-              This action cannot be undone.
+              {t('reviews.deleteCannotUndo')}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>{t('common.cancel')}</AlertDialogCancel>
             <AlertDialogAction onClick={handleDeleteReview}>
-              Delete
+              {t('common.delete')}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

@@ -105,7 +105,8 @@
     "results": "wynik",
     "results_plural": "wyników",
     "loading": "Ładowanie...",
-    "cancel": "Anuluj"
+    "cancel": "Anuluj",
+    "delete": "Usuń"
   },
   "lists": {
     "myLists": "Moje listy",
@@ -260,11 +261,15 @@
     "reviewPlaceholder": "Podziel się swoim doświadczeniem...",
     "submitReview": "Wyślij opinię",
     "updateReview": "Zaktualizuj opinię",
-    "deleteConfirm": "Czy na pewno chcesz usunąć swoją opinię?",
+    "deleteConfirm": "Usunąć twoją opinię?",
+    "deleteCannotUndo": "Tej czynności nie można cofnąć.",
     "reviewAdded": "Opinia dodana pomyślnie",
     "reviewUpdated": "Opinia zaktualizowana pomyślnie",
     "reviewDeleted": "Opinia usunięta pomyślnie",
     "signInToReview": "Zaloguj się, aby wystawić opinię",
+    "alreadyReviewed": "Już wystawiłeś opinię dla tej usługi",
+    "submitError": "Nie udało się wysłać opinii",
+    "deleteError": "Nie udało się usunąć opinii",
     "averageRating": "Średnia ocena",
     "basedOnReviews": "opinii"
   },
