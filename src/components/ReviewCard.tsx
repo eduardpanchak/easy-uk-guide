@@ -1,12 +1,14 @@
 import React from 'react';
-import { Star, Trash2, Edit } from 'lucide-react';
+import { Star, Trash2, Edit, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { cn } from '@/lib/utils';
 
 interface ReviewCardProps {
   rating: number;
   reviewText: string | null;
   createdAt: string;
+  reviewerName?: string | null;
   isOwnReview: boolean;
   onEdit?: () => void;
   onDelete?: () => void;
@@ -16,14 +18,30 @@ export const ReviewCard = ({
   rating,
   reviewText,
   createdAt,
+  reviewerName,
   isOwnReview,
   onEdit,
   onDelete
 }: ReviewCardProps) => {
+  const { t } = useLanguage();
   const date = new Date(createdAt).toLocaleDateString();
+  const displayName = reviewerName || t('reviews.anonymousUser');
 
   return (
     <div className="bg-card border border-border rounded-lg p-4 space-y-2">
+      {/* Reviewer Name */}
+      <div className="flex items-center gap-2">
+        <div className="flex items-center justify-center w-6 h-6 rounded-full bg-muted">
+          <User className="h-3.5 w-3.5 text-muted-foreground" />
+        </div>
+        <span className="text-sm font-medium text-foreground">{displayName}</span>
+        {isOwnReview && (
+          <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full">
+            {t('reviews.you')}
+          </span>
+        )}
+      </div>
+
       {/* Rating Stars */}
       <div className="flex items-center gap-2">
         <div className="flex items-center gap-0.5">
@@ -57,7 +75,7 @@ export const ReviewCard = ({
             className="h-8 text-xs"
           >
             <Edit className="h-3 w-3 mr-1" />
-            Edit
+            {t('common.edit')}
           </Button>
           <Button
             variant="ghost"
@@ -66,7 +84,7 @@ export const ReviewCard = ({
             className="h-8 text-xs text-destructive hover:text-destructive"
           >
             <Trash2 className="h-3 w-3 mr-1" />
-            Delete
+            {t('common.delete')}
           </Button>
         </div>
       )}

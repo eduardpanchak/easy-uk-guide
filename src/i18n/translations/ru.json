@@ -106,7 +106,8 @@
     "results_plural": "результатов",
     "loading": "Загрузка...",
     "cancel": "Отмена",
-    "delete": "Удалить"
+    "delete": "Удалить",
+    "edit": "Редактировать"
   },
   "lists": {
     "myLists": "Мои списки",
@@ -271,7 +272,9 @@
     "submitError": "Не удалось отправить отзыв",
     "deleteError": "Не удалось удалить отзыв",
     "averageRating": "Средняя оценка",
-    "basedOnReviews": "отзывов"
+    "basedOnReviews": "отзывов",
+    "anonymousUser": "Анонимный пользователь",
+    "you": "Вы"
   },
   "account": {
     "title": "Аккаунт",

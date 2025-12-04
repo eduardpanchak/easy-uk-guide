@@ -106,7 +106,8 @@
     "results_plural": "wyników",
     "loading": "Ładowanie...",
     "cancel": "Anuluj",
-    "delete": "Usuń"
+    "delete": "Usuń",
+    "edit": "Edytuj"
   },
   "lists": {
     "myLists": "Moje listy",
@@ -271,7 +272,9 @@
     "submitError": "Nie udało się wysłać opinii",
     "deleteError": "Nie udało się usunąć opinii",
     "averageRating": "Średnia ocena",
-    "basedOnReviews": "opinii"
+    "basedOnReviews": "opinii",
+    "anonymousUser": "Anonimowy użytkownik",
+    "you": "Ty"
   },
   "account": {
     "title": "Konto",

@@ -43,6 +43,7 @@ interface Review {
   review_text: string | null;
   created_at: string;
   updated_at: string;
+  reviewer_name?: string | null;
 }
 
 export default function ServiceDetails() {
@@ -101,7 +102,10 @@ export default function ServiceDetails() {
     try {
       const { data, error } = await supabase
         .from('service_reviews')
-        .select('*')
+        .select(`
+          *,
+          profiles:user_id (name)
+        `)
         .eq('service_id', serviceId)
         .order('created_at', { ascending: false });
 
@@ -110,11 +114,17 @@ export default function ServiceDetails() {
         return;
       }
 
-      setReviews(data || []);
+      // Transform data to include reviewer_name
+      const reviewsWithNames = (data || []).map((review: any) => ({
+        ...review,
+        reviewer_name: review.profiles?.name || null,
+      }));
+
+      setReviews(reviewsWithNames);
 
       // Calculate average rating
-      if (data && data.length > 0) {
-        const avg = data.reduce((sum, review) => sum + review.rating, 0) / data.length;
+      if (reviewsWithNames.length > 0) {
+        const avg = reviewsWithNames.reduce((sum: number, review: Review) => sum + review.rating, 0) / reviewsWithNames.length;
         setAverageRating(Math.round(avg * 10) / 10);
       } else {
         setAverageRating(0);
@@ -122,7 +132,7 @@ export default function ServiceDetails() {
 
       // Find user's review if logged in
       if (user) {
-        const userReviewData = data?.find(review => review.user_id === user.id);
+        const userReviewData = reviewsWithNames.find((review: Review) => review.user_id === user.id);
         setUserReview(userReviewData || null);
       }
     } catch (error) {
@@ -440,6 +450,7 @@ export default function ServiceDetails() {
                 rating={userReview.rating}
                 reviewText={userReview.review_text}
                 createdAt={userReview.created_at}
+                reviewerName={userReview.reviewer_name}
                 isOwnReview={true}
                 onEdit={handleEditReview}
                 onDelete={() => setDeleteDialogOpen(true)}
@@ -457,6 +468,7 @@ export default function ServiceDetails() {
                       rating={review.rating}
                       reviewText={review.review_text}
                       createdAt={review.created_at}
+                      reviewerName={review.reviewer_name}
                       isOwnReview={false}
                     />
                   ))}

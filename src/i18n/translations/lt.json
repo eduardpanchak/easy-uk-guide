@@ -106,7 +106,8 @@
     "results_plural": "rezultatų",
     "loading": "Kraunama...",
     "cancel": "Atšaukti",
-    "delete": "Ištrinti"
+    "delete": "Ištrinti",
+    "edit": "Redaguoti"
   },
   "lists": {
     "myLists": "Mano sąrašai",
@@ -271,7 +272,9 @@
     "submitError": "Nepavyko pateikti atsiliepimo",
     "deleteError": "Nepavyko ištrinti atsiliepimo",
     "averageRating": "Vidutinis įvertinimas",
-    "basedOnReviews": "atsiliepimų"
+    "basedOnReviews": "atsiliepimų",
+    "anonymousUser": "Anoniminis vartotojas",
+    "you": "Jūs"
   },
   "account": {
     "title": "Paskyra",

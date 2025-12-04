@@ -106,7 +106,8 @@
     "results_plural": "результатів",
     "loading": "Завантаження...",
     "cancel": "Скасувати",
-    "delete": "Видалити"
+    "delete": "Видалити",
+    "edit": "Редагувати"
   },
   "lists": {
     "myLists": "Мої списки",
@@ -271,7 +272,9 @@
     "submitError": "Не вдалося відправити відгук",
     "deleteError": "Не вдалося видалити відгук",
     "averageRating": "Середня оцінка",
-    "basedOnReviews": "відгуків"
+    "basedOnReviews": "відгуків",
+    "anonymousUser": "Анонімний користувач",
+    "you": "Ви"
   },
   "account": {
     "title": "Акаунт",
