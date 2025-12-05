@@ -379,7 +379,11 @@
     "subscribeNow": "Prenumeruoti dabar",
     "subscriptionActive": "Prenumerata aktyvi",
     "reactivate": "Atnaujinti paslaugą",
-    "plan": "Planas"
+    "plan": "Planas",
+    "deleteServiceTitle": "Ištrinti paslaugą",
+    "deleteServiceMessage": "Ar tikrai norite ištrinti šią paslaugą? Šio veiksmo negalima atšaukti.",
+    "serviceDeleted": "Paslauga sėkmingai ištrinta",
+    "deleteError": "Nepavyko ištrinti paslaugos"
   },
   "editService": {
     "title": "Redaguoti paslaugą",

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { ArrowLeft, Clock, CheckCircle, XCircle, CreditCard, Edit } from 'lucide-react';
+import { ArrowLeft, Clock, CheckCircle, XCircle, CreditCard, Edit, Trash2 } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
@@ -8,6 +8,16 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { BottomNav } from '@/components/BottomNav';
 import { toast } from 'sonner';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 
 interface Service {
   id: string;
@@ -29,6 +39,8 @@ export default function MyServices() {
   const { user } = useAuth();
   const [services, setServices] = useState<Service[]>([]);
   const [loading, setLoading] = useState(true);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [serviceToDelete, setServiceToDelete] = useState<Service | null>(null);
 
   useEffect(() => {
     if (user) {
@@ -147,6 +159,34 @@ export default function MyServices() {
     return tier === 'top' ? '£4.99' : '£1.99';
   };
 
+  const handleDeleteClick = (service: Service) => {
+    setServiceToDelete(service);
+    setDeleteDialogOpen(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!serviceToDelete) return;
+
+    try {
+      const { error } = await supabase
+        .from('services')
+        .delete()
+        .eq('id', serviceToDelete.id)
+        .eq('user_id', user?.id);
+
+      if (error) throw error;
+
+      toast.success(t('myServices.serviceDeleted'));
+      fetchServices();
+    } catch (error) {
+      console.error('Error deleting service:', error);
+      toast.error(t('myServices.deleteError'));
+    } finally {
+      setDeleteDialogOpen(false);
+      setServiceToDelete(null);
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -206,14 +246,23 @@ export default function MyServices() {
                         {service.description}
                       </p>
                     </div>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => navigate(`/edit-service/${service.id}`)}
-                      className="shrink-0"
-                    >
-                      <Edit className="h-5 w-5" />
-                    </Button>
+                    <div className="flex gap-1 shrink-0">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => navigate(`/edit-service/${service.id}`)}
+                      >
+                        <Edit className="h-5 w-5" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => handleDeleteClick(service)}
+                        className="text-destructive hover:text-destructive"
+                      >
+                        <Trash2 className="h-5 w-5" />
+                      </Button>
+                    </div>
                   </div>
                 </div>
 
@@ -271,6 +320,23 @@ export default function MyServices() {
           })
         )}
       </div>
+
+      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{t('myServices.deleteServiceTitle')}</AlertDialogTitle>
+            <AlertDialogDescription>
+              {t('myServices.deleteServiceMessage')}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>{t('common.cancel')}</AlertDialogCancel>
+            <AlertDialogAction onClick={handleDeleteConfirm} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+              {t('common.delete')}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
 
       <BottomNav />
     </div>
