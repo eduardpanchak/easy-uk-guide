@@ -76,6 +76,15 @@
     "services": "Paslaugos",
     "account": "Paskyra"
   },
+  "saved": {
+    "title": "Išsaugota",
+    "information": "Informacija",
+    "services": "Paslaugos",
+    "noInformation": "Nėra išsaugotos informacijos",
+    "noInformationDesc": "Išsaugokite naudingus straipsnius ir vadovus greitai pasiekti",
+    "noServices": "Nėra išsaugotų paslaugų",
+    "noServicesDesc": "Išsaugokite paslaugas iš tiekėjų patogumui"
+  },
   "home": {
     "documents": "Dokumentai",
     "documentsDesc": "NIN, Bankas, BRP, GP, Savivaldybės mokestis, Vairuotojo pažymėjimas",
