@@ -379,7 +379,11 @@
     "subscribeNow": "Subscribe Now",
     "subscriptionActive": "Subscription active",
     "reactivate": "Reactivate Service",
-    "plan": "Plan"
+    "plan": "Plan",
+    "deleteServiceTitle": "Delete Service",
+    "deleteServiceMessage": "Are you sure you want to delete this service? This action cannot be undone.",
+    "serviceDeleted": "Service deleted successfully",
+    "deleteError": "Failed to delete service"
   },
   "editService": {
     "title": "Edit Service",

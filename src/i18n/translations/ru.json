@@ -379,7 +379,11 @@
     "subscribeNow": "Подписаться сейчас",
     "subscriptionActive": "Подписка активна",
     "reactivate": "Возобновить услугу",
-    "plan": "План"
+    "plan": "План",
+    "deleteServiceTitle": "Удалить услугу",
+    "deleteServiceMessage": "Вы уверены, что хотите удалить эту услугу? Это действие нельзя отменить.",
+    "serviceDeleted": "Услуга успешно удалена",
+    "deleteError": "Не удалось удалить услугу"
   },
   "editService": {
     "title": "Редактировать услугу",

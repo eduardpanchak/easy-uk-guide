@@ -379,7 +379,11 @@
     "subscribeNow": "Subskrybuj teraz",
     "subscriptionActive": "Subskrypcja aktywna",
     "reactivate": "Reaktywuj usługę",
-    "plan": "Plan"
+    "plan": "Plan",
+    "deleteServiceTitle": "Usuń usługę",
+    "deleteServiceMessage": "Czy na pewno chcesz usunąć tę usługę? Tej czynności nie można cofnąć.",
+    "serviceDeleted": "Usługa została pomyślnie usunięta",
+    "deleteError": "Nie udało się usunąć usługi"
   },
   "editService": {
     "title": "Edytuj usługę",
