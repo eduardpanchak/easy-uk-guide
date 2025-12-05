@@ -76,6 +76,15 @@
     "services": "Usługi",
     "account": "Konto"
   },
+  "saved": {
+    "title": "Zapisane",
+    "information": "Informacje",
+    "services": "Usługi",
+    "noInformation": "Brak zapisanych informacji",
+    "noInformationDesc": "Zapisuj przydatne artykuły i przewodniki dla szybkiego dostępu",
+    "noServices": "Brak zapisanych usług",
+    "noServicesDesc": "Zapisuj usługi od dostawców dla wygody"
+  },
   "home": {
     "documents": "Dokumenty",
     "documentsDesc": "NIN, Bank, BRP, GP, Podatek lokalny, Prawo jazdy",

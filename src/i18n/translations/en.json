@@ -76,6 +76,15 @@
     "services": "Services",
     "account": "Account"
   },
+  "saved": {
+    "title": "Saved",
+    "information": "Information",
+    "services": "Services",
+    "noInformation": "No saved information yet",
+    "noInformationDesc": "Save helpful articles and guides for quick access",
+    "noServices": "No saved services yet",
+    "noServicesDesc": "Save services from providers for easy reference"
+  },
   "home": {
     "documents": "Documents",
     "documentsDesc": "NIN, Bank, BRP, GP, Council Tax, Driving Licence",

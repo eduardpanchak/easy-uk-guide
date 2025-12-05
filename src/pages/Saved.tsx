@@ -1,34 +1,80 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Header } from '@/components/Header';
 import { BottomNav } from '@/components/BottomNav';
 import { Card } from '@/components/Card';
+import { ServiceCard } from '@/components/ServiceCard';
 import { useApp } from '@/contexts/AppContext';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { useNavigate } from 'react-router-dom';
-import { Heart } from 'lucide-react';
+import { Heart, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { supabase } from '@/integrations/supabase/client';
 
 type TabType = 'information' | 'services';
 
+interface ServiceData {
+  id: string;
+  service_name: string;
+  description: string | null;
+  category: string;
+  pricing: string | null;
+  photos: string[] | null;
+  subscription_tier: string;
+}
+
 export default function Saved() {
   const { savedItems } = useApp();
+  const { t } = useLanguage();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<TabType>('information');
+  const [savedServices, setSavedServices] = useState<ServiceData[]>([]);
+  const [loadingServices, setLoadingServices] = useState(false);
 
   const getIcon = (type: string) => {
     switch (type) {
       case 'document': return '📄';
       case 'nhs': return '🏥';
       case 'checklist': return '✅';
-      case 'service': return '💼';
       default: return '📌';
     }
   };
 
   // Separate information items from service items
   const informationItems = savedItems.filter(item => item.type !== 'service');
-  const serviceItems = savedItems.filter(item => item.type === 'service');
+  const serviceItemIds = savedItems.filter(item => item.type === 'service').map(item => item.id);
 
-  const displayedItems = activeTab === 'information' ? informationItems : serviceItems;
+  // Fetch full service data when services tab is active
+  useEffect(() => {
+    const fetchSavedServices = async () => {
+      if (activeTab !== 'services' || serviceItemIds.length === 0) {
+        setSavedServices([]);
+        return;
+      }
+
+      setLoadingServices(true);
+      try {
+        const { data, error } = await supabase
+          .from('services')
+          .select('id, service_name, description, category, pricing, photos, subscription_tier')
+          .in('id', serviceItemIds);
+
+        if (error) {
+          console.error('Error fetching saved services:', error);
+          return;
+        }
+
+        setSavedServices(data || []);
+      } catch (error) {
+        console.error('Error fetching saved services:', error);
+      } finally {
+        setLoadingServices(false);
+      }
+    };
+
+    fetchSavedServices();
+  }, [activeTab, serviceItemIds.join(',')]);
+
+  const displayedItems = activeTab === 'information' ? informationItems : [];
 
   const handleItemClick = (item: typeof savedItems[0]) => {
     if (item.type === 'document') {
@@ -37,14 +83,12 @@ export default function Saved() {
       navigate(`/nhs/${item.id}`);
     } else if (item.type === 'checklist') {
       navigate(`/checklists/${item.id}`);
-    } else if (item.type === 'service') {
-      navigate(`/service/${item.id}`);
     }
   };
 
   return (
     <div className="min-h-screen bg-background pb-20">
-      <Header title="Saved" showSearch />
+      <Header title={t('saved.title')} showSearch />
       
       <div className="max-w-md mx-auto px-4 py-6">
         {/* Tab Navigation */}
@@ -58,7 +102,7 @@ export default function Saved() {
                 : "bg-card text-muted-foreground border border-border hover:border-primary"
             )}
           >
-            Information
+            {t('saved.information')}
           </button>
           <button
             onClick={() => setActiveTab('services')}
@@ -69,36 +113,67 @@ export default function Saved() {
                 : "bg-card text-muted-foreground border border-border hover:border-primary"
             )}
           >
-            Services
+            {t('saved.services')}
           </button>
         </div>
 
         {/* Content Area */}
-        {displayedItems.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-12 text-center">
-            <Heart className="w-16 h-16 text-muted-foreground mb-4" />
-            <h2 className="text-lg font-semibold text-foreground mb-2">
-              No saved {activeTab === 'information' ? 'information' : 'services'} yet
-            </h2>
-            <p className="text-sm text-muted-foreground">
-              {activeTab === 'information' 
-                ? 'Save helpful articles and guides for quick access'
-                : 'Save services from providers for easy reference'
-              }
-            </p>
-          </div>
+        {activeTab === 'information' ? (
+          displayedItems.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-12 text-center">
+              <Heart className="w-16 h-16 text-muted-foreground mb-4" />
+              <h2 className="text-lg font-semibold text-foreground mb-2">
+                {t('saved.noInformation')}
+              </h2>
+              <p className="text-sm text-muted-foreground">
+                {t('saved.noInformationDesc')}
+              </p>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {displayedItems.map(item => (
+                <Card
+                  key={item.id}
+                  icon={getIcon(item.type)}
+                  title={item.title}
+                  description={item.type.charAt(0).toUpperCase() + item.type.slice(1)}
+                  onClick={() => handleItemClick(item)}
+                />
+              ))}
+            </div>
+          )
         ) : (
-          <div className="space-y-3">
-            {displayedItems.map(item => (
-              <Card
-                key={item.id}
-                icon={getIcon(item.type)}
-                title={item.title}
-                description={item.type.charAt(0).toUpperCase() + item.type.slice(1)}
-                onClick={() => handleItemClick(item)}
-              />
-            ))}
-          </div>
+          loadingServices ? (
+            <div className="flex justify-center py-12">
+              <Loader2 className="h-8 w-8 animate-spin text-primary" />
+            </div>
+          ) : savedServices.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-12 text-center">
+              <Heart className="w-16 h-16 text-muted-foreground mb-4" />
+              <h2 className="text-lg font-semibold text-foreground mb-2">
+                {t('saved.noServices')}
+              </h2>
+              <p className="text-sm text-muted-foreground">
+                {t('saved.noServicesDesc')}
+              </p>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {savedServices.map(service => (
+                <ServiceCard
+                  key={service.id}
+                  id={service.id}
+                  name={service.service_name}
+                  description={service.description}
+                  category={service.category}
+                  pricing={service.pricing}
+                  photo={service.photos?.[0] || null}
+                  subscriptionTier={service.subscription_tier}
+                  onClick={() => navigate(`/services/${service.id}`)}
+                />
+              ))}
+            </div>
+          )
         )}
       </div>
 
