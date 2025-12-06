@@ -38,6 +38,18 @@ export const dbService = {
     return { data, error };
   },
 
+  async markTrialUsed(userId: string, tier: 'standard' | 'top') {
+    const field = tier === 'top' ? 'premium_trial_used' : 'standard_trial_used';
+    const { data, error } = await supabase
+      .from('profiles')
+      .update({ [field]: true })
+      .eq('id', userId)
+      .select()
+      .single();
+
+    return { data, error };
+  },
+
   // ============ SERVICES ============
   
   async getServices(filters?: { userId?: string; status?: string }) {

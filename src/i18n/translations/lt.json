@@ -373,7 +373,10 @@
     "required": "Šis laukas yra privalomas",
     "serviceAdded": "Paslauga sėkmingai pridėta! Jūsų 14 dienų bandomasis laikotarpis baigiasi {date}.",
     "failed": "Nepavyko pridėti paslaugos. Bandykite dar kartą.",
-    "photosAdded": "nuotraukų pridėta"
+    "photosAdded": "nuotraukų pridėta",
+    "trialUsed": "Jūs jau išnaudojote nemokamą bandomąjį laikotarpį šiam planui. Reikalingas mokėjimas.",
+    "trialUsedForTier": "Bandomasis laikotarpis jau išnaudotas",
+    "paymentRequired": "Bandomasis laikotarpis nepasiekiamas pasirinktam planui. Reikės mokėti."
   },
   "myServices": {
     "title": "Mano paslaugos",

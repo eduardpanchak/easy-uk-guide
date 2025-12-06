@@ -188,6 +188,8 @@ export type Database = {
           location: string | null
           name: string | null
           phone: string | null
+          premium_trial_used: boolean
+          standard_trial_used: boolean
           updated_at: string
         }
         Insert: {
@@ -199,6 +201,8 @@ export type Database = {
           location?: string | null
           name?: string | null
           phone?: string | null
+          premium_trial_used?: boolean
+          standard_trial_used?: boolean
           updated_at?: string
         }
         Update: {
@@ -210,6 +214,8 @@ export type Database = {
           location?: string | null
           name?: string | null
           phone?: string | null
+          premium_trial_used?: boolean
+          standard_trial_used?: boolean
           updated_at?: string
         }
         Relationships: []
