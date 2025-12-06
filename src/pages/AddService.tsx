@@ -11,6 +11,7 @@ import { Label } from '@/components/ui/label';
 import { BottomNav } from '@/components/BottomNav';
 import { toast } from 'sonner';
 import LocationPicker from '@/components/LocationPicker';
+import { LanguageMultiSelect } from '@/components/LanguageMultiSelect';
 
 export default function AddService() {
   const navigate = useNavigate();
@@ -28,6 +29,7 @@ export default function AddService() {
     email: '',
     subscriptionTier: 'standard' as 'standard' | 'top',
   });
+  const [selectedLanguages, setSelectedLanguages] = useState<string[]>(['en']);
   const [selectedPhoto, setSelectedPhoto] = useState<File | null>(null);
   const [uploadedPhotoUrl, setUploadedPhotoUrl] = useState<string | null>(null);
   const [isUploadingPhoto, setIsUploadingPhoto] = useState(false);
@@ -170,7 +172,7 @@ export default function AddService() {
         trial_start: trialStart.toISOString(),
         trial_end: trialEnd.toISOString(),
         subscription_tier: formData.subscriptionTier,
-        languages: ['en'],
+        languages: selectedLanguages.length > 0 ? selectedLanguages : ['en'],
         latitude: location?.lat || null,
         longitude: location?.lng || null,
       };
@@ -278,6 +280,19 @@ export default function AddService() {
             <option value="car_services">{t('addService.categories.car_services')}</option>
             <option value="other">{t('addService.categories.other')}</option>
           </select>
+        </div>
+
+        {/* Available Languages */}
+        <div className="space-y-2">
+          <Label className="text-sm font-medium">
+            {t('addService.availableLanguages')} <span className="text-destructive">*</span>
+          </Label>
+          <p className="text-sm text-muted-foreground">{t('addService.availableLanguagesDesc')}</p>
+          <LanguageMultiSelect
+            selectedLanguages={selectedLanguages}
+            onChange={setSelectedLanguages}
+            placeholder={t('languages.selectLanguages')}
+          />
         </div>
 
         {/* Subscription Tier */}

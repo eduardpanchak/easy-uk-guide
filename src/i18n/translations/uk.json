@@ -238,6 +238,8 @@
     "clearSavedFilter": "Очистити збережений",
     "nearby": "Поблизу (10 км)",
     "allCategories": "Всі категорії",
+    "allLanguages": "Всі мови",
+    "languageFilter": "Мови",
     "newest": "Найновіші",
     "priceLowToHigh": "Ціна: від низької до високої",
     "searchPlaceholder": "Пошук послуг...",
@@ -376,7 +378,12 @@
     "photosAdded": "фото додано",
     "trialUsed": "Ви вже використали безкоштовний пробний період для цього плану. Потрібна оплата.",
     "trialUsedForTier": "Пробний період вже використано",
-    "paymentRequired": "Пробний період недоступний для обраного плану. Потрібна оплата."
+    "paymentRequired": "Пробний період недоступний для обраного плану. Потрібна оплата.",
+    "availableLanguages": "Доступні мови",
+    "availableLanguagesDesc": "Оберіть мови, якими доступна ваша послуга"
+  },
+  "languages": {
+    "selectLanguages": "Оберіть мови..."
   },
   "myServices": {
     "title": "Мої послуги",

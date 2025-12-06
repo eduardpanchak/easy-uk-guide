@@ -238,6 +238,8 @@
     "clearSavedFilter": "Wyczyść zapisany",
     "nearby": "W pobliżu (10 km)",
     "allCategories": "Wszystkie kategorie",
+    "allLanguages": "Wszystkie języki",
+    "languageFilter": "Języki",
     "newest": "Najnowsze",
     "priceLowToHigh": "Cena: od najniższej do najwyższej",
     "searchPlaceholder": "Szukaj usług...",
@@ -376,7 +378,12 @@
     "photosAdded": "zdjęć dodanych",
     "trialUsed": "Wykorzystałeś już bezpłatny okres próbny dla tego planu. Wymagana płatność.",
     "trialUsedForTier": "Okres próbny już wykorzystany",
-    "paymentRequired": "Okres próbny niedostępny dla wybranego planu. Wymagana będzie płatność."
+    "paymentRequired": "Okres próbny niedostępny dla wybranego planu. Wymagana będzie płatność.",
+    "availableLanguages": "Dostępne języki",
+    "availableLanguagesDesc": "Wybierz języki, w których dostępna jest Twoja usługa"
+  },
+  "languages": {
+    "selectLanguages": "Wybierz języki..."
   },
   "myServices": {
     "title": "Moje usługi",
