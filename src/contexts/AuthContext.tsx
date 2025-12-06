@@ -14,6 +14,8 @@ interface Profile {
   phone: string | null;
   location: string | null;
   is_business_user?: boolean;
+  premium_trial_used?: boolean;
+  standard_trial_used?: boolean;
 }
 
 interface Subscription {

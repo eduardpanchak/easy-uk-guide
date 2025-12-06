@@ -373,7 +373,10 @@
     "required": "This field is required",
     "serviceAdded": "Service added successfully! Your 14-day trial ends on {date}.",
     "failed": "Failed to add service. Please try again.",
-    "photosAdded": "photo(s) added"
+    "photosAdded": "photo(s) added",
+    "trialUsed": "You have already used your free trial for this plan. Payment required.",
+    "trialUsedForTier": "Trial already used",
+    "paymentRequired": "Trial not available for selected plan. Payment will be required."
   },
   "myServices": {
     "title": "My Services",

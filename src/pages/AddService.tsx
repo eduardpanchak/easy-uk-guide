@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Upload, ImagePlus } from 'lucide-react';
+import { ArrowLeft, Upload, ImagePlus, Lock } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { authService, dbService, storageService } from '@/services';
@@ -15,23 +15,38 @@ import LocationPicker from '@/components/LocationPicker';
 export default function AddService() {
   const navigate = useNavigate();
   const { t } = useLanguage();
-  const { user } = useAuth();
+  const { user, profile } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     serviceName: '',
     description: '',
-    category: 'repair', // Default category
+    category: 'repair',
     address: '',
     price: '',
     website: '',
     phone: '',
     email: '',
-    subscriptionTier: 'standard' as 'standard' | 'top', // Default to standard
+    subscriptionTier: 'standard' as 'standard' | 'top',
   });
   const [selectedPhoto, setSelectedPhoto] = useState<File | null>(null);
   const [uploadedPhotoUrl, setUploadedPhotoUrl] = useState<string | null>(null);
   const [isUploadingPhoto, setIsUploadingPhoto] = useState(false);
   const [location, setLocation] = useState<{ lat: number; lng: number } | null>(null);
+  const [trialStatus, setTrialStatus] = useState<{ standard: boolean; premium: boolean }>({ standard: false, premium: false });
+
+  // Fetch trial status on mount
+  useEffect(() => {
+    if (profile) {
+      setTrialStatus({
+        standard: profile.standard_trial_used ?? false,
+        premium: profile.premium_trial_used ?? false,
+      });
+    }
+  }, [profile]);
+
+  const isTrialAvailable = formData.subscriptionTier === 'top' 
+    ? !trialStatus.premium 
+    : !trialStatus.standard;
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -127,6 +142,14 @@ export default function AddService() {
       console.log('User authenticated:', session.user.id);
       console.log('Using uploaded photo URL:', uploadedPhotoUrl);
 
+      // Check if trial is available for this tier
+      if (!isTrialAvailable) {
+        // Redirect to subscription/payment flow
+        toast.error(t('addService.trialUsed'));
+        navigate('/my-services');
+        return;
+      }
+
       // Calculate trial dates (14 days from now)
       const trialStart = new Date();
       const trialEnd = new Date();
@@ -142,7 +165,7 @@ export default function AddService() {
         social_links: formData.website ? { website: formData.website } : {},
         phone: formData.phone || null,
         email: formData.email || null,
-        photos: [uploadedPhotoUrl], // Store as array with single photo
+        photos: [uploadedPhotoUrl],
         status: 'trial',
         trial_start: trialStart.toISOString(),
         trial_end: trialEnd.toISOString(),
@@ -154,7 +177,7 @@ export default function AddService() {
 
       console.log('Inserting service with data:', serviceData);
 
-      // Insert service into database using service layer
+      // Insert service into database
       const { data: insertedData, error: insertError } = await dbService.createService(serviceData);
 
       if (insertError) {
@@ -162,14 +185,17 @@ export default function AddService() {
         throw new Error(insertError.message || 'Failed to insert service');
       }
 
+      // Mark trial as used
+      await dbService.markTrialUsed(user.id, formData.subscriptionTier);
+
       console.log('Service created successfully:', insertedData);
       const trialEndDate = trialEnd.toLocaleDateString();
-      toast.success(`Service added! Trial ends on ${trialEndDate}`);
+      toast.success(t('addService.serviceAdded').replace('{date}', trialEndDate));
       navigate('/account');
     } catch (error) {
       console.error('Error adding service:', error);
       const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
-      toast.error(`Failed to add service: ${errorMessage}`);
+      toast.error(`${t('addService.failed')}: ${errorMessage}`);
     } finally {
       setIsSubmitting(false);
     }
@@ -265,16 +291,22 @@ export default function AddService() {
             <button
               type="button"
               onClick={() => setFormData(prev => ({ ...prev, subscriptionTier: 'standard' }))}
-              className={`p-4 border-2 rounded-lg transition-all ${
+              className={`p-4 border-2 rounded-lg transition-all relative ${
                 formData.subscriptionTier === 'standard'
                   ? 'border-primary bg-primary/5'
                   : 'border-border hover:border-primary/50'
               }`}
             >
               <div className="text-left">
-                <div className="font-semibold text-lg">{t('addService.standardTier')}</div>
+                <div className="font-semibold text-lg flex items-center gap-2">
+                  {t('addService.standardTier')}
+                  {trialStatus.standard && <Lock className="h-4 w-4 text-muted-foreground" />}
+                </div>
                 <div className="text-2xl font-bold text-primary my-2">£1.99<span className="text-sm font-normal text-muted-foreground">/month</span></div>
                 <div className="text-sm text-muted-foreground">{t('addService.standardFeatures')}</div>
+                {trialStatus.standard && (
+                  <div className="text-xs text-destructive mt-2">{t('addService.trialUsedForTier')}</div>
+                )}
               </div>
             </button>
 
@@ -282,20 +314,30 @@ export default function AddService() {
             <button
               type="button"
               onClick={() => setFormData(prev => ({ ...prev, subscriptionTier: 'top' }))}
-              className={`p-4 border-2 rounded-lg transition-all ${
+              className={`p-4 border-2 rounded-lg transition-all relative ${
                 formData.subscriptionTier === 'top'
                   ? 'border-primary bg-primary/5'
                   : 'border-border hover:border-primary/50'
               }`}
             >
               <div className="text-left">
-                <div className="font-semibold text-lg">{t('addService.topTier')}</div>
+                <div className="font-semibold text-lg flex items-center gap-2">
+                  {t('addService.topTier')}
+                  {trialStatus.premium && <Lock className="h-4 w-4 text-muted-foreground" />}
+                </div>
                 <div className="text-2xl font-bold text-primary my-2">£4.99<span className="text-sm font-normal text-muted-foreground">/month</span></div>
                 <div className="text-sm text-muted-foreground">{t('addService.topFeatures')}</div>
+                {trialStatus.premium && (
+                  <div className="text-xs text-destructive mt-2">{t('addService.trialUsedForTier')}</div>
+                )}
               </div>
             </button>
           </div>
-          <p className="text-xs text-muted-foreground italic">{t('addService.trialNote')}</p>
+          {isTrialAvailable ? (
+            <p className="text-xs text-muted-foreground italic">{t('addService.trialNote')}</p>
+          ) : (
+            <p className="text-xs text-destructive italic">{t('addService.paymentRequired')}</p>
+          )}
         </div>
 
         {/* Location Picker */}

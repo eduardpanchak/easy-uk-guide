@@ -373,7 +373,10 @@
     "required": "To pole jest wymagane",
     "serviceAdded": "Usługa została pomyślnie dodana! Twój 14-dniowy okres próbny kończy się {date}.",
     "failed": "Nie udało się dodać usługi. Spróbuj ponownie.",
-    "photosAdded": "zdjęć dodanych"
+    "photosAdded": "zdjęć dodanych",
+    "trialUsed": "Wykorzystałeś już bezpłatny okres próbny dla tego planu. Wymagana płatność.",
+    "trialUsedForTier": "Okres próbny już wykorzystany",
+    "paymentRequired": "Okres próbny niedostępny dla wybranego planu. Wymagana będzie płatność."
   },
   "myServices": {
     "title": "Moje usługi",
