@@ -238,6 +238,8 @@
     "clearSavedFilter": "Очистить сохранённый",
     "nearby": "Рядом (10 км)",
     "allCategories": "Все категории",
+    "allLanguages": "Все языки",
+    "languageFilter": "Языки",
     "newest": "Новейшие",
     "priceLowToHigh": "Цена: от низкой к высокой",
     "searchPlaceholder": "Поиск услуг...",
@@ -376,7 +378,12 @@
     "photosAdded": "фото добавлено",
     "trialUsed": "Вы уже использовали бесплатный пробный период для этого плана. Требуется оплата.",
     "trialUsedForTier": "Пробный период уже использован",
-    "paymentRequired": "Пробный период недоступен для выбранного плана. Потребуется оплата."
+    "paymentRequired": "Пробный период недоступен для выбранного плана. Потребуется оплата.",
+    "availableLanguages": "Доступные языки",
+    "availableLanguagesDesc": "Выберите языки, на которых доступна ваша услуга"
+  },
+  "languages": {
+    "selectLanguages": "Выберите языки..."
   },
   "myServices": {
     "title": "Мои услуги",

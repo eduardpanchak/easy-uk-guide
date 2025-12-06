@@ -5,6 +5,7 @@ interface ServiceFilters {
   selectedCategory: string;
   sortBy: 'newest' | 'price';
   showNearby: boolean;
+  selectedLanguages: string[];
 }
 
 interface FilterContextType {
@@ -20,6 +21,7 @@ export const FilterProvider = ({ children }: { children: ReactNode }) => {
     selectedCategory: 'all',
     sortBy: 'newest',
     showNearby: false,
+    selectedLanguages: [],
   });
 
   return (

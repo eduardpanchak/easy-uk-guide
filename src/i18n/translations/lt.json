@@ -238,6 +238,8 @@
     "clearSavedFilter": "Išvalyti išsaugotą",
     "nearby": "Netoliese (10 km)",
     "allCategories": "Visos kategorijos",
+    "allLanguages": "Visos kalbos",
+    "languageFilter": "Kalbos",
     "newest": "Naujausi",
     "priceLowToHigh": "Kaina: nuo žemiausios iki aukščiausios",
     "searchPlaceholder": "Ieškoti paslaugų...",
@@ -376,7 +378,12 @@
     "photosAdded": "nuotraukų pridėta",
     "trialUsed": "Jūs jau išnaudojote nemokamą bandomąjį laikotarpį šiam planui. Reikalingas mokėjimas.",
     "trialUsedForTier": "Bandomasis laikotarpis jau išnaudotas",
-    "paymentRequired": "Bandomasis laikotarpis nepasiekiamas pasirinktam planui. Reikės mokėti."
+    "paymentRequired": "Bandomasis laikotarpis nepasiekiamas pasirinktam planui. Reikės mokėti.",
+    "availableLanguages": "Galimos kalbos",
+    "availableLanguagesDesc": "Pasirinkite kalbas, kuriomis teikiama jūsų paslauga"
+  },
+  "languages": {
+    "selectLanguages": "Pasirinkite kalbas..."
   },
   "myServices": {
     "title": "Mano paslaugos",

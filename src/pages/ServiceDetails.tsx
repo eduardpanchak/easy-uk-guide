@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { BottomNav } from '@/components/BottomNav';
 import { ReviewCard } from '@/components/ReviewCard';
 import { ReviewForm } from '@/components/ReviewForm';
+import { LanguageBadge } from '@/components/LanguageMultiSelect';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -33,6 +34,7 @@ interface Service {
   email: string | null;
   social_links: any;
   status: string;
+  languages: string[];
 }
 
 interface Review {
@@ -340,6 +342,15 @@ export default function ServiceDetails() {
                 </span>
               )}
             </div>
+
+            {/* Available Languages */}
+            {service.languages && service.languages.length > 0 && (
+              <div className="flex flex-wrap gap-1.5 mt-3">
+                {service.languages.map(lang => (
+                  <LanguageBadge key={lang} code={lang} />
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Description */}

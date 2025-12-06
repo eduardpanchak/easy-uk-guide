@@ -6,12 +6,13 @@ import { ServiceCard } from '@/components/ServiceCard';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useFilters } from '@/contexts/FilterContext';
 import { supabase } from '@/integrations/supabase/client';
-import { Loader2, MapPin, Search, Save, X } from 'lucide-react';
+import { Loader2, MapPin, Search, Save, X, Globe } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { calculateDistance } from '@/lib/geolocation';
 import { useToast } from '@/hooks/use-toast';
+import { LanguageMultiSelect, AVAILABLE_LANGUAGES } from '@/components/LanguageMultiSelect';
 
 interface Service {
   id: string;
@@ -41,6 +42,7 @@ export default function Services() {
   const [searchText, setSearchText] = useState(filters.searchText);
   const [selectedCategory, setSelectedCategory] = useState(filters.selectedCategory);
   const [sortBy, setSortBy] = useState(filters.sortBy);
+  const [selectedLanguageFilter, setSelectedLanguageFilter] = useState<string[]>(filters.selectedLanguages || []);
   const [showNearby, setShowNearby] = useState(filters.showNearby);
 
   useEffect(() => {
@@ -56,8 +58,9 @@ export default function Services() {
       selectedCategory,
       sortBy,
       showNearby,
+      selectedLanguages: selectedLanguageFilter,
     });
-  }, [searchText, selectedCategory, sortBy, showNearby, setFilters]);
+  }, [searchText, selectedCategory, sortBy, showNearby, selectedLanguageFilter, setFilters]);
 
   const loadSavedFilters = () => {
     try {
@@ -68,6 +71,7 @@ export default function Services() {
         setSelectedCategory(savedFilters.selectedCategory || 'all');
         setSortBy(savedFilters.sortBy || 'newest');
         setShowNearby(savedFilters.showNearby || false);
+        setSelectedLanguageFilter(savedFilters.selectedLanguages || []);
       }
     } catch (error) {
       console.error('Error loading saved filters:', error);
@@ -81,6 +85,7 @@ export default function Services() {
         selectedCategory,
         sortBy,
         showNearby,
+        selectedLanguages: selectedLanguageFilter,
       };
       localStorage.setItem(SAVED_FILTERS_KEY, JSON.stringify(filterData));
       toast({
@@ -98,6 +103,7 @@ export default function Services() {
       setSelectedCategory('all');
       setSortBy('newest');
       setShowNearby(false);
+      setSelectedLanguageFilter([]);
       toast({
         title: t('services.filterCleared'),
       });
@@ -171,6 +177,14 @@ export default function Services() {
       // Category filter
       if (selectedCategory !== 'all' && service.category !== selectedCategory) {
         return false;
+      }
+      
+      // Language filter
+      if (selectedLanguageFilter.length > 0) {
+        const hasMatchingLanguage = selectedLanguageFilter.some(lang => 
+          service.languages?.includes(lang)
+        );
+        if (!hasMatchingLanguage) return false;
       }
       
       // Text search filter
@@ -264,6 +278,19 @@ export default function Services() {
                 <SelectItem value="price">{t('services.priceLowToHigh')}</SelectItem>
               </SelectContent>
             </Select>
+          </div>
+          
+          {/* Language Filter */}
+          <div className="space-y-1">
+            <label className="text-sm font-medium text-muted-foreground flex items-center gap-1.5">
+              <Globe className="h-4 w-4" />
+              {t('services.languageFilter')}
+            </label>
+            <LanguageMultiSelect
+              selectedLanguages={selectedLanguageFilter}
+              onChange={setSelectedLanguageFilter}
+              placeholder={t('services.allLanguages')}
+            />
           </div>
 
           {/* Save/Clear Filter Buttons */}

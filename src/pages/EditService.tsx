@@ -10,6 +10,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { BottomNav } from '@/components/BottomNav';
 import { toast } from 'sonner';
+import { LanguageMultiSelect } from '@/components/LanguageMultiSelect';
 
 export default function EditService() {
   const navigate = useNavigate();
@@ -28,6 +29,7 @@ export default function EditService() {
     phone: '',
     email: '',
   });
+  const [selectedLanguages, setSelectedLanguages] = useState<string[]>(['en']);
   const [existingPhotoUrl, setExistingPhotoUrl] = useState<string | null>(null);
   const [selectedPhoto, setSelectedPhoto] = useState<File | null>(null);
   const [uploadedPhotoUrl, setUploadedPhotoUrl] = useState<string | null>(null);
@@ -59,6 +61,7 @@ export default function EditService() {
           phone: data.phone || '',
           email: data.email || '',
         });
+        setSelectedLanguages(data.languages || ['en']);
         if (data.photos && data.photos.length > 0) {
           setExistingPhotoUrl(data.photos[0]);
         }
@@ -177,6 +180,7 @@ export default function EditService() {
         phone: formData.phone || null,
         email: formData.email || null,
         photos: [finalPhotoUrl],
+        languages: selectedLanguages.length > 0 ? selectedLanguages : ['en'],
         updated_at: new Date().toISOString(),
       });
 
@@ -279,6 +283,19 @@ export default function EditService() {
             <option value="car_services">{t('addService.categories.car_services')}</option>
             <option value="other">{t('addService.categories.other')}</option>
           </select>
+        </div>
+
+        {/* Available Languages */}
+        <div className="space-y-2">
+          <Label className="text-sm font-medium">
+            {t('addService.availableLanguages')} <span className="text-destructive">*</span>
+          </Label>
+          <p className="text-sm text-muted-foreground">{t('addService.availableLanguagesDesc')}</p>
+          <LanguageMultiSelect
+            selectedLanguages={selectedLanguages}
+            onChange={setSelectedLanguages}
+            placeholder={t('languages.selectLanguages')}
+          />
         </div>
 
         {/* Address */}
