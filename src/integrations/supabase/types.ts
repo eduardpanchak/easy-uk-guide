@@ -289,7 +289,9 @@ export type Database = {
         Row: {
           address: string | null
           category: string
+          city: string | null
           click_count: number | null
+          country: string | null
           created_at: string
           description: string | null
           email: string | null
@@ -299,6 +301,7 @@ export type Database = {
           longitude: number | null
           phone: string | null
           photos: string[] | null
+          postcode: string | null
           pricing: string | null
           service_name: string
           social_links: Json | null
@@ -314,7 +317,9 @@ export type Database = {
         Insert: {
           address?: string | null
           category: string
+          city?: string | null
           click_count?: number | null
+          country?: string | null
           created_at?: string
           description?: string | null
           email?: string | null
@@ -324,6 +329,7 @@ export type Database = {
           longitude?: number | null
           phone?: string | null
           photos?: string[] | null
+          postcode?: string | null
           pricing?: string | null
           service_name: string
           social_links?: Json | null
@@ -339,7 +345,9 @@ export type Database = {
         Update: {
           address?: string | null
           category?: string
+          city?: string | null
           click_count?: number | null
+          country?: string | null
           created_at?: string
           description?: string | null
           email?: string | null
@@ -349,6 +357,7 @@ export type Database = {
           longitude?: number | null
           phone?: string | null
           photos?: string[] | null
+          postcode?: string | null
           pricing?: string | null
           service_name?: string
           social_links?: Json | null

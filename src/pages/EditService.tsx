@@ -11,6 +11,7 @@ import { Label } from '@/components/ui/label';
 import { BottomNav } from '@/components/BottomNav';
 import { toast } from 'sonner';
 import { LanguageMultiSelect } from '@/components/LanguageMultiSelect';
+import { geocodeAddress, geocodePostcode } from '@/lib/geocoding';
 
 export default function EditService() {
   const navigate = useNavigate();
@@ -24,6 +25,9 @@ export default function EditService() {
     description: '',
     category: 'repair',
     address: '',
+    city: '',
+    postcode: '',
+    country: 'United Kingdom',
     price: '',
     website: '',
     phone: '',
@@ -56,6 +60,9 @@ export default function EditService() {
           description: data.description || '',
           category: data.category || 'repair',
           address: data.address || '',
+          city: (data as any).city || '',
+          postcode: (data as any).postcode || '',
+          country: (data as any).country || 'United Kingdom',
           price: data.pricing || '',
           website: socialLinks?.website || '',
           phone: data.phone || '',
@@ -166,8 +173,27 @@ export default function EditService() {
     setIsSubmitting(true);
 
     try {
-      console.log('Updating service with photo:', finalPhotoUrl);
-      console.log('User authenticated:', session.user.id);
+      // Geocode the address if postcode or city provided
+      let lat: number | null = null;
+      let lng: number | null = null;
+      
+      if (formData.postcode) {
+        const geocodeResult = await geocodePostcode(formData.postcode);
+        if (geocodeResult) {
+          lat = geocodeResult.latitude;
+          lng = geocodeResult.longitude;
+        }
+      } else if (formData.city || formData.address) {
+        const geocodeResult = await geocodeAddress(
+          formData.address || '',
+          formData.city,
+          formData.country
+        );
+        if (geocodeResult) {
+          lat = geocodeResult.latitude;
+          lng = geocodeResult.longitude;
+        }
+      }
 
       // Update service in database
       const { error: updateError } = await dbService.updateService(id, {
@@ -175,12 +201,17 @@ export default function EditService() {
         description: formData.description,
         category: formData.category,
         address: formData.address || null,
+        city: formData.city || null,
+        postcode: formData.postcode || null,
+        country: formData.country || 'United Kingdom',
         pricing: formData.price || null,
         social_links: formData.website ? { website: formData.website } : {},
         phone: formData.phone || null,
         email: formData.email || null,
         photos: [finalPhotoUrl],
         languages: selectedLanguages.length > 0 ? selectedLanguages : ['en'],
+        latitude: lat,
+        longitude: lng,
         updated_at: new Date().toISOString(),
       });
 
@@ -298,18 +329,53 @@ export default function EditService() {
           />
         </div>
 
-        {/* Address */}
-        <div className="space-y-2">
-          <Label htmlFor="address" className="text-sm font-medium">
-            {t('addService.address')}
+        {/* Location Fields */}
+        <div className="space-y-4 p-4 bg-muted/50 rounded-lg">
+          <Label className="text-sm font-medium">
+            {t('addService.locationSection')}
           </Label>
-          <Input
-            id="address"
-            name="address"
-            value={formData.address}
-            onChange={handleInputChange}
-            placeholder={t('addService.addressPlaceholder')}
-          />
+          
+          {/* Postcode */}
+          <div className="space-y-2">
+            <Label htmlFor="postcode" className="text-sm font-medium">
+              {t('addService.postcode')}
+            </Label>
+            <Input
+              id="postcode"
+              name="postcode"
+              value={formData.postcode}
+              onChange={handleInputChange}
+              placeholder={t('addService.postcodePlaceholder')}
+            />
+          </div>
+
+          {/* City */}
+          <div className="space-y-2">
+            <Label htmlFor="city" className="text-sm font-medium">
+              {t('addService.city')}
+            </Label>
+            <Input
+              id="city"
+              name="city"
+              value={formData.city}
+              onChange={handleInputChange}
+              placeholder={t('addService.cityPlaceholder')}
+            />
+          </div>
+
+          {/* Address */}
+          <div className="space-y-2">
+            <Label htmlFor="address" className="text-sm font-medium">
+              {t('addService.address')}
+            </Label>
+            <Input
+              id="address"
+              name="address"
+              value={formData.address}
+              onChange={handleInputChange}
+              placeholder={t('addService.addressPlaceholder')}
+            />
+          </div>
         </div>
 
         {/* Price */}

@@ -1,4 +1,4 @@
-import { Heart, Star } from 'lucide-react';
+import { Heart, Star, MapPin } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useApp } from '@/contexts/AppContext';
 import { useEffect, useState } from 'react';
@@ -12,6 +12,7 @@ interface ServiceCardProps {
   pricing: string | null;
   photo: string | null;
   subscriptionTier?: string;
+  distance?: string | null;
   onClick?: () => void;
 }
 
@@ -23,6 +24,7 @@ export const ServiceCard = ({
   pricing,
   photo,
   subscriptionTier,
+  distance,
   onClick
 }: ServiceCardProps) => {
   const { toggleSaved, isSaved } = useApp();
@@ -115,6 +117,15 @@ export const ServiceCard = ({
             </div>
           )}
         </div>
+        {/* Distance badge */}
+        {distance && (
+          <div className="flex items-center gap-1 mt-1.5">
+            <MapPin className="h-3 w-3 text-primary" />
+            <span className="text-xs font-medium text-primary">
+              {distance}
+            </span>
+          </div>
+        )}
       </div>
 
       {/* Heart button */}

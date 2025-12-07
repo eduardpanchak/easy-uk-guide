@@ -240,13 +240,23 @@
     "allCategories": "All Categories",
     "allLanguages": "All Languages",
     "languageFilter": "Languages",
+    "locationFilter": "Location",
+    "postcodePlaceholder": "Enter postcode (e.g., SW1A 1AA)",
+    "radius": "Radius",
+    "search": "Search",
     "newest": "Newest",
     "priceLowToHigh": "Price: Low to High",
+    "sortByDistance": "Distance",
     "searchPlaceholder": "Search services...",
     "noNearbyServices": "No services found nearby",
     "category": "Category",
     "filterSaved": "Filter saved",
-    "filterCleared": "Filter cleared"
+    "filterCleared": "Filter cleared",
+    "locationFound": "Location found",
+    "locationNotFound": "Could not find this postcode",
+    "locationError": "Error finding location",
+    "servicesWithinRadius": "Services within {radius} km",
+    "alsoNearby": "Also nearby"
   },
   "serviceDetails": {
     "description": "Description",
@@ -380,7 +390,13 @@
     "availableLanguagesDesc": "Select the languages your service is available in",
     "trialUsed": "You have already used your free trial for this plan. Payment required.",
     "trialUsedForTier": "Trial already used",
-    "paymentRequired": "Trial not available for selected plan. Payment will be required."
+    "paymentRequired": "Trial not available for selected plan. Payment will be required.",
+    "locationSection": "Service Location",
+    "postcode": "Postcode",
+    "postcodePlaceholder": "e.g., SW1A 1AA",
+    "city": "City",
+    "cityPlaceholder": "e.g., London",
+    "locationSet": "Location coordinates will be set automatically"
   },
   "languages": {
     "selectLanguages": "Select languages..."

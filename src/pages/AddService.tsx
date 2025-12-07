@@ -10,8 +10,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { BottomNav } from '@/components/BottomNav';
 import { toast } from 'sonner';
-import LocationPicker from '@/components/LocationPicker';
 import { LanguageMultiSelect } from '@/components/LanguageMultiSelect';
+import { geocodeAddress, geocodePostcode } from '@/lib/geocoding';
 
 export default function AddService() {
   const navigate = useNavigate();
@@ -23,6 +23,9 @@ export default function AddService() {
     description: '',
     category: 'repair',
     address: '',
+    city: '',
+    postcode: '',
+    country: 'United Kingdom',
     price: '',
     website: '',
     phone: '',
@@ -34,6 +37,7 @@ export default function AddService() {
   const [uploadedPhotoUrl, setUploadedPhotoUrl] = useState<string | null>(null);
   const [isUploadingPhoto, setIsUploadingPhoto] = useState(false);
   const [location, setLocation] = useState<{ lat: number; lng: number } | null>(null);
+  const [isGeocoding, setIsGeocoding] = useState(false);
   const [trialStatus, setTrialStatus] = useState<{ standard: boolean; premium: boolean }>({ standard: false, premium: false });
 
   // Fetch trial status on mount
@@ -157,12 +161,37 @@ export default function AddService() {
       const trialEnd = new Date();
       trialEnd.setDate(trialEnd.getDate() + 14);
 
+      // Geocode the address if postcode or city provided
+      let lat: number | null = null;
+      let lng: number | null = null;
+      
+      if (formData.postcode) {
+        const geocodeResult = await geocodePostcode(formData.postcode);
+        if (geocodeResult) {
+          lat = geocodeResult.latitude;
+          lng = geocodeResult.longitude;
+        }
+      } else if (formData.city || formData.address) {
+        const geocodeResult = await geocodeAddress(
+          formData.address || '',
+          formData.city,
+          formData.country
+        );
+        if (geocodeResult) {
+          lat = geocodeResult.latitude;
+          lng = geocodeResult.longitude;
+        }
+      }
+
       const serviceData = {
         user_id: user.id,
         service_name: formData.serviceName,
         description: formData.description,
         category: formData.category,
         address: formData.address || null,
+        city: formData.city || null,
+        postcode: formData.postcode || null,
+        country: formData.country || 'United Kingdom',
         pricing: formData.price || null,
         social_links: formData.website ? { website: formData.website } : {},
         phone: formData.phone || null,
@@ -173,8 +202,8 @@ export default function AddService() {
         trial_end: trialEnd.toISOString(),
         subscription_tier: formData.subscriptionTier,
         languages: selectedLanguages.length > 0 ? selectedLanguages : ['en'],
-        latitude: location?.lat || null,
-        longitude: location?.lng || null,
+        latitude: lat,
+        longitude: lng,
       };
 
       console.log('Inserting service with data:', serviceData);
@@ -355,33 +384,59 @@ export default function AddService() {
           )}
         </div>
 
-        {/* Location Picker */}
-        <div className="space-y-2">
+        {/* Location Fields */}
+        <div className="space-y-4 p-4 bg-muted/50 rounded-lg">
           <Label className="text-sm font-medium">
-            {t('addService.location') || 'Service Location'}
+            {t('addService.locationSection')}
           </Label>
-          <LocationPicker 
-            onLocationSelect={(lat, lng, address) => {
-              setLocation({ lat, lng });
-              if (address && !formData.address) {
-                setFormData(prev => ({ ...prev, address }));
-              }
-            }}
-          />
-        </div>
+          
+          {/* Postcode */}
+          <div className="space-y-2">
+            <Label htmlFor="postcode" className="text-sm font-medium">
+              {t('addService.postcode')}
+            </Label>
+            <Input
+              id="postcode"
+              name="postcode"
+              value={formData.postcode}
+              onChange={handleInputChange}
+              placeholder={t('addService.postcodePlaceholder')}
+            />
+          </div>
 
-        {/* Address */}
-        <div className="space-y-2">
-          <Label htmlFor="address" className="text-sm font-medium">
-            {t('addService.address')}
-          </Label>
-          <Input
-            id="address"
-            name="address"
-            value={formData.address}
-            onChange={handleInputChange}
-            placeholder={t('addService.addressPlaceholder')}
-          />
+          {/* City */}
+          <div className="space-y-2">
+            <Label htmlFor="city" className="text-sm font-medium">
+              {t('addService.city')}
+            </Label>
+            <Input
+              id="city"
+              name="city"
+              value={formData.city}
+              onChange={handleInputChange}
+              placeholder={t('addService.cityPlaceholder')}
+            />
+          </div>
+
+          {/* Address */}
+          <div className="space-y-2">
+            <Label htmlFor="address" className="text-sm font-medium">
+              {t('addService.address')}
+            </Label>
+            <Input
+              id="address"
+              name="address"
+              value={formData.address}
+              onChange={handleInputChange}
+              placeholder={t('addService.addressPlaceholder')}
+            />
+          </div>
+
+          {location && (
+            <p className="text-xs text-muted-foreground">
+              {t('addService.locationSet')}
+            </p>
+          )}
         </div>
 
         {/* Price */}
