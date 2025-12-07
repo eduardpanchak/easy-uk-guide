@@ -62,6 +62,7 @@ export default function ServiceDetails() {
   const [editingReview, setEditingReview] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [averageRating, setAverageRating] = useState(0);
+  const [viewTracked, setViewTracked] = useState(false);
 
   useEffect(() => {
     if (id) {
@@ -69,6 +70,60 @@ export default function ServiceDetails() {
       fetchReviews(id);
     }
   }, [id, user]);
+
+  // Track view once when service is loaded
+  useEffect(() => {
+    if (id && service && !viewTracked) {
+      trackView(id);
+      setViewTracked(true);
+    }
+  }, [id, service, viewTracked]);
+
+  const trackView = async (serviceId: string) => {
+    try {
+      const { error } = await supabase.rpc('increment_view_count', { service_id: serviceId });
+      if (error) {
+        // Fallback to direct update if RPC doesn't exist
+        const { data: currentService } = await supabase
+          .from('services')
+          .select('view_count')
+          .eq('id', serviceId)
+          .single();
+        
+        if (currentService) {
+          await supabase
+            .from('services')
+            .update({ view_count: (currentService.view_count || 0) + 1 })
+            .eq('id', serviceId);
+        }
+      }
+    } catch (error) {
+      console.error('Error tracking view:', error);
+    }
+  };
+
+  const trackClick = async (serviceId: string) => {
+    try {
+      const { error } = await supabase.rpc('increment_click_count', { service_id: serviceId });
+      if (error) {
+        // Fallback to direct update if RPC doesn't exist
+        const { data: currentService } = await supabase
+          .from('services')
+          .select('click_count')
+          .eq('id', serviceId)
+          .single();
+        
+        if (currentService) {
+          await supabase
+            .from('services')
+            .update({ click_count: (currentService.click_count || 0) + 1 })
+            .eq('id', serviceId);
+        }
+      }
+    } catch (error) {
+      console.error('Error tracking click:', error);
+    }
+  };
 
   const fetchService = async (serviceId: string) => {
     try {
@@ -230,18 +285,21 @@ export default function ServiceDetails() {
 
   const handleVisitWebsite = () => {
     if (service?.social_links?.website) {
+      trackClick(service.id);
       window.open(service.social_links.website, '_blank');
     }
   };
 
   const handleCall = () => {
     if (service?.phone) {
+      trackClick(service.id);
       window.location.href = `tel:${service.phone}`;
     }
   };
 
   const handleEmail = () => {
     if (service?.email) {
+      trackClick(service.id);
       window.location.href = `mailto:${service.email}`;
     }
   };
