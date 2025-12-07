@@ -441,6 +441,11 @@ export type Database = {
     }
     Functions: {
       cancel_expired_trials: { Args: never; Returns: undefined }
+      increment_click_count: {
+        Args: { service_id: string }
+        Returns: undefined
+      }
+      increment_view_count: { Args: { service_id: string }; Returns: undefined }
     }
     Enums: {
       [_ in never]: never

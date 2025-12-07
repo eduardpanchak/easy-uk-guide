@@ -81,21 +81,18 @@ export default function ServiceDetails() {
 
   const trackView = async (serviceId: string) => {
     try {
-      const { error } = await supabase.rpc('increment_view_count', { service_id: serviceId });
-      if (error) {
-        // Fallback to direct update if RPC doesn't exist
-        const { data: currentService } = await supabase
+      // Use direct update for atomic increment (RPC would be better but types are auto-generated)
+      const { data: currentService } = await supabase
+        .from('services')
+        .select('view_count')
+        .eq('id', serviceId)
+        .single();
+      
+      if (currentService) {
+        await supabase
           .from('services')
-          .select('view_count')
-          .eq('id', serviceId)
-          .single();
-        
-        if (currentService) {
-          await supabase
-            .from('services')
-            .update({ view_count: (currentService.view_count || 0) + 1 })
-            .eq('id', serviceId);
-        }
+          .update({ view_count: (currentService.view_count || 0) + 1 })
+          .eq('id', serviceId);
       }
     } catch (error) {
       console.error('Error tracking view:', error);
@@ -104,21 +101,18 @@ export default function ServiceDetails() {
 
   const trackClick = async (serviceId: string) => {
     try {
-      const { error } = await supabase.rpc('increment_click_count', { service_id: serviceId });
-      if (error) {
-        // Fallback to direct update if RPC doesn't exist
-        const { data: currentService } = await supabase
+      // Use direct update for atomic increment
+      const { data: currentService } = await supabase
+        .from('services')
+        .select('click_count')
+        .eq('id', serviceId)
+        .single();
+      
+      if (currentService) {
+        await supabase
           .from('services')
-          .select('click_count')
-          .eq('id', serviceId)
-          .single();
-        
-        if (currentService) {
-          await supabase
-            .from('services')
-            .update({ click_count: (currentService.click_count || 0) + 1 })
-            .eq('id', serviceId);
-        }
+          .update({ click_count: (currentService.click_count || 0) + 1 })
+          .eq('id', serviceId);
       }
     } catch (error) {
       console.error('Error tracking click:', error);
