@@ -246,7 +246,17 @@
     "noNearbyServices": "Nie znaleziono usług w pobliżu",
     "category": "Kategoria",
     "filterSaved": "Filtr zapisany",
-    "filterCleared": "Filtr wyczyszczony"
+    "filterCleared": "Filtr wyczyszczony",
+    "locationFilter": "Filtr lokalizacji",
+    "postcodePlaceholder": "Wprowadź kod pocztowy",
+    "radius": "Promień",
+    "search": "Szukaj",
+    "sortByDistance": "Według odległości",
+    "locationFound": "Lokalizacja znaleziona",
+    "locationNotFound": "Lokalizacja nie znaleziona",
+    "locationError": "Błąd wyszukiwania lokalizacji",
+    "servicesWithinRadius": "Usługi w promieniu {radius} km",
+    "alsoNearby": "Również w pobliżu"
   },
   "serviceDetails": {
     "description": "Opis",
@@ -380,7 +390,13 @@
     "trialUsedForTier": "Okres próbny już wykorzystany",
     "paymentRequired": "Okres próbny niedostępny dla wybranego planu. Wymagana będzie płatność.",
     "availableLanguages": "Dostępne języki",
-    "availableLanguagesDesc": "Wybierz języki, w których dostępna jest Twoja usługa"
+    "availableLanguagesDesc": "Wybierz języki, w których dostępna jest Twoja usługa",
+    "locationSection": "Lokalizacja",
+    "postcode": "Kod pocztowy",
+    "postcodePlaceholder": "Wprowadź kod pocztowy",
+    "city": "Miasto",
+    "cityPlaceholder": "Wprowadź miasto",
+    "locationSet": "Lokalizacja ustawiona"
   },
   "languages": {
     "selectLanguages": "Wybierz języki..."

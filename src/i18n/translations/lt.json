@@ -246,7 +246,17 @@
     "noNearbyServices": "Netoliese paslaugų nerasta",
     "category": "Kategorija",
     "filterSaved": "Filtras išsaugotas",
-    "filterCleared": "Filtras išvalytas"
+    "filterCleared": "Filtras išvalytas",
+    "locationFilter": "Vietos filtras",
+    "postcodePlaceholder": "Įveskite pašto kodą",
+    "radius": "Spindulys",
+    "search": "Ieškoti",
+    "sortByDistance": "Pagal atstumą",
+    "locationFound": "Vieta rasta",
+    "locationNotFound": "Vieta nerasta",
+    "locationError": "Vietos paieškos klaida",
+    "servicesWithinRadius": "Paslaugos {radius} km spinduliu",
+    "alsoNearby": "Taip pat netoliese"
   },
   "serviceDetails": {
     "description": "Aprašymas",
@@ -380,7 +390,13 @@
     "trialUsedForTier": "Bandomasis laikotarpis jau išnaudotas",
     "paymentRequired": "Bandomasis laikotarpis nepasiekiamas pasirinktam planui. Reikės mokėti.",
     "availableLanguages": "Galimos kalbos",
-    "availableLanguagesDesc": "Pasirinkite kalbas, kuriomis teikiama jūsų paslauga"
+    "availableLanguagesDesc": "Pasirinkite kalbas, kuriomis teikiama jūsų paslauga",
+    "locationSection": "Vieta",
+    "postcode": "Pašto kodas",
+    "postcodePlaceholder": "Įveskite pašto kodą",
+    "city": "Miestas",
+    "cityPlaceholder": "Įveskite miestą",
+    "locationSet": "Vieta nustatyta"
   },
   "languages": {
     "selectLanguages": "Pasirinkite kalbas..."
