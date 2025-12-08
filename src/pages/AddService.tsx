@@ -38,21 +38,18 @@ export default function AddService() {
   const [isUploadingPhoto, setIsUploadingPhoto] = useState(false);
   const [location, setLocation] = useState<{ lat: number; lng: number } | null>(null);
   const [isGeocoding, setIsGeocoding] = useState(false);
-  const [trialStatus, setTrialStatus] = useState<{ standard: boolean; premium: boolean }>({ standard: false, premium: false });
+  const [premiumTrialUsed, setPremiumTrialUsed] = useState(false);
 
-  // Fetch trial status on mount
+  // Fetch premium trial status on mount
   useEffect(() => {
     if (profile) {
-      setTrialStatus({
-        standard: profile.standard_trial_used ?? false,
-        premium: profile.premium_trial_used ?? false,
-      });
+      setPremiumTrialUsed(profile.premium_trial_used ?? false);
     }
   }, [profile]);
 
-  const isTrialAvailable = formData.subscriptionTier === 'top' 
-    ? !trialStatus.premium 
-    : !trialStatus.standard;
+  // Standard is always free, premium has one-time trial
+  const isPremiumTrialAvailable = !premiumTrialUsed;
+  const canCreateService = formData.subscriptionTier === 'standard' || isPremiumTrialAvailable;
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -148,18 +145,22 @@ export default function AddService() {
       console.log('User authenticated:', session.user.id);
       console.log('Using uploaded photo URL:', uploadedPhotoUrl);
 
-      // Check if trial is available for this tier
-      if (!isTrialAvailable) {
+      // Check if premium tier and trial not available
+      if (formData.subscriptionTier === 'top' && !isPremiumTrialAvailable) {
         // Redirect to subscription/payment flow
-        toast.error(t('addService.trialUsed'));
+        toast.error(t('addService.premiumTrialUsed'));
         navigate('/my-services');
         return;
       }
 
-      // Calculate trial dates (14 days from now)
+      // Calculate trial dates for premium (14 days from now)
       const trialStart = new Date();
       const trialEnd = new Date();
       trialEnd.setDate(trialEnd.getDate() + 14);
+
+      // Determine service status: standard is always 'active', premium starts as 'trial'
+      const isStandard = formData.subscriptionTier === 'standard';
+      const serviceStatus = isStandard ? 'active' : 'trial';
 
       // Geocode the address if postcode or city provided
       let lat: number | null = null;
@@ -197,9 +198,9 @@ export default function AddService() {
         phone: formData.phone || null,
         email: formData.email || null,
         photos: [uploadedPhotoUrl],
-        status: 'trial',
-        trial_start: trialStart.toISOString(),
-        trial_end: trialEnd.toISOString(),
+        status: serviceStatus,
+        trial_start: isStandard ? null : trialStart.toISOString(),
+        trial_end: isStandard ? null : trialEnd.toISOString(),
         subscription_tier: formData.subscriptionTier,
         languages: selectedLanguages.length > 0 ? selectedLanguages : ['en'],
         latitude: lat,
@@ -216,12 +217,19 @@ export default function AddService() {
         throw new Error(insertError.message || 'Failed to insert service');
       }
 
-      // Mark trial as used
-      await dbService.markTrialUsed(user.id, formData.subscriptionTier);
+      // Mark premium trial as used (only for premium tier)
+      if (!isStandard) {
+        await dbService.markPremiumTrialUsed(user.id);
+      }
 
       console.log('Service created successfully:', insertedData);
-      const trialEndDate = trialEnd.toLocaleDateString();
-      toast.success(t('addService.serviceAdded').replace('{date}', trialEndDate));
+      
+      if (isStandard) {
+        toast.success(t('addService.standardServiceAdded'));
+      } else {
+        const trialEndDate = trialEnd.toLocaleDateString();
+        toast.success(t('addService.serviceAdded').replace('{date}', trialEndDate));
+      }
       navigate('/account');
     } catch (error) {
       console.error('Error adding service:', error);
@@ -329,9 +337,9 @@ export default function AddService() {
           <Label className="text-sm font-medium">
             {t('addService.subscriptionTier')} <span className="text-destructive">*</span>
           </Label>
-          <p className="text-sm text-muted-foreground">{t('addService.tierDescription')}</p>
+          <p className="text-sm text-muted-foreground">{t('addService.tierDescriptionNew')}</p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            {/* Standard Tier */}
+            {/* Standard Tier - Always Free */}
             <button
               type="button"
               onClick={() => setFormData(prev => ({ ...prev, subscriptionTier: 'standard' }))}
@@ -344,43 +352,51 @@ export default function AddService() {
               <div className="text-left">
                 <div className="font-semibold text-lg flex items-center gap-2">
                   {t('addService.standardTier')}
-                  {trialStatus.standard && <Lock className="h-4 w-4 text-muted-foreground" />}
+                  <span className="text-xs bg-green-100 text-green-800 px-2 py-0.5 rounded-full">{t('addService.free')}</span>
                 </div>
-                <div className="text-2xl font-bold text-primary my-2">£1.99<span className="text-sm font-normal text-muted-foreground">/month</span></div>
+                <div className="text-2xl font-bold text-green-600 my-2">{t('addService.freeForever')}</div>
                 <div className="text-sm text-muted-foreground">{t('addService.standardFeatures')}</div>
-                {trialStatus.standard && (
-                  <div className="text-xs text-destructive mt-2">{t('addService.trialUsedForTier')}</div>
-                )}
               </div>
             </button>
 
-            {/* Top Tier */}
+            {/* Top/Premium Tier */}
             <button
               type="button"
-              onClick={() => setFormData(prev => ({ ...prev, subscriptionTier: 'top' }))}
+              onClick={() => !premiumTrialUsed && setFormData(prev => ({ ...prev, subscriptionTier: 'top' }))}
+              disabled={premiumTrialUsed}
               className={`p-4 border-2 rounded-lg transition-all relative ${
                 formData.subscriptionTier === 'top'
                   ? 'border-primary bg-primary/5'
-                  : 'border-border hover:border-primary/50'
+                  : premiumTrialUsed
+                    ? 'border-border bg-muted/50 opacity-60 cursor-not-allowed'
+                    : 'border-border hover:border-primary/50'
               }`}
             >
               <div className="text-left">
                 <div className="font-semibold text-lg flex items-center gap-2">
                   {t('addService.topTier')}
-                  {trialStatus.premium && <Lock className="h-4 w-4 text-muted-foreground" />}
+                  {premiumTrialUsed ? (
+                    <Lock className="h-4 w-4 text-muted-foreground" />
+                  ) : (
+                    <span className="text-xs bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full">{t('addService.trialBadge')}</span>
+                  )}
                 </div>
                 <div className="text-2xl font-bold text-primary my-2">£4.99<span className="text-sm font-normal text-muted-foreground">/month</span></div>
                 <div className="text-sm text-muted-foreground">{t('addService.topFeatures')}</div>
-                {trialStatus.premium && (
-                  <div className="text-xs text-destructive mt-2">{t('addService.trialUsedForTier')}</div>
+                {!premiumTrialUsed && (
+                  <div className="text-xs text-amber-600 mt-2">{t('addService.premiumTrialNote')}</div>
+                )}
+                {premiumTrialUsed && (
+                  <div className="text-xs text-destructive mt-2">{t('addService.premiumTrialUsed')}</div>
                 )}
               </div>
             </button>
           </div>
-          {isTrialAvailable ? (
-            <p className="text-xs text-muted-foreground italic">{t('addService.trialNote')}</p>
-          ) : (
-            <p className="text-xs text-destructive italic">{t('addService.paymentRequired')}</p>
+          {formData.subscriptionTier === 'standard' && (
+            <p className="text-xs text-green-600 italic">{t('addService.standardFreeNote')}</p>
+          )}
+          {formData.subscriptionTier === 'top' && !premiumTrialUsed && (
+            <p className="text-xs text-amber-600 italic">{t('addService.premiumTrialInfo')}</p>
           )}
         </div>
 
