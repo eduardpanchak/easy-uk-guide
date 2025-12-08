@@ -246,7 +246,17 @@
     "noNearbyServices": "Поблизу послуг не знайдено",
     "category": "Категорія",
     "filterSaved": "Фільтр збережено",
-    "filterCleared": "Фільтр очищено"
+    "filterCleared": "Фільтр очищено",
+    "locationFilter": "Фільтр за розташуванням",
+    "postcodePlaceholder": "Введіть поштовий індекс",
+    "radius": "Радіус",
+    "search": "Пошук",
+    "sortByDistance": "За відстанню",
+    "locationFound": "Місцезнаходження знайдено",
+    "locationNotFound": "Місцезнаходження не знайдено",
+    "locationError": "Помилка пошуку місцезнаходження",
+    "servicesWithinRadius": "Послуги в межах {radius} км",
+    "alsoNearby": "Також поблизу"
   },
   "serviceDetails": {
     "description": "Опис",
@@ -380,7 +390,13 @@
     "trialUsedForTier": "Пробний період вже використано",
     "paymentRequired": "Пробний період недоступний для обраного плану. Потрібна оплата.",
     "availableLanguages": "Доступні мови",
-    "availableLanguagesDesc": "Оберіть мови, якими доступна ваша послуга"
+    "availableLanguagesDesc": "Оберіть мови, якими доступна ваша послуга",
+    "locationSection": "Розташування",
+    "postcode": "Поштовий індекс",
+    "postcodePlaceholder": "Введіть поштовий індекс",
+    "city": "Місто",
+    "cityPlaceholder": "Введіть місто",
+    "locationSet": "Розташування встановлено"
   },
   "languages": {
     "selectLanguages": "Оберіть мови..."

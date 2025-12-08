@@ -246,7 +246,17 @@
     "noNearbyServices": "Рядом услуг не найдено",
     "category": "Категория",
     "filterSaved": "Фильтр сохранён",
-    "filterCleared": "Фильтр очищен"
+    "filterCleared": "Фильтр очищен",
+    "locationFilter": "Фильтр по расположению",
+    "postcodePlaceholder": "Введите почтовый индекс",
+    "radius": "Радиус",
+    "search": "Поиск",
+    "sortByDistance": "По расстоянию",
+    "locationFound": "Местоположение найдено",
+    "locationNotFound": "Местоположение не найдено",
+    "locationError": "Ошибка поиска местоположения",
+    "servicesWithinRadius": "Услуги в пределах {radius} км",
+    "alsoNearby": "Также рядом"
   },
   "serviceDetails": {
     "description": "Описание",
@@ -380,7 +390,13 @@
     "trialUsedForTier": "Пробный период уже использован",
     "paymentRequired": "Пробный период недоступен для выбранного плана. Потребуется оплата.",
     "availableLanguages": "Доступные языки",
-    "availableLanguagesDesc": "Выберите языки, на которых доступна ваша услуга"
+    "availableLanguagesDesc": "Выберите языки, на которых доступна ваша услуга",
+    "locationSection": "Местоположение",
+    "postcode": "Почтовый индекс",
+    "postcodePlaceholder": "Введите почтовый индекс",
+    "city": "Город",
+    "cityPlaceholder": "Введите город",
+    "locationSet": "Местоположение установлено"
   },
   "languages": {
     "selectLanguages": "Выберите языки..."
