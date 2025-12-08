@@ -50,6 +50,17 @@ export const dbService = {
     return { data, error };
   },
 
+  async markPremiumTrialUsed(userId: string) {
+    const { data, error } = await supabase
+      .from('profiles')
+      .update({ premium_trial_used: true })
+      .eq('id', userId)
+      .select()
+      .single();
+
+    return { data, error };
+  },
+
   // ============ SERVICES ============
   
   async getServices(filters?: { userId?: string; status?: string }) {
