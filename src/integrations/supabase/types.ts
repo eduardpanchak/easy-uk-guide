@@ -14,6 +14,48 @@ export type Database = {
   }
   public: {
     Tables: {
+      advertisements: {
+        Row: {
+          clicks: number
+          created_at: string
+          expires_at: string
+          id: string
+          impressions: number
+          media_type: string
+          media_url: string
+          status: string
+          target_url: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          clicks?: number
+          created_at?: string
+          expires_at: string
+          id?: string
+          impressions?: number
+          media_type: string
+          media_url: string
+          status?: string
+          target_url: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          clicks?: number
+          created_at?: string
+          expires_at?: string
+          id?: string
+          impressions?: number
+          media_type?: string
+          media_url?: string
+          status?: string
+          target_url?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       business_profiles: {
         Row: {
           business_type: string | null
@@ -450,6 +492,8 @@ export type Database = {
     }
     Functions: {
       cancel_expired_trials: { Args: never; Returns: undefined }
+      increment_ad_clicks: { Args: { ad_id: string }; Returns: undefined }
+      increment_ad_impressions: { Args: { ad_id: string }; Returns: undefined }
       increment_click_count: {
         Args: { service_id: string }
         Returns: undefined
