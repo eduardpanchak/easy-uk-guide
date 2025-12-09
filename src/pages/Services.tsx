@@ -3,9 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import { Header } from '@/components/Header';
 import { BottomNav } from '@/components/BottomNav';
 import { ServiceCard } from '@/components/ServiceCard';
+import { AdCard } from '@/components/AdCard';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useFilters } from '@/contexts/FilterContext';
 import { supabase } from '@/integrations/supabase/client';
+import { advertisingService, Advertisement } from '@/services/advertisingService';
 import { Loader2, MapPin, Search, Save, X, Globe } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -34,6 +36,7 @@ interface ServiceWithDistance extends Service {
 }
 
 const SAVED_FILTERS_KEY = 'savedFilters';
+const ADS_INTERVAL = 5; // Show an ad every 5 service cards
 
 export default function Services() {
   const { language, t } = useLanguage();
@@ -41,6 +44,7 @@ export default function Services() {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [services, setServices] = useState<Service[]>([]);
+  const [ads, setAds] = useState<Advertisement[]>([]);
   const [loading, setLoading] = useState(true);
   const [isGeocodingPostcode, setIsGeocodingPostcode] = useState(false);
   
@@ -57,8 +61,18 @@ export default function Services() {
 
   useEffect(() => {
     fetchServices();
+    fetchAds();
     loadSavedFilters();
   }, []);
+
+  const fetchAds = async () => {
+    try {
+      const { data } = await advertisingService.getActiveAds();
+      setAds(data || []);
+    } catch (error) {
+      console.error('Error fetching ads:', error);
+    }
+  };
 
   // Sync local state with context on change
   useEffect(() => {
@@ -466,19 +480,30 @@ export default function Services() {
                     {t('services.servicesWithinRadius').replace('{radius}', searchRadius.toString())}
                   </h3>
                 )}
-                {servicesWithinRadius.map((service) => (
-                  <ServiceCard
-                    key={service.id}
-                    id={service.id}
-                    name={service.service_name}
-                    description={service.description}
-                    category={service.category}
-                    pricing={service.pricing}
-                    photo={service.photos?.[0] || null}
-                    subscriptionTier={service.subscription_tier}
-                    distance={formatDistance(service.distance)}
-                    onClick={() => navigate(`/services/${service.id}`)}
-                  />
+                {servicesWithinRadius.map((service, index) => (
+                  <React.Fragment key={service.id}>
+                    <ServiceCard
+                      id={service.id}
+                      name={service.service_name}
+                      description={service.description}
+                      category={service.category}
+                      pricing={service.pricing}
+                      photo={service.photos?.[0] || null}
+                      subscriptionTier={service.subscription_tier}
+                      distance={formatDistance(service.distance)}
+                      onClick={() => navigate(`/services/${service.id}`)}
+                    />
+                    {/* Insert ad after every ADS_INTERVAL services */}
+                    {ads.length > 0 && (index + 1) % ADS_INTERVAL === 0 && (
+                      <AdCard
+                        key={`ad-${Math.floor(index / ADS_INTERVAL)}`}
+                        id={ads[Math.floor(index / ADS_INTERVAL) % ads.length].id}
+                        mediaUrl={ads[Math.floor(index / ADS_INTERVAL) % ads.length].media_url}
+                        mediaType={ads[Math.floor(index / ADS_INTERVAL) % ads.length].media_type}
+                        targetUrl={ads[Math.floor(index / ADS_INTERVAL) % ads.length].target_url}
+                      />
+                    )}
+                  </React.Fragment>
                 ))}
               </div>
             )}

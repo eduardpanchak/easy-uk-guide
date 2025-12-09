@@ -45,6 +45,9 @@ import MyProfile from "./pages/MyProfile";
 import About from "./pages/About";
 import Feedback from "./pages/Feedback";
 import FAQ from "./pages/FAQ";
+import Advertising from "./pages/Advertising";
+import AddAdvertisement from "./pages/AddAdvertisement";
+import MyAds from "./pages/MyAds";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -100,6 +103,9 @@ const ProtectedRoutes = () => {
       <Route path="/about" element={<About />} />
       <Route path="/feedback" element={<Feedback />} />
       <Route path="/faq" element={<FAQ />} />
+      <Route path="/advertising" element={<Advertising />} />
+      <Route path="/advertising/add" element={<AddAdvertisement />} />
+      <Route path="/advertising/my-ads" element={<MyAds />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );
