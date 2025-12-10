@@ -16,39 +16,57 @@ export type Database = {
     Tables: {
       advertisements: {
         Row: {
+          address: string | null
+          category: string | null
+          city: string | null
           clicks: number
+          country: string | null
           created_at: string
           expires_at: string
           id: string
           impressions: number
+          languages: string[] | null
           media_type: string
           media_url: string
+          postcode: string | null
           status: string
           target_url: string
           updated_at: string
           user_id: string
         }
         Insert: {
+          address?: string | null
+          category?: string | null
+          city?: string | null
           clicks?: number
+          country?: string | null
           created_at?: string
           expires_at: string
           id?: string
           impressions?: number
+          languages?: string[] | null
           media_type: string
           media_url: string
+          postcode?: string | null
           status?: string
           target_url: string
           updated_at?: string
           user_id: string
         }
         Update: {
+          address?: string | null
+          category?: string | null
+          city?: string | null
           clicks?: number
+          country?: string | null
           created_at?: string
           expires_at?: string
           id?: string
           impressions?: number
+          languages?: string[] | null
           media_type?: string
           media_url?: string
+          postcode?: string | null
           status?: string
           target_url?: string
           updated_at?: string

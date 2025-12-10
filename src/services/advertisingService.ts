@@ -12,6 +12,21 @@ export interface Advertisement {
   expires_at: string;
   created_at: string;
   updated_at: string;
+  category?: string;
+  languages?: string[];
+  country?: string;
+  city?: string;
+  postcode?: string;
+  address?: string;
+}
+
+export interface AdLocationData {
+  category: string;
+  languages: string[];
+  country: string;
+  city: string;
+  postcode: string;
+  address: string;
 }
 
 // Validation constants
@@ -47,6 +62,38 @@ export const advertisingService = {
   },
 
   /**
+   * Get active ads filtered by category
+   */
+  async getActiveAdsByCategory(category: string): Promise<{ data: Advertisement[] | null; error: any }> {
+    const { data, error } = await supabase
+      .from('advertisements')
+      .select('*')
+      .eq('status', 'active')
+      .eq('category', category)
+      .gt('expires_at', new Date().toISOString())
+      .order('created_at', { ascending: false });
+
+    return { data: data as Advertisement[] | null, error };
+  },
+
+  /**
+   * Get active ads filtered by location (postcode prefix match)
+   */
+  async getActiveAdsByLocation(postcode: string): Promise<{ data: Advertisement[] | null; error: any }> {
+    const postcodePrefix = postcode.split(' ')[0].toUpperCase();
+    
+    const { data, error } = await supabase
+      .from('advertisements')
+      .select('*')
+      .eq('status', 'active')
+      .gt('expires_at', new Date().toISOString())
+      .ilike('postcode', `${postcodePrefix}%`)
+      .order('created_at', { ascending: false });
+
+    return { data: data as Advertisement[] | null, error };
+  },
+
+  /**
    * Get user's advertisements
    */
   async getUserAds(userId: string): Promise<{ data: Advertisement[] | null; error: any }> {
@@ -67,21 +114,33 @@ export const advertisingService = {
     mediaUrl: string,
     mediaType: 'photo' | 'video',
     targetUrl: string,
-    durationDays: number = 7
+    durationDays: number = 7,
+    locationData?: AdLocationData
   ): Promise<{ data: Advertisement | null; error: any }> {
     const expiresAt = new Date();
     expiresAt.setDate(expiresAt.getDate() + durationDays);
 
+    const insertData: any = {
+      user_id: userId,
+      media_url: mediaUrl,
+      media_type: mediaType,
+      target_url: targetUrl,
+      status: 'pending', // Will be 'active' after payment
+      expires_at: expiresAt.toISOString(),
+    };
+
+    if (locationData) {
+      insertData.category = locationData.category;
+      insertData.languages = locationData.languages;
+      insertData.country = locationData.country;
+      insertData.city = locationData.city;
+      insertData.postcode = locationData.postcode;
+      insertData.address = locationData.address;
+    }
+
     const { data, error } = await supabase
       .from('advertisements')
-      .insert({
-        user_id: userId,
-        media_url: mediaUrl,
-        media_type: mediaType,
-        target_url: targetUrl,
-        status: 'pending', // Will be 'active' after payment
-        expires_at: expiresAt.toISOString(),
-      })
+      .insert(insertData)
       .select()
       .single();
 
