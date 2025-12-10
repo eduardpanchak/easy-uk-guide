@@ -9,7 +9,24 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { advertisingService } from '@/services/advertisingService';
+import { LanguageMultiSelect } from '@/components/LanguageMultiSelect';
 import { Loader2, Upload, Image, Video, X } from 'lucide-react';
+
+const CATEGORIES = [
+  { value: 'beauty', labelKey: 'categories.beauty' },
+  { value: 'construction', labelKey: 'categories.construction' },
+  { value: 'cleaning', labelKey: 'categories.cleaning' },
+  { value: 'delivery', labelKey: 'categories.delivery' },
+  { value: 'health', labelKey: 'categories.health' },
+  { value: 'education', labelKey: 'categories.education' },
+  { value: 'car', labelKey: 'categories.car' },
+  { value: 'repair', labelKey: 'categories.repair' },
+  { value: 'food', labelKey: 'categories.food' },
+  { value: 'transport', labelKey: 'categories.transport' },
+  { value: 'legal', labelKey: 'categories.legal' },
+  { value: 'finance', labelKey: 'categories.finance' },
+  { value: 'other', labelKey: 'categories.other' },
+];
 
 export default function AddAdvertisement() {
   const navigate = useNavigate();
@@ -19,6 +36,12 @@ export default function AddAdvertisement() {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [targetUrl, setTargetUrl] = useState('');
+  const [category, setCategory] = useState('');
+  const [selectedLanguages, setSelectedLanguages] = useState<string[]>(['en']);
+  const [country, setCountry] = useState('');
+  const [city, setCity] = useState('');
+  const [postcode, setPostcode] = useState('');
+  const [address, setAddress] = useState('');
   const [mediaFile, setMediaFile] = useState<File | null>(null);
   const [mediaPreview, setMediaPreview] = useState<string | null>(null);
   const [mediaType, setMediaType] = useState<'photo' | 'video' | null>(null);
@@ -80,10 +103,24 @@ export default function AddAdvertisement() {
     }
   };
 
+  const isFormValid = () => {
+    return (
+      mediaFile &&
+      mediaType &&
+      targetUrl.trim() &&
+      category &&
+      selectedLanguages.length > 0 &&
+      country.trim() &&
+      city.trim() &&
+      postcode.trim() &&
+      address.trim()
+    );
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!mediaFile || !mediaType || !targetUrl.trim()) {
+    if (!isFormValid()) {
       toast({
         title: t('ads.fillAllFields'),
         variant: 'destructive',
@@ -108,7 +145,7 @@ export default function AddAdvertisement() {
       // Upload media
       const { url, error: uploadError } = await advertisingService.uploadAdMedia(
         user.id,
-        mediaFile
+        mediaFile!
       );
 
       if (uploadError || !url) {
@@ -119,9 +156,17 @@ export default function AddAdvertisement() {
       const { error: createError } = await advertisingService.createAd(
         user.id,
         url,
-        mediaType,
+        mediaType!,
         targetUrl,
-        7 // 7 days duration
+        7, // 7 days duration
+        {
+          category,
+          languages: selectedLanguages,
+          country,
+          city,
+          postcode,
+          address,
+        }
       );
 
       if (createError) {
@@ -224,7 +269,7 @@ export default function AddAdvertisement() {
 
           {/* Target URL */}
           <div className="space-y-2">
-            <Label htmlFor="targetUrl">{t('ads.targetUrl')}</Label>
+            <Label htmlFor="targetUrl">{t('ads.targetUrl')} *</Label>
             <Input
               id="targetUrl"
               type="url"
@@ -236,6 +281,87 @@ export default function AddAdvertisement() {
             <p className="text-xs text-muted-foreground">
               {t('ads.targetUrlHint')}
             </p>
+          </div>
+
+          {/* Category Selection */}
+          <div className="space-y-2">
+            <Label htmlFor="category">{t('ads.category')} *</Label>
+            <select
+              id="category"
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+              className="w-full h-10 px-3 rounded-md border border-border bg-background text-foreground"
+              required
+            >
+              <option value="">{t('ads.selectCategory')}</option>
+              {CATEGORIES.map((cat) => (
+                <option key={cat.value} value={cat.value}>
+                  {t(cat.labelKey)}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Language Selection */}
+          <div className="space-y-2">
+            <Label>{t('ads.languages')} *</Label>
+            <LanguageMultiSelect
+              selectedLanguages={selectedLanguages}
+              onChange={setSelectedLanguages}
+              placeholder={t('ads.selectLanguages')}
+            />
+            <p className="text-xs text-muted-foreground">
+              {t('ads.languagesHint')}
+            </p>
+          </div>
+
+          {/* Location Section */}
+          <div className="space-y-4">
+            <Label className="text-base font-semibold">{t('ads.locationSection')}</Label>
+            
+            <div className="space-y-2">
+              <Label htmlFor="country">{t('ads.country')} *</Label>
+              <Input
+                id="country"
+                value={country}
+                onChange={(e) => setCountry(e.target.value)}
+                placeholder={t('ads.countryPlaceholder')}
+                required
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="city">{t('ads.city')} *</Label>
+              <Input
+                id="city"
+                value={city}
+                onChange={(e) => setCity(e.target.value)}
+                placeholder={t('ads.cityPlaceholder')}
+                required
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="postcode">{t('ads.postcode')} *</Label>
+              <Input
+                id="postcode"
+                value={postcode}
+                onChange={(e) => setPostcode(e.target.value)}
+                placeholder={t('ads.postcodePlaceholder')}
+                required
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="address">{t('ads.address')} *</Label>
+              <Input
+                id="address"
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+                placeholder={t('ads.addressPlaceholder')}
+                required
+              />
+            </div>
           </div>
 
           {/* Pricing Info */}
@@ -250,7 +376,7 @@ export default function AddAdvertisement() {
           <Button
             type="submit"
             className="w-full"
-            disabled={isUploading || !mediaFile || !targetUrl.trim()}
+            disabled={isUploading || !isFormValid()}
           >
             {isUploading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             {t('ads.createAd')}
