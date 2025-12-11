@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Upload, ImagePlus, Lock } from 'lucide-react';
+import { ArrowLeft, Upload, ImagePlus } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { authService, dbService, storageService } from '@/services';
@@ -49,7 +49,8 @@ export default function AddService() {
 
   // Standard is always free, premium has one-time trial
   const isPremiumTrialAvailable = !premiumTrialUsed;
-  const canCreateService = formData.subscriptionTier === 'standard' || isPremiumTrialAvailable;
+  // Premium can always be selected, but requires payment if trial used
+  const requiresPremiumPayment = formData.subscriptionTier === 'top' && premiumTrialUsed;
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -145,12 +146,38 @@ export default function AddService() {
       console.log('User authenticated:', session.user.id);
       console.log('Using uploaded photo URL:', uploadedPhotoUrl);
 
-      // Check if premium tier and trial not available
+      // Check if premium tier and trial not available - redirect to payment
       if (formData.subscriptionTier === 'top' && !isPremiumTrialAvailable) {
-        // Redirect to subscription/payment flow
-        toast.error(t('addService.premiumTrialUsed'));
-        navigate('/my-services');
-        return;
+        // Initiate premium payment flow via Stripe
+        try {
+          const { subscriptionService } = await import('@/services/subscriptionService');
+          const { data, error } = await subscriptionService.createServiceSubscription(
+            'pending-service', // Service will be created after payment
+            'premium'
+          );
+          
+          if (error) {
+            toast.error(t('addService.paymentError'));
+            return;
+          }
+          
+          if (data?.url) {
+            // Store service data temporarily for after payment
+            localStorage.setItem('pendingServiceData', JSON.stringify({
+              ...formData,
+              uploadedPhotoUrl,
+              selectedLanguages,
+              location,
+            }));
+            window.open(data.url, '_blank');
+            toast.info(t('addService.redirectingToPayment'));
+          }
+          return;
+        } catch (error) {
+          console.error('Payment initiation error:', error);
+          toast.error(t('addService.paymentError'));
+          return;
+        }
       }
 
       // Calculate trial dates for premium (14 days from now)
@@ -362,21 +389,18 @@ export default function AddService() {
             {/* Top/Premium Tier */}
             <button
               type="button"
-              onClick={() => !premiumTrialUsed && setFormData(prev => ({ ...prev, subscriptionTier: 'top' }))}
-              disabled={premiumTrialUsed}
+              onClick={() => setFormData(prev => ({ ...prev, subscriptionTier: 'top' }))}
               className={`p-4 border-2 rounded-lg transition-all relative ${
                 formData.subscriptionTier === 'top'
                   ? 'border-primary bg-primary/5'
-                  : premiumTrialUsed
-                    ? 'border-border bg-muted/50 opacity-60 cursor-not-allowed'
-                    : 'border-border hover:border-primary/50'
+                  : 'border-border hover:border-primary/50'
               }`}
             >
               <div className="text-left">
                 <div className="font-semibold text-lg flex items-center gap-2">
                   {t('addService.topTier')}
                   {premiumTrialUsed ? (
-                    <Lock className="h-4 w-4 text-muted-foreground" />
+                    <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full">{t('addService.paidBadge')}</span>
                   ) : (
                     <span className="text-xs bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full">{t('addService.trialBadge')}</span>
                   )}
@@ -387,7 +411,7 @@ export default function AddService() {
                   <div className="text-xs text-amber-600 mt-2">{t('addService.premiumTrialNote')}</div>
                 )}
                 {premiumTrialUsed && (
-                  <div className="text-xs text-destructive mt-2">{t('addService.premiumTrialUsed')}</div>
+                  <div className="text-xs text-primary mt-2">{t('addService.premiumPaymentRequired')}</div>
                 )}
               </div>
             </button>
@@ -397,6 +421,9 @@ export default function AddService() {
           )}
           {formData.subscriptionTier === 'top' && !premiumTrialUsed && (
             <p className="text-xs text-amber-600 italic">{t('addService.premiumTrialInfo')}</p>
+          )}
+          {formData.subscriptionTier === 'top' && premiumTrialUsed && (
+            <p className="text-xs text-primary italic">{t('addService.premiumPaymentInfo')}</p>
           )}
         </div>
 
