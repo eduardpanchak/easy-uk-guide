@@ -512,7 +512,7 @@
     "address": "Adres",
     "addressPlaceholder": "np. Downing Street 10",
     "pricing": "Cennik",
-    "pricingInfo": "Reklamy wyświetlane przez 7 dni. Wymagana płatność.",
+    "pricingInfo": "7 dni ZA DARMO. Po okresie: £7.99/mies. za kontynuację.",
     "createAd": "Utwórz reklamę",
     "fillAllFields": "Wypełnij wszystkie pola",
     "invalidUrl": "Wprowadź poprawny URL",
@@ -527,7 +527,7 @@
     "invalidVideo": "Nieprawidłowy plik wideo",
     "invalidFile": "Nieprawidłowy plik",
     "adCreated": "Reklama utworzona",
-    "adCreatedDesc": "Twoja reklama została przesłana do weryfikacji",
+    "adCreatedDesc": "Twoja reklama jest aktywna z 7-dniowym darmowym okresem",
     "errorCreating": "Błąd tworzenia reklamy",
     "errorLoading": "Błąd ładowania reklam",
     "adDeleted": "Reklama usunięta",
@@ -543,6 +543,11 @@
     "statusPending": "Oczekuje",
     "statusActive": "Aktywna",
     "statusExpired": "Wygasła",
-    "statusCancelled": "Anulowana"
+    "statusCancelled": "Anulowana",
+    "nextPayment": "Następna płatność",
+    "payForAd": "Zapłać",
+    "extendAd": "Przedłuż",
+    "paymentSuccess": "Płatność zakończona! Twoja reklama została przedłużona.",
+    "errorPayment": "Błąd przetwarzania płatności"
   }
 }

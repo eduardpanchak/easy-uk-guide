@@ -18,6 +18,8 @@ export interface Advertisement {
   city?: string;
   postcode?: string;
   address?: string;
+  is_paid?: boolean;
+  paid_until?: string;
 }
 
 export interface AdLocationData {
@@ -107,7 +109,7 @@ export const advertisingService = {
   },
 
   /**
-   * Create a new advertisement
+   * Create a new advertisement with 7-day trial
    */
   async createAd(
     userId: string,
@@ -125,8 +127,9 @@ export const advertisingService = {
       media_url: mediaUrl,
       media_type: mediaType,
       target_url: targetUrl,
-      status: 'pending', // Will be 'active' after payment
+      status: 'active', // Active during 7-day trial
       expires_at: expiresAt.toISOString(),
+      is_paid: false, // Not paid yet, in trial
     };
 
     if (locationData) {
@@ -162,9 +165,9 @@ export const advertisingService = {
   },
 
   /**
-   * Renew an advertisement
+   * Renew an advertisement (after payment - 30 days)
    */
-  async renewAd(adId: string, durationDays: number = 7): Promise<{ data: Advertisement | null; error: any }> {
+  async renewAd(adId: string, durationDays: number = 30): Promise<{ data: Advertisement | null; error: any }> {
     const expiresAt = new Date();
     expiresAt.setDate(expiresAt.getDate() + durationDays);
 
@@ -173,6 +176,30 @@ export const advertisingService = {
       .update({ 
         status: 'active',
         expires_at: expiresAt.toISOString(),
+        is_paid: true,
+        paid_until: expiresAt.toISOString(),
+      })
+      .eq('id', adId)
+      .select()
+      .single();
+
+    return { data: data as Advertisement | null, error };
+  },
+
+  /**
+   * Mark ad as paid and extend for 30 days
+   */
+  async markAdAsPaid(adId: string): Promise<{ data: Advertisement | null; error: any }> {
+    const paidUntil = new Date();
+    paidUntil.setDate(paidUntil.getDate() + 30);
+
+    const { data, error } = await supabase
+      .from('advertisements')
+      .update({ 
+        status: 'active',
+        expires_at: paidUntil.toISOString(),
+        is_paid: true,
+        paid_until: paidUntil.toISOString(),
       })
       .eq('id', adId)
       .select()

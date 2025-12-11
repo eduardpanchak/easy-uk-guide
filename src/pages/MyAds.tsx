@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, Navigate } from 'react-router-dom';
+import { useNavigate, Navigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Header } from '@/components/Header';
@@ -7,6 +7,7 @@ import { BottomNav } from '@/components/BottomNav';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { advertisingService, Advertisement } from '@/services/advertisingService';
+import { supabase } from '@/integrations/supabase/client';
 import { 
   Loader2, 
   Plus, 
@@ -14,7 +15,7 @@ import {
   MousePointerClick, 
   Calendar, 
   Trash2, 
-  RefreshCw,
+  CreditCard,
   ExternalLink
 } from 'lucide-react';
 import {
@@ -30,6 +31,7 @@ import {
 
 export default function MyAds() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { user } = useAuth();
   const { t } = useLanguage();
   const { toast } = useToast();
@@ -39,6 +41,29 @@ export default function MyAds() {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [adToDelete, setAdToDelete] = useState<Advertisement | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [processingPayment, setProcessingPayment] = useState<string | null>(null);
+
+  // Handle payment success callback
+  useEffect(() => {
+    const adPaidId = searchParams.get('ad_paid');
+    if (adPaidId && user) {
+      handlePaymentSuccess(adPaidId);
+    }
+  }, [searchParams, user]);
+
+  const handlePaymentSuccess = async (adId: string) => {
+    try {
+      await advertisingService.markAdAsPaid(adId);
+      toast({
+        title: t('ads.paymentSuccess'),
+      });
+      // Clear URL params
+      navigate('/advertising/my-ads', { replace: true });
+      fetchAds();
+    } catch (error) {
+      console.error('Error marking ad as paid:', error);
+    }
+  };
 
   useEffect(() => {
     if (user) {
@@ -109,25 +134,25 @@ export default function MyAds() {
     }
   };
 
-  const handleRenew = async (ad: Advertisement) => {
+  const handlePayment = async (ad: Advertisement) => {
+    setProcessingPayment(ad.id);
     try {
-      const { error } = await advertisingService.renewAd(ad.id, 7);
-
-      if (error) {
-        throw error;
-      }
-
-      toast({
-        title: t('ads.adRenewed'),
+      const { data, error } = await supabase.functions.invoke('create-ad-checkout', {
+        body: { adId: ad.id },
       });
 
-      fetchAds();
+      if (error) throw error;
+      if (data?.url) {
+        window.open(data.url, '_blank');
+      }
     } catch (error) {
-      console.error('Error renewing ad:', error);
+      console.error('Error creating payment:', error);
       toast({
-        title: t('ads.errorRenewing'),
+        title: t('ads.errorPayment'),
         variant: 'destructive',
       });
+    } finally {
+      setProcessingPayment(null);
     }
   };
 
@@ -265,27 +290,35 @@ export default function MyAds() {
                       </div>
                     </div>
 
+                    {/* Next Payment Info */}
+                    {ad.is_paid && ad.paid_until && (
+                      <div className="text-sm text-muted-foreground bg-muted/50 rounded-lg p-2">
+                        {t('ads.nextPayment')}: {new Date(ad.paid_until).toLocaleDateString()}
+                      </div>
+                    )}
+
                     {/* Actions */}
                     <div className="flex gap-2">
-                      {isExpired && (
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="flex-1"
-                          onClick={() => handleRenew(ad)}
-                        >
-                          <RefreshCw className="h-4 w-4 mr-2" />
-                          {t('ads.renew')}
-                        </Button>
-                      )}
+                      <Button
+                        variant={ad.is_paid ? "outline" : "default"}
+                        size="sm"
+                        className="flex-1"
+                        onClick={() => handlePayment(ad)}
+                        disabled={processingPayment === ad.id}
+                      >
+                        {processingPayment === ad.id ? (
+                          <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                        ) : (
+                          <CreditCard className="h-4 w-4 mr-2" />
+                        )}
+                        {ad.is_paid ? t('ads.extendAd') : t('ads.payForAd')} £7.99
+                      </Button>
                       <Button
                         variant="destructive"
                         size="sm"
-                        className={isExpired ? 'flex-1' : 'w-full'}
                         onClick={() => handleDeleteClick(ad)}
                       >
-                        <Trash2 className="h-4 w-4 mr-2" />
-                        {t('ads.delete')}
+                        <Trash2 className="h-4 w-4" />
                       </Button>
                     </div>
                   </div>
