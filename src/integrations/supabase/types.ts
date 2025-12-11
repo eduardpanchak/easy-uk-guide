@@ -25,9 +25,11 @@ export type Database = {
           expires_at: string
           id: string
           impressions: number
+          is_paid: boolean | null
           languages: string[] | null
           media_type: string
           media_url: string
+          paid_until: string | null
           postcode: string | null
           status: string
           target_url: string
@@ -44,9 +46,11 @@ export type Database = {
           expires_at: string
           id?: string
           impressions?: number
+          is_paid?: boolean | null
           languages?: string[] | null
           media_type: string
           media_url: string
+          paid_until?: string | null
           postcode?: string | null
           status?: string
           target_url: string
@@ -63,9 +67,11 @@ export type Database = {
           expires_at?: string
           id?: string
           impressions?: number
+          is_paid?: boolean | null
           languages?: string[] | null
           media_type?: string
           media_url?: string
+          paid_until?: string | null
           postcode?: string | null
           status?: string
           target_url?: string
