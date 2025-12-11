@@ -512,7 +512,7 @@
     "address": "Address",
     "addressPlaceholder": "e.g. 10 Downing Street",
     "pricing": "Pricing",
-    "pricingInfo": "Ads are displayed for 7 days. Payment required to activate.",
+    "pricingInfo": "7-day FREE trial. After trial: £7.99/month to keep your ad active.",
     "createAd": "Create Advertisement",
     "fillAllFields": "Please fill all required fields",
     "invalidUrl": "Please enter a valid URL",
@@ -527,7 +527,7 @@
     "invalidVideo": "Invalid video file",
     "invalidFile": "Invalid file",
     "adCreated": "Advertisement Created",
-    "adCreatedDesc": "Your ad has been submitted for review",
+    "adCreatedDesc": "Your ad is now active with a 7-day free trial",
     "errorCreating": "Error creating advertisement",
     "errorLoading": "Error loading advertisements",
     "adDeleted": "Advertisement deleted",
@@ -543,6 +543,11 @@
     "statusPending": "Pending",
     "statusActive": "Active",
     "statusExpired": "Expired",
-    "statusCancelled": "Cancelled"
+    "statusCancelled": "Cancelled",
+    "nextPayment": "Your next payment",
+    "payForAd": "Pay",
+    "extendAd": "Extend",
+    "paymentSuccess": "Payment successful! Your ad is now extended.",
+    "errorPayment": "Error processing payment"
   }
 }

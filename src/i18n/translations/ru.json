@@ -512,7 +512,7 @@
     "address": "Адрес",
     "addressPlaceholder": "напр. Даунинг-стрит, 10",
     "pricing": "Цены",
-    "pricingInfo": "Реклама показывается 7 дней. Требуется оплата для активации.",
+    "pricingInfo": "7 дней БЕСПЛАТНО. После: £7.99/мес для продления.",
     "createAd": "Создать рекламу",
     "fillAllFields": "Заполните все поля",
     "invalidUrl": "Введите действительный URL",
@@ -527,7 +527,7 @@
     "invalidVideo": "Неверный видеофайл",
     "invalidFile": "Неверный файл",
     "adCreated": "Реклама создана",
-    "adCreatedDesc": "Ваша реклама отправлена на проверку",
+    "adCreatedDesc": "Ваша реклама активирована на 7 дней бесплатно",
     "errorCreating": "Ошибка создания рекламы",
     "errorLoading": "Ошибка загрузки рекламы",
     "adDeleted": "Реклама удалена",
@@ -543,6 +543,11 @@
     "statusPending": "Ожидает",
     "statusActive": "Активна",
     "statusExpired": "Истекла",
-    "statusCancelled": "Отменена"
+    "statusCancelled": "Отменена",
+    "nextPayment": "Следующий платеж",
+    "payForAd": "Оплатить",
+    "extendAd": "Продлить",
+    "paymentSuccess": "Оплата успешна! Ваша реклама продлена.",
+    "errorPayment": "Ошибка обработки платежа"
   }
 }

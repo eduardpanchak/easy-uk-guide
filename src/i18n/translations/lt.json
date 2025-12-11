@@ -512,7 +512,7 @@
     "address": "Adresas",
     "addressPlaceholder": "pvz. Downing Street 10",
     "pricing": "Kaina",
-    "pricingInfo": "Reklamos rodomos 7 dienas. Reikalingas mokėjimas.",
+    "pricingInfo": "7 dienos NEMOKAMAI. Po to: £7.99/mėn. tęsti.",
     "createAd": "Sukurti reklamą",
     "fillAllFields": "Užpildykite visus laukus",
     "invalidUrl": "Įveskite galiojantį URL",
@@ -527,7 +527,7 @@
     "invalidVideo": "Netinkamas vaizdo failas",
     "invalidFile": "Netinkamas failas",
     "adCreated": "Reklama sukurta",
-    "adCreatedDesc": "Jūsų reklama pateikta peržiūrai",
+    "adCreatedDesc": "Jūsų reklama aktyvi su 7 dienų nemokamu laikotarpiu",
     "errorCreating": "Klaida kuriant reklamą",
     "errorLoading": "Klaida įkeliant reklamas",
     "adDeleted": "Reklama ištrinta",
@@ -543,6 +543,11 @@
     "statusPending": "Laukiama",
     "statusActive": "Aktyvi",
     "statusExpired": "Pasibaigė",
-    "statusCancelled": "Atšaukta"
+    "statusCancelled": "Atšaukta",
+    "nextPayment": "Kitas mokėjimas",
+    "payForAd": "Mokėti",
+    "extendAd": "Pratęsti",
+    "paymentSuccess": "Mokėjimas sėkmingas! Jūsų reklama pratęsta.",
+    "errorPayment": "Mokėjimo apdorojimo klaida"
   }
 }
