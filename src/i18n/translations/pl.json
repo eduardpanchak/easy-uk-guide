@@ -549,5 +549,11 @@
     "extendAd": "Przedłuż",
     "paymentSuccess": "Płatność zakończona! Twoja reklama została przedłużona.",
     "errorPayment": "Błąd przetwarzania płatności"
-  }
+  },
+  "documents": { "pageTitle": "Dokumenty", "whatYouNeed": "Co potrzebujesz", "steps": "Kroki", "expectedTime": "Czas", "warnings": "Ostrzeżenia" },
+  "nhs": { "pageTitle": "NHS (Opieka zdrowotna)", "content": "Treść", "steps": "Kroki" },
+  "jobs": { "pageTitle": "Praca", "content": "Informacje", "tips": "Porady" },
+  "housing": { "pageTitle": "Mieszkanie", "content": "Informacje", "warnings": "Ostrzeżenia" },
+  "benefits": { "pageTitle": "Zasiłki", "content": "Informacje", "eligibility": "Kto może się ubiegać" },
+  "education": { "pageTitle": "Edukacja", "content": "Informacje", "tips": "Porady" }
 }
