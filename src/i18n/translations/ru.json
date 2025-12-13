@@ -549,5 +549,11 @@
     "extendAd": "Продлить",
     "paymentSuccess": "Оплата успешна! Ваша реклама продлена.",
     "errorPayment": "Ошибка обработки платежа"
-  }
+  },
+  "documents": { "pageTitle": "Документы", "whatYouNeed": "Что вам нужно", "steps": "Шаги", "expectedTime": "Время", "warnings": "Предупреждения" },
+  "nhs": { "pageTitle": "NHS (Здравоохранение)", "content": "Содержание", "steps": "Шаги" },
+  "jobs": { "pageTitle": "Работа", "content": "Информация", "tips": "Советы" },
+  "housing": { "pageTitle": "Жильё", "content": "Информация", "warnings": "Предупреждения" },
+  "benefits": { "pageTitle": "Пособия", "content": "Информация", "eligibility": "Кто может подавать" },
+  "education": { "pageTitle": "Образование", "content": "Информация", "tips": "Советы" }
 }

@@ -549,5 +549,11 @@
     "extendAd": "Pratęsti",
     "paymentSuccess": "Mokėjimas sėkmingas! Jūsų reklama pratęsta.",
     "errorPayment": "Mokėjimo apdorojimo klaida"
-  }
+  },
+  "documents": { "pageTitle": "Dokumentai", "whatYouNeed": "Ko jums reikia", "steps": "Žingsniai", "expectedTime": "Laikas", "warnings": "Įspėjimai" },
+  "nhs": { "pageTitle": "NHS (Sveikatos priežiūra)", "content": "Turinys", "steps": "Žingsniai" },
+  "jobs": { "pageTitle": "Darbas", "content": "Informacija", "tips": "Patarimai" },
+  "housing": { "pageTitle": "Būstas", "content": "Informacija", "warnings": "Įspėjimai" },
+  "benefits": { "pageTitle": "Pašalpos", "content": "Informacija", "eligibility": "Kas gali kreiptis" },
+  "education": { "pageTitle": "Išsilavinimas", "content": "Informacija", "tips": "Patarimai" }
 }
