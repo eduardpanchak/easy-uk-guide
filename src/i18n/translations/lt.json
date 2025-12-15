@@ -104,6 +104,7 @@
   "common": {
     "back": "Atgal",
     "save": "Išsaugoti",
+    "saveForLater": "Išsaugoti vėliau",
     "saved": "Išsaugota",
     "complete": "Pažymėti kaip užbaigtą",
     "completed": "Užbaigta",
@@ -116,7 +117,9 @@
     "loading": "Kraunama...",
     "cancel": "Atšaukti",
     "delete": "Ištrinti",
-    "edit": "Redaguoti"
+    "edit": "Redaguoti",
+    "tips": "Patarimai",
+    "important": "Svarbu"
   },
   "lists": {
     "myLists": "Mano sąrašai",

@@ -104,6 +104,7 @@
   "common": {
     "back": "Wstecz",
     "save": "Zapisz",
+    "saveForLater": "Zapisz na później",
     "saved": "Zapisane",
     "complete": "Oznacz jako ukończone",
     "completed": "Ukończone",
@@ -116,7 +117,9 @@
     "loading": "Ładowanie...",
     "cancel": "Anuluj",
     "delete": "Usuń",
-    "edit": "Edytuj"
+    "edit": "Edytuj",
+    "tips": "Porady",
+    "important": "Ważne"
   },
   "lists": {
     "myLists": "Moje listy",
