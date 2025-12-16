@@ -313,6 +313,38 @@ export type Database = {
         }
         Relationships: []
       }
+      service_reports: {
+        Row: {
+          created_at: string
+          id: string
+          reason: string
+          reporter_user_id: string
+          service_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          reason: string
+          reporter_user_id: string
+          service_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          reason?: string
+          reporter_user_id?: string
+          service_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "service_reports_service_id_fkey"
+            columns: ["service_id"]
+            isOneToOne: false
+            referencedRelation: "services"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       service_reviews: {
         Row: {
           created_at: string
@@ -365,10 +397,14 @@ export type Database = {
           languages: string[]
           latitude: number | null
           longitude: number | null
+          moderation_status:
+            | Database["public"]["Enums"]["moderation_status"]
+            | null
           phone: string | null
           photos: string[] | null
           postcode: string | null
           pricing: string | null
+          reports_count: number | null
           service_name: string
           social_links: Json | null
           status: string
@@ -393,10 +429,14 @@ export type Database = {
           languages: string[]
           latitude?: number | null
           longitude?: number | null
+          moderation_status?:
+            | Database["public"]["Enums"]["moderation_status"]
+            | null
           phone?: string | null
           photos?: string[] | null
           postcode?: string | null
           pricing?: string | null
+          reports_count?: number | null
           service_name: string
           social_links?: Json | null
           status?: string
@@ -421,10 +461,14 @@ export type Database = {
           languages?: string[]
           latitude?: number | null
           longitude?: number | null
+          moderation_status?:
+            | Database["public"]["Enums"]["moderation_status"]
+            | null
           phone?: string | null
           photos?: string[] | null
           postcode?: string | null
           pricing?: string | null
+          reports_count?: number | null
           service_name?: string
           social_links?: Json | null
           status?: string
@@ -525,7 +569,7 @@ export type Database = {
       increment_view_count: { Args: { service_id: string }; Returns: undefined }
     }
     Enums: {
-      [_ in never]: never
+      moderation_status: "active" | "under_review" | "suspended"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -652,6 +696,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      moderation_status: ["active", "under_review", "suspended"],
+    },
   },
 } as const
