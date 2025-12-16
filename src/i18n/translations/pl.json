@@ -106,6 +106,7 @@
     "save": "Zapisz",
     "saveForLater": "Zapisz na później",
     "saved": "Zapisane",
+    "removedFromSaved": "Usunięto z zapisanych",
     "complete": "Oznacz jako ukończone",
     "completed": "Ukończone",
     "search": "Szukaj",
@@ -119,7 +120,8 @@
     "delete": "Usuń",
     "edit": "Edytuj",
     "tips": "Porady",
-    "important": "Ważne"
+    "important": "Ważne",
+    "notFound": "Nie znaleziono"
   },
   "lists": {
     "myLists": "Moje listy",
