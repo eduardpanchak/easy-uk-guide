@@ -104,7 +104,9 @@
   "common": {
     "back": "Back",
     "save": "Save for Later",
+    "saveForLater": "Save for Later",
     "saved": "Saved",
+    "removedFromSaved": "Removed from saved",
     "complete": "Mark as Complete",
     "completed": "Completed",
     "search": "Search",
@@ -116,7 +118,10 @@
     "loading": "Loading...",
     "cancel": "Cancel",
     "delete": "Delete",
-    "edit": "Edit"
+    "edit": "Edit",
+    "tips": "Tips",
+    "important": "Important",
+    "notFound": "Not found"
   },
   "lists": {
     "myLists": "My Lists",
@@ -556,6 +561,7 @@
     "steps": "Steps",
     "expectedTime": "Expected time",
     "warnings": "Important warnings",
+    "important": "Important",
     "nin": {
       "title": "National Insurance Number (NIN)",
       "need1": "Valid passport or BRP card",

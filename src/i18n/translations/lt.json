@@ -106,6 +106,7 @@
     "save": "Išsaugoti",
     "saveForLater": "Išsaugoti vėliau",
     "saved": "Išsaugota",
+    "removedFromSaved": "Pašalinta iš išsaugotų",
     "complete": "Pažymėti kaip užbaigtą",
     "completed": "Užbaigta",
     "search": "Paieška",
@@ -119,7 +120,8 @@
     "delete": "Ištrinti",
     "edit": "Redaguoti",
     "tips": "Patarimai",
-    "important": "Svarbu"
+    "important": "Svarbu",
+    "notFound": "Nerasta"
   },
   "lists": {
     "myLists": "Mano sąrašai",
