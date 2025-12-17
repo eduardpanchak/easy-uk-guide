@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { ArrowLeft, Clock, CheckCircle, XCircle, CreditCard, Edit, Trash2 } from 'lucide-react';
+import { ArrowLeft, Clock, CheckCircle, XCircle, CreditCard, Edit, Trash2, AlertTriangle } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
@@ -30,6 +30,7 @@ interface Service {
   stripe_subscription_id: string | null;
   photos: string[] | null;
   created_at: string;
+  moderation_status: 'active' | 'under_review' | 'suspended' | null;
 }
 
 export default function MyServices() {
@@ -116,6 +117,16 @@ export default function MyServices() {
   };
 
   const getStatusBadge = (service: Service) => {
+    // Check moderation status first
+    if (service.moderation_status === 'suspended') {
+      return (
+        <div className="flex items-center gap-2 text-destructive">
+          <AlertTriangle className="h-4 w-4" />
+          <span className="text-sm font-medium">{t('myServices.underModeration')}</span>
+        </div>
+      );
+    }
+
     const now = new Date();
     const trialEnd = new Date(service.trial_end);
     const daysLeft = Math.ceil((trialEnd.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
@@ -224,9 +235,10 @@ export default function MyServices() {
             const now = new Date();
             const trialEnd = new Date(service.trial_end);
             const isTrialExpired = service.status === 'trial' && trialEnd < now;
+            const isSuspended = service.moderation_status === 'suspended';
 
             return (
-              <Card key={service.id} className="p-4 space-y-3">
+              <Card key={service.id} className={`p-4 space-y-3 ${isSuspended ? 'opacity-75 border-destructive' : ''}`}>
                 <div className="flex gap-4">
                   {/* Service thumbnail */}
                   {service.photos && service.photos.length > 0 && (
@@ -251,6 +263,8 @@ export default function MyServices() {
                         variant="ghost"
                         size="icon"
                         onClick={() => navigate(`/edit-service/${service.id}`)}
+                        disabled={isSuspended}
+                        title={isSuspended ? t('myServices.actionDisabledModeration') : undefined}
                       >
                         <Edit className="h-5 w-5" />
                       </Button>
@@ -259,6 +273,8 @@ export default function MyServices() {
                         size="icon"
                         onClick={() => handleDeleteClick(service)}
                         className="text-destructive hover:text-destructive"
+                        disabled={isSuspended}
+                        title={isSuspended ? t('myServices.actionDisabledModeration') : undefined}
                       >
                         <Trash2 className="h-5 w-5" />
                       </Button>
@@ -273,7 +289,15 @@ export default function MyServices() {
                   </span>
                 </div>
 
-                {service.status === 'trial' && (
+                {isSuspended && (
+                  <div className="pt-3 border-t">
+                    <p className="text-sm text-destructive">
+                      {t('myServices.moderationMessage')}
+                    </p>
+                  </div>
+                )}
+
+                {!isSuspended && service.status === 'trial' && (
                   <div className="pt-3 border-t space-y-2">
                     {isTrialExpired ? (
                       <p className="text-sm text-destructive">
@@ -295,7 +319,7 @@ export default function MyServices() {
                   </div>
                 )}
 
-                {service.status === 'active' && (
+                {!isSuspended && service.status === 'active' && (
                   <div className="pt-3 border-t">
                     <p className="text-sm text-muted-foreground">
                       {t('myServices.subscriptionActive')} - {getPriceForTier(service.subscription_tier)}/month
@@ -303,7 +327,7 @@ export default function MyServices() {
                   </div>
                 )}
 
-                {service.status === 'cancelled' && (
+                {!isSuspended && service.status === 'cancelled' && (
                   <div className="pt-3 border-t">
                     <Button
                       onClick={() => handleSubscribe(service.id, service.subscription_tier)}

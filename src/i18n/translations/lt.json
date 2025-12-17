@@ -437,7 +437,10 @@
     "deleteServiceTitle": "Ištrinti paslaugą",
     "deleteServiceMessage": "Ar tikrai norite ištrinti šią paslaugą? Šio veiksmo negalima atšaukti.",
     "serviceDeleted": "Paslauga sėkmingai ištrinta",
-    "deleteError": "Nepavyko ištrinti paslaugos"
+    "deleteError": "Nepavyko ištrinti paslaugos",
+    "underModeration": "Moderuojama",
+    "moderationMessage": "Ši paslauga sustabdyta dėl daugybės skundų. Redagavimas, trynimas ir pakartotinis publikavimas išjungti.",
+    "actionDisabledModeration": "Veiksmas išjungtas, kol paslauga moderuojama"
   },
   "editService": {
     "title": "Redaguoti paslaugą",
