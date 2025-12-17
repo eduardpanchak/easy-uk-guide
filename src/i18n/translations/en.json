@@ -437,7 +437,10 @@
     "deleteServiceTitle": "Delete Service",
     "deleteServiceMessage": "Are you sure you want to delete this service? This action cannot be undone.",
     "serviceDeleted": "Service deleted successfully",
-    "deleteError": "Failed to delete service"
+    "deleteError": "Failed to delete service",
+    "underModeration": "Under Moderation",
+    "moderationMessage": "This service has been suspended due to multiple reports. Editing, deletion, and re-publishing are disabled.",
+    "actionDisabledModeration": "Action disabled while service is under moderation"
   },
   "editService": {
     "title": "Edit Service",
