@@ -329,4 +329,14 @@ export const dbService = {
 
     return { data, error };
   },
+
+  // ============ SERVICE REPORTS ============
+  
+  async submitServiceReport(serviceId: string, reason: string) {
+    const { data, error } = await supabase.functions.invoke('submit-service-report', {
+      body: { serviceId, reason }
+    });
+
+    return { data, error };
+  },
 };

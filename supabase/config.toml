@@ -17,3 +17,6 @@ verify_jwt = true
 
 [functions.verify-service-subscription]
 verify_jwt = true
+
+[functions.submit-service-report]
+verify_jwt = true
