@@ -244,6 +244,30 @@ export type Database = {
         }
         Relationships: []
       }
+      owner_bans: {
+        Row: {
+          banned_by: string
+          created_at: string
+          id: string
+          reason: string | null
+          user_id: string
+        }
+        Insert: {
+          banned_by: string
+          created_at?: string
+          id?: string
+          reason?: string | null
+          user_id: string
+        }
+        Update: {
+          banned_by?: string
+          created_at?: string
+          id?: string
+          reason?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -524,6 +548,27 @@ export type Database = {
         }
         Relationships: []
       }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_settings: {
         Row: {
           created_at: string
@@ -560,6 +605,13 @@ export type Database = {
     }
     Functions: {
       cancel_expired_trials: { Args: never; Returns: undefined }
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
       increment_ad_clicks: { Args: { ad_id: string }; Returns: undefined }
       increment_ad_impressions: { Args: { ad_id: string }; Returns: undefined }
       increment_click_count: {
@@ -569,6 +621,7 @@ export type Database = {
       increment_view_count: { Args: { service_id: string }; Returns: undefined }
     }
     Enums: {
+      app_role: "admin" | "moderator" | "user"
       moderation_status: "active" | "under_review" | "suspended"
     }
     CompositeTypes: {
@@ -697,6 +750,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      app_role: ["admin", "moderator", "user"],
       moderation_status: ["active", "under_review", "suspended"],
     },
   },
