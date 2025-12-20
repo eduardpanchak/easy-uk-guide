@@ -626,5 +626,22 @@
     "deleteSuccess": "Usługa została usunięta",
     "ban_ownerSuccess": "Właściciel został zablokowany",
     "actionError": "Nie udało się wykonać akcji"
+  },
+  "report": {
+    "reportService": "Zgłoś usługę",
+    "reportDescription": "Wybierz powód zgłoszenia. Zgłoszenia są sprawdzane przez moderatorów.",
+    "selectReason": "Wybierz powód",
+    "reasons": {
+      "spam": "Spam lub wprowadzanie w błąd",
+      "inappropriate": "Nieodpowiednia treść",
+      "fake": "Fałszywe lub oszustwo",
+      "scam": "Podejrzenie oszustwa",
+      "other": "Inne naruszenie"
+    },
+    "submit": "Wyślij zgłoszenie",
+    "submitted": "Zgłoszenie wysłane pomyślnie",
+    "submitError": "Nie udało się wysłać zgłoszenia",
+    "alreadyReported": "Już zgłosiłeś tę usługę",
+    "signInRequired": "Zaloguj się, aby zgłosić usługę"
   }
 }

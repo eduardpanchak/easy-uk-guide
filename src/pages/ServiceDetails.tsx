@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, ExternalLink, Phone, Mail, Heart, Star } from 'lucide-react';
+import { ArrowLeft, ExternalLink, Phone, Mail, Heart, Star, Flag } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useApp } from '@/contexts/AppContext';
 import { useAuth } from '@/contexts/AuthContext';
@@ -20,6 +20,13 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 
@@ -35,6 +42,7 @@ interface Service {
   social_links: any;
   status: string;
   languages: string[];
+  user_id: string;
 }
 
 interface Review {
@@ -63,6 +71,11 @@ export default function ServiceDetails() {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [averageRating, setAverageRating] = useState(0);
   const [viewTracked, setViewTracked] = useState(false);
+  const [reportDialogOpen, setReportDialogOpen] = useState(false);
+  const [reportReason, setReportReason] = useState('');
+  const [submittingReport, setSubmittingReport] = useState(false);
+
+  const isOwner = user && service?.user_id === user.id;
 
   useEffect(() => {
     if (id) {
@@ -309,6 +322,45 @@ export default function ServiceDetails() {
     }
   };
 
+  const handleReportService = async () => {
+    if (!user || !service || !reportReason) {
+      toast.error(t('report.selectReason'));
+      return;
+    }
+
+    setSubmittingReport(true);
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        toast.error(t('report.signInRequired'));
+        return;
+      }
+
+      const response = await supabase.functions.invoke('submit-service-report', {
+        body: { serviceId: service.id, reason: reportReason },
+      });
+
+      if (response.error) {
+        const errorMessage = response.error.message || t('report.submitError');
+        if (errorMessage.includes('already reported')) {
+          toast.error(t('report.alreadyReported'));
+        } else {
+          toast.error(errorMessage);
+        }
+        return;
+      }
+
+      toast.success(t('report.submitted'));
+      setReportDialogOpen(false);
+      setReportReason('');
+    } catch (error) {
+      console.error('Error submitting report:', error);
+      toast.error(t('report.submitError'));
+    } finally {
+      setSubmittingReport(false);
+    }
+  };
+
   const saved = service ? isSaved(service.id) : false;
 
   if (loading) {
@@ -458,6 +510,19 @@ export default function ServiceDetails() {
                 {t('serviceDetails.emailProvider')}
               </Button>
             )}
+
+            {/* Report Service Button - only for logged in users who don't own the service */}
+            {user && !isOwner && (
+              <Button
+                onClick={() => setReportDialogOpen(true)}
+                variant="ghost"
+                size="sm"
+                className="w-full text-muted-foreground hover:text-destructive"
+              >
+                <Flag className="h-4 w-4 mr-2" />
+                {t('report.reportService')}
+              </Button>
+            )}
           </div>
 
           {/* Reviews Section */}
@@ -572,6 +637,42 @@ export default function ServiceDetails() {
             <AlertDialogCancel>{t('common.cancel')}</AlertDialogCancel>
             <AlertDialogAction onClick={handleDeleteReview}>
               {t('common.delete')}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* Report Service Dialog */}
+      <AlertDialog open={reportDialogOpen} onOpenChange={setReportDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{t('report.reportService')}</AlertDialogTitle>
+            <AlertDialogDescription>
+              {t('report.reportDescription')}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <div className="py-4">
+            <Select value={reportReason} onValueChange={setReportReason}>
+              <SelectTrigger>
+                <SelectValue placeholder={t('report.selectReason')} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="spam">{t('report.reasons.spam')}</SelectItem>
+                <SelectItem value="inappropriate">{t('report.reasons.inappropriate')}</SelectItem>
+                <SelectItem value="fake">{t('report.reasons.fake')}</SelectItem>
+                <SelectItem value="scam">{t('report.reasons.scam')}</SelectItem>
+                <SelectItem value="other">{t('report.reasons.other')}</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={submittingReport}>{t('common.cancel')}</AlertDialogCancel>
+            <AlertDialogAction 
+              onClick={handleReportService}
+              disabled={!reportReason || submittingReport}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              {submittingReport ? t('common.loading') : t('report.submit')}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

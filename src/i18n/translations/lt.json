@@ -626,5 +626,22 @@
     "deleteSuccess": "Paslauga sėkmingai ištrinta",
     "ban_ownerSuccess": "Savininkas sėkmingai užblokuotas",
     "actionError": "Nepavyko atlikti veiksmo"
+  },
+  "report": {
+    "reportService": "Pranešti apie paslaugą",
+    "reportDescription": "Pasirinkite pranešimo priežastį. Pranešimus peržiūri moderatoriai.",
+    "selectReason": "Pasirinkite priežastį",
+    "reasons": {
+      "spam": "Šlamštas arba klaidinimas",
+      "inappropriate": "Netinkamas turinys",
+      "fake": "Netikra arba apgaulė",
+      "scam": "Įtariama sukčiavimas",
+      "other": "Kitas pažeidimas"
+    },
+    "submit": "Siųsti pranešimą",
+    "submitted": "Pranešimas sėkmingai išsiųstas",
+    "submitError": "Nepavyko išsiųsti pranešimo",
+    "alreadyReported": "Jūs jau pranešėte apie šią paslaugą",
+    "signInRequired": "Prisijunkite, kad pranešti"
   }
 }
