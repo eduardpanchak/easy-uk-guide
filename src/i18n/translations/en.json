@@ -1193,5 +1193,22 @@
     "deleteSuccess": "Service deleted successfully",
     "ban_ownerSuccess": "Owner banned successfully",
     "actionError": "Failed to perform action"
+  },
+  "report": {
+    "reportService": "Report Service",
+    "reportDescription": "Please select a reason for reporting this service. Reports are reviewed by our moderation team.",
+    "selectReason": "Select a reason",
+    "reasons": {
+      "spam": "Spam or misleading",
+      "inappropriate": "Inappropriate content",
+      "fake": "Fake or fraudulent",
+      "scam": "Suspected scam",
+      "other": "Other violation"
+    },
+    "submit": "Submit Report",
+    "submitted": "Report submitted successfully",
+    "submitError": "Failed to submit report",
+    "alreadyReported": "You have already reported this service",
+    "signInRequired": "Please sign in to report a service"
   }
 }
