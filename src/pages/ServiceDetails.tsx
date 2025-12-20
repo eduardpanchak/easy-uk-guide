@@ -74,6 +74,8 @@ export default function ServiceDetails() {
   const [reportDialogOpen, setReportDialogOpen] = useState(false);
   const [reportReason, setReportReason] = useState('');
   const [submittingReport, setSubmittingReport] = useState(false);
+  const [hasExistingReport, setHasExistingReport] = useState(false);
+  const [checkingReport, setCheckingReport] = useState(false);
 
   const isOwner = user && service?.user_id === user.id;
 
@@ -83,6 +85,40 @@ export default function ServiceDetails() {
       fetchReviews(id);
     }
   }, [id, user]);
+
+  // Check if user has already reported this service
+  useEffect(() => {
+    const checkExistingReport = async () => {
+      if (!user || !id) {
+        setHasExistingReport(false);
+        return;
+      }
+      
+      setCheckingReport(true);
+      try {
+        const { data, error } = await supabase
+          .from('service_reports')
+          .select('id')
+          .eq('service_id', id)
+          .eq('reporter_user_id', user.id)
+          .maybeSingle();
+        
+        if (error) {
+          console.error('Error checking existing report:', error);
+          setHasExistingReport(false);
+        } else {
+          setHasExistingReport(!!data);
+        }
+      } catch (error) {
+        console.error('Error checking existing report:', error);
+        setHasExistingReport(false);
+      } finally {
+        setCheckingReport(false);
+      }
+    };
+
+    checkExistingReport();
+  }, [user, id]);
 
   // Track view once when service is loaded
   useEffect(() => {
@@ -513,15 +549,23 @@ export default function ServiceDetails() {
 
             {/* Report Service Button - only for logged in users who don't own the service */}
             {user && !isOwner && (
-              <Button
-                onClick={() => setReportDialogOpen(true)}
-                variant="ghost"
-                size="sm"
-                className="w-full text-muted-foreground hover:text-destructive"
-              >
-                <Flag className="h-4 w-4 mr-2" />
-                {t('report.reportService')}
-              </Button>
+              hasExistingReport ? (
+                <div className="w-full text-center py-2 px-4 rounded-md bg-muted/50 text-sm text-muted-foreground">
+                  <Flag className="h-4 w-4 inline mr-2" />
+                  {t('report.alreadyReportedMessage')}
+                </div>
+              ) : (
+                <Button
+                  onClick={() => setReportDialogOpen(true)}
+                  variant="ghost"
+                  size="sm"
+                  className="w-full text-muted-foreground hover:text-destructive"
+                  disabled={checkingReport}
+                >
+                  <Flag className="h-4 w-4 mr-2" />
+                  {t('report.reportService')}
+                </Button>
+              )
             )}
           </div>
 

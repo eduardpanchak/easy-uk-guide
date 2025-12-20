@@ -642,6 +642,7 @@
     "submitted": "Pranešimas sėkmingai išsiųstas",
     "submitError": "Nepavyko išsiųsti pranešimo",
     "alreadyReported": "Jūs jau pranešėte apie šią paslaugą",
+    "alreadyReportedMessage": "Jūs jau pranešėte apie šią paslaugą. Jūsų pranešimas peržiūrimas.",
     "signInRequired": "Prisijunkite, kad pranešti"
   }
 }

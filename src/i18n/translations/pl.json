@@ -642,6 +642,7 @@
     "submitted": "Zgłoszenie wysłane pomyślnie",
     "submitError": "Nie udało się wysłać zgłoszenia",
     "alreadyReported": "Już zgłosiłeś tę usługę",
+    "alreadyReportedMessage": "Już zgłosiłeś tę usługę. Twoje zgłoszenie jest rozpatrywane.",
     "signInRequired": "Zaloguj się, aby zgłosić usługę"
   }
 }
