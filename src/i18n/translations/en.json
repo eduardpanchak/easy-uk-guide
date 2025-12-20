@@ -1209,6 +1209,7 @@
     "submitted": "Report submitted successfully",
     "submitError": "Failed to submit report",
     "alreadyReported": "You have already reported this service",
+    "alreadyReportedMessage": "You already reported this service. Your report is under review.",
     "signInRequired": "Please sign in to report a service"
   }
 }
