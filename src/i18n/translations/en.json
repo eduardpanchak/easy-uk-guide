@@ -451,7 +451,16 @@
     "newPhotos": "new photo(s) selected",
     "uploadNew": "Tap to upload new photos",
     "updated": "Service updated successfully!",
-    "failed": "Failed to update service. Please try again."
+    "failed": "Failed to update service. Please try again.",
+    "currentPlan": "Service Plan",
+    "currentPlanBadge": "Current",
+    "upgradeNote": "Payment required to upgrade",
+    "alreadyPremium": "You are already on the Premium plan. Downgrading is not available.",
+    "upgradeInfo": "Clicking upgrade will redirect you to complete payment first.",
+    "upgradeAndSave": "Upgrade to Premium",
+    "processing": "Processing...",
+    "upgradeError": "Failed to initiate upgrade. Please try again.",
+    "redirectingToPayment": "Redirecting to payment..."
   },
   "statistics": {
     "title": "Statistics",

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { ArrowLeft, Save, ImagePlus } from 'lucide-react';
+import { ArrowLeft, Save, ImagePlus, Crown } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useAuth } from '@/contexts/AuthContext';
-import { authService, dbService, storageService } from '@/services';
+import { authService, dbService, storageService, subscriptionService } from '@/services';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -38,6 +38,11 @@ export default function EditService() {
   const [selectedPhoto, setSelectedPhoto] = useState<File | null>(null);
   const [uploadedPhotoUrl, setUploadedPhotoUrl] = useState<string | null>(null);
   const [isUploadingPhoto, setIsUploadingPhoto] = useState(false);
+  
+  // Plan upgrade state
+  const [currentTier, setCurrentTier] = useState<'standard' | 'top'>('standard');
+  const [selectedTier, setSelectedTier] = useState<'standard' | 'top'>('standard');
+  const [isUpgrading, setIsUpgrading] = useState(false);
 
   useEffect(() => {
     if (user && id) {
@@ -72,6 +77,10 @@ export default function EditService() {
         if (data.photos && data.photos.length > 0) {
           setExistingPhotoUrl(data.photos[0]);
         }
+        // Set the current subscription tier
+        const tier = data.subscription_tier === 'top' ? 'top' : 'standard';
+        setCurrentTier(tier);
+        setSelectedTier(tier);
       }
     } catch (error) {
       console.error('Error fetching service:', error);
@@ -168,6 +177,42 @@ export default function EditService() {
       toast.error('Session expired. Please log in again.');
       navigate('/auth');
       return;
+    }
+
+    // Check if upgrading from standard to top - requires payment first
+    const isUpgradingPlan = currentTier === 'standard' && selectedTier === 'top';
+    
+    if (isUpgradingPlan) {
+      setIsUpgrading(true);
+      try {
+        // Store pending service data for after payment
+        localStorage.setItem('pendingServiceUpgrade', JSON.stringify({
+          serviceId: id,
+          formData,
+          selectedLanguages,
+          finalPhotoUrl,
+        }));
+        
+        // Initiate payment flow
+        const { data, error } = await subscriptionService.createServiceSubscription(id, 'top');
+        
+        if (error) {
+          toast.error(t('editService.upgradeError'));
+          return;
+        }
+        
+        if (data?.url) {
+          window.open(data.url, '_blank');
+          toast.info(t('editService.redirectingToPayment'));
+        }
+        return;
+      } catch (error) {
+        console.error('Payment initiation error:', error);
+        toast.error(t('editService.upgradeError'));
+        return;
+      } finally {
+        setIsUpgrading(false);
+      }
     }
 
     setIsSubmitting(true);
@@ -327,6 +372,78 @@ export default function EditService() {
             onChange={setSelectedLanguages}
             placeholder={t('languages.selectLanguages')}
           />
+        </div>
+
+        {/* Subscription Plan Upgrade */}
+        <div className="space-y-3">
+          <Label className="text-sm font-medium">
+            {t('editService.currentPlan')}
+          </Label>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            {/* Standard Tier */}
+            <button
+              type="button"
+              onClick={() => {
+                // Only allow selecting standard if already standard (no downgrade)
+                if (currentTier === 'standard') {
+                  setSelectedTier('standard');
+                }
+              }}
+              disabled={currentTier === 'top'}
+              className={`p-4 border-2 rounded-lg transition-all relative ${
+                selectedTier === 'standard'
+                  ? 'border-primary bg-primary/5'
+                  : 'border-border hover:border-primary/50'
+              } ${currentTier === 'top' ? 'opacity-50 cursor-not-allowed' : ''}`}
+            >
+              <div className="text-left">
+                <div className="font-semibold text-lg flex items-center gap-2">
+                  {t('addService.standardTier')}
+                  {currentTier === 'standard' && (
+                    <span className="text-xs bg-green-100 text-green-800 px-2 py-0.5 rounded-full">
+                      {t('editService.currentPlanBadge')}
+                    </span>
+                  )}
+                </div>
+                <div className="text-2xl font-bold text-green-600 my-2">{t('addService.freeForever')}</div>
+                <div className="text-sm text-muted-foreground">{t('addService.standardFeatures')}</div>
+              </div>
+            </button>
+
+            {/* Top/Premium Tier */}
+            <button
+              type="button"
+              onClick={() => setSelectedTier('top')}
+              className={`p-4 border-2 rounded-lg transition-all relative ${
+                selectedTier === 'top'
+                  ? 'border-primary bg-primary/5'
+                  : 'border-border hover:border-primary/50'
+              }`}
+            >
+              <div className="text-left">
+                <div className="font-semibold text-lg flex items-center gap-2">
+                  <Crown className="h-4 w-4 text-amber-500" />
+                  {t('addService.topTier')}
+                  {currentTier === 'top' && (
+                    <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full">
+                      {t('editService.currentPlanBadge')}
+                    </span>
+                  )}
+                </div>
+                <div className="text-2xl font-bold text-primary my-2">£4.99<span className="text-sm font-normal text-muted-foreground">/month</span></div>
+                <div className="text-sm text-muted-foreground">{t('addService.topFeatures')}</div>
+                {currentTier === 'standard' && selectedTier === 'top' && (
+                  <div className="text-xs text-primary mt-2 font-medium">{t('editService.upgradeNote')}</div>
+                )}
+              </div>
+            </button>
+          </div>
+          {currentTier === 'top' && (
+            <p className="text-xs text-muted-foreground italic">{t('editService.alreadyPremium')}</p>
+          )}
+          {currentTier === 'standard' && selectedTier === 'top' && (
+            <p className="text-xs text-primary italic">{t('editService.upgradeInfo')}</p>
+          )}
         </div>
 
         {/* Location Fields */}
@@ -509,10 +626,19 @@ export default function EditService() {
           type="submit" 
           className="w-full" 
           size="lg" 
-          disabled={isSubmitting || isUploadingPhoto}
+          disabled={isSubmitting || isUploadingPhoto || isUpgrading}
         >
-          <Save className="h-5 w-5 mr-2" />
-          {isSubmitting ? t('editService.saving') : isUploadingPhoto ? 'Uploading photo...' : t('editService.save')}
+          {currentTier === 'standard' && selectedTier === 'top' ? (
+            <>
+              <Crown className="h-5 w-5 mr-2" />
+              {isUpgrading ? t('editService.processing') : t('editService.upgradeAndSave')}
+            </>
+          ) : (
+            <>
+              <Save className="h-5 w-5 mr-2" />
+              {isSubmitting ? t('editService.saving') : isUploadingPhoto ? 'Uploading photo...' : t('editService.save')}
+            </>
+          )}
         </Button>
         {!existingPhotoUrl && !uploadedPhotoUrl && !isUploadingPhoto && (
           <p className="text-xs text-center text-muted-foreground">

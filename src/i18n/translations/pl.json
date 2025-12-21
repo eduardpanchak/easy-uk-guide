@@ -451,7 +451,16 @@
     "newPhotos": "nowych zdjęć wybranych",
     "uploadNew": "Dotknij, aby przesłać nowe zdjęcia",
     "updated": "Usługa została pomyślnie zaktualizowana!",
-    "failed": "Nie udało się zaktualizować usługi. Spróbuj ponownie."
+    "failed": "Nie udało się zaktualizować usługi. Spróbuj ponownie.",
+    "currentPlan": "Plan usługi",
+    "currentPlanBadge": "Aktualny",
+    "upgradeNote": "Wymagana płatność za uaktualnienie",
+    "alreadyPremium": "Jesteś już na planie Premium. Obniżenie planu nie jest dostępne.",
+    "upgradeInfo": "Kliknięcie uaktualnij przekieruje Cię do płatności.",
+    "upgradeAndSave": "Uaktualnij do Premium",
+    "processing": "Przetwarzanie...",
+    "upgradeError": "Nie udało się rozpocząć uaktualnienia. Spróbuj ponownie.",
+    "redirectingToPayment": "Przekierowywanie do płatności..."
   },
   "statistics": {
     "title": "Statystyki",
