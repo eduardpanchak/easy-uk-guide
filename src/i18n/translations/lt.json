@@ -451,7 +451,16 @@
     "newPhotos": "naujų nuotraukų pasirinkta",
     "uploadNew": "Bakstelėkite, kad įkeltumėte naujas nuotraukas",
     "updated": "Paslauga sėkmingai atnaujinta!",
-    "failed": "Nepavyko atnaujinti paslaugos. Bandykite dar kartą."
+    "failed": "Nepavyko atnaujinti paslaugos. Bandykite dar kartą.",
+    "currentPlan": "Paslaugos planas",
+    "currentPlanBadge": "Dabartinis",
+    "upgradeNote": "Reikalingas mokėjimas už atnaujinimą",
+    "alreadyPremium": "Jūs jau esate Premium plane. Perejimas į žemesnį planą negalimas.",
+    "upgradeInfo": "Paspaudus atnaujinti, būsite nukreipti į mokėjimą.",
+    "upgradeAndSave": "Atnaujinti iki Premium",
+    "processing": "Apdorojama...",
+    "upgradeError": "Nepavyko pradėti atnaujinimo. Bandykite dar kartą.",
+    "redirectingToPayment": "Nukreipiama į mokėjimą..."
   },
   "statistics": {
     "title": "Statistika",
