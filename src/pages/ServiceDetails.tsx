@@ -76,6 +76,7 @@ export default function ServiceDetails() {
   const [submittingReport, setSubmittingReport] = useState(false);
   const [hasExistingReport, setHasExistingReport] = useState(false);
   const [checkingReport, setCheckingReport] = useState(false);
+  const [hasReported, setHasReported] = useState(false);
 
   const isOwner = user && service?.user_id === user.id;
 
@@ -387,6 +388,7 @@ export default function ServiceDetails() {
       }
 
       toast.success(t('report.submitted'));
+      setHasReported(true);
       setReportDialogOpen(false);
       setReportReason('');
     } catch (error) {
@@ -549,7 +551,7 @@ export default function ServiceDetails() {
 
             {/* Report Service Button - only for logged in users who don't own the service */}
             {user && !isOwner && (
-              hasExistingReport ? (
+              hasExistingReport || hasReported ? (
                 <div className="w-full text-center py-2 px-4 rounded-md bg-muted/50 text-sm text-muted-foreground">
                   <Flag className="h-4 w-4 inline mr-2" />
                   {t('report.alreadyReportedMessage')}
