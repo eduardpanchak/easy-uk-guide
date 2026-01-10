@@ -605,6 +605,23 @@ export type Database = {
     }
     Functions: {
       cancel_expired_trials: { Args: never; Returns: undefined }
+      get_services_seeded_order: {
+        Args: { seed_value: number }
+        Returns: {
+          category: string
+          city: string
+          description: string
+          id: string
+          languages: string[]
+          latitude: number
+          longitude: number
+          photos: string[]
+          postcode: string
+          pricing: string
+          service_name: string
+          subscription_tier: string
+        }[]
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]

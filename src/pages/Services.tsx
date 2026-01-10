@@ -6,6 +6,7 @@ import { ServiceCard } from '@/components/ServiceCard';
 import { AdCard } from '@/components/AdCard';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useFilters } from '@/contexts/FilterContext';
+import { seededShuffle } from '@/lib/seededShuffle';
 import { supabase } from '@/integrations/supabase/client';
 import { advertisingService, Advertisement } from '@/services/advertisingService';
 import { Loader2, MapPin, Search, Save, X, Globe } from 'lucide-react';
@@ -40,7 +41,7 @@ const ADS_INTERVAL = 5; // Show an ad every 5 service cards
 
 export default function Services() {
   const { language, t } = useLanguage();
-  const { filters, setFilters } = useFilters();
+  const { filters, setFilters, orderSeed } = useFilters();
   const navigate = useNavigate();
   const { toast } = useToast();
   const [services, setServices] = useState<Service[]>([]);
@@ -63,7 +64,7 @@ export default function Services() {
     fetchServices();
     fetchAds();
     loadSavedFilters();
-  }, []);
+  }, [orderSeed]);
 
   const fetchAds = async () => {
     try {
@@ -190,11 +191,9 @@ export default function Services() {
   const fetchServices = async () => {
     try {
       setLoading(true);
+      // Use server-side seeded ordering function
       const { data, error } = await supabase
-        .from('services')
-        .select('id, service_name, description, category, pricing, photos, languages, subscription_tier, latitude, longitude, postcode, city')
-        .in('status', ['active', 'trial'])
-        .order('created_at', { ascending: false });
+        .rpc('get_services_seeded_order', { seed_value: orderSeed });
 
       if (error) {
         console.error('Error fetching services:', error);
@@ -280,20 +279,17 @@ export default function Services() {
       };
     }
 
-    // Apply regular sorting
-    filtered = filtered.sort((a, b) => {
-      if (sortBy === 'price') {
+    // Apply client-side sorting only for price; otherwise preserve server order (premium first, seeded random)
+    if (sortBy === 'price') {
+      filtered = filtered.sort((a, b) => {
         const priceA = parseFloat(a.pricing?.replace(/[^0-9.]/g, '') || '0');
         const priceB = parseFloat(b.pricing?.replace(/[^0-9.]/g, '') || '0');
         return priceA - priceB;
-      }
-      // Default: Premium first
-      const aIsPremium = a.subscription_tier === 'top' || a.subscription_tier === 'premium';
-      const bIsPremium = b.subscription_tier === 'top' || b.subscription_tier === 'premium';
-      if (aIsPremium && !bIsPremium) return -1;
-      if (!aIsPremium && bIsPremium) return 1;
-      return 0;
-    });
+      });
+    }
+    // For 'newest' or default, we preserve the server-side order which is already:
+    // 1. Premium/top tier first
+    // 2. Within each tier: seeded pseudo-random order
 
     return {
       servicesWithinRadius: filtered,
