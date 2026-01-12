@@ -121,7 +121,8 @@
     "edit": "Edit",
     "tips": "Tips",
     "important": "Important",
-    "notFound": "Not found"
+    "notFound": "Not found",
+    "optional": "optional"
   },
   "lists": {
     "myLists": "My Lists",
@@ -416,11 +417,26 @@
     "trialUsedForTier": "Trial already used",
     "paymentRequired": "Trial not available for selected plan. Payment will be required.",
     "locationSection": "Service Location",
+    "locationDescription": "Help customers find you with accurate location details",
+    "country": "Country",
+    "selectCity": "Select city",
+    "borough": "Borough / Area",
+    "selectBorough": "Select borough (optional)",
+    "noBorough": "Not specified",
+    "recommended": "recommended",
     "postcode": "Postcode",
-    "postcodePlaceholder": "e.g., SW1A 1AA",
+    "postcodePlaceholder": "e.g., SW1A 1AA or E11",
+    "postcodeHint": "Enter a valid UK postcode (e.g., SW1A 1AA or E11)",
     "city": "City",
     "cityPlaceholder": "e.g., London",
+    "address": "Address line",
+    "addressPlaceholder": "e.g., 123 High Street",
+    "addressHint": "Optional - for display only, does not affect search",
     "locationSet": "Location coordinates will be set automatically"
+  },
+  "validation": {
+    "postcodeRequired": "Please enter a valid UK postcode",
+    "postcodeInvalid": "Invalid UK postcode format. Use format like SW1A 1AA or E11"
   },
   "languages": {
     "selectLanguages": "Select languages..."
