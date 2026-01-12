@@ -416,11 +416,26 @@
     "availableLanguages": "Dostępne języki",
     "availableLanguagesDesc": "Wybierz języki, w których dostępna jest Twoja usługa",
     "locationSection": "Lokalizacja",
+    "locationDescription": "Pomóż klientom znaleźć Cię dzięki dokładnym danym lokalizacji",
+    "country": "Kraj",
+    "selectCity": "Wybierz miasto",
+    "borough": "Dzielnica",
+    "selectBorough": "Wybierz dzielnicę (opcjonalnie)",
+    "noBorough": "Nie określono",
+    "recommended": "zalecane",
     "postcode": "Kod pocztowy",
-    "postcodePlaceholder": "Wprowadź kod pocztowy",
+    "postcodePlaceholder": "np. SW1A 1AA lub E11",
+    "postcodeHint": "Wprowadź prawidłowy brytyjski kod pocztowy",
     "city": "Miasto",
-    "cityPlaceholder": "Wprowadź miasto",
+    "cityPlaceholder": "np. Londyn",
+    "address": "Adres",
+    "addressPlaceholder": "np. 123 High Street",
+    "addressHint": "Opcjonalnie - tylko do wyświetlania",
     "locationSet": "Lokalizacja ustawiona"
+  },
+  "validation": {
+    "postcodeRequired": "Wprowadź prawidłowy brytyjski kod pocztowy",
+    "postcodeInvalid": "Nieprawidłowy format kodu pocztowego"
   },
   "languages": {
     "selectLanguages": "Wybierz języki..."

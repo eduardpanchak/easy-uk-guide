@@ -416,11 +416,26 @@
     "availableLanguages": "Galimos kalbos",
     "availableLanguagesDesc": "Pasirinkite kalbas, kuriomis teikiama jūsų paslauga",
     "locationSection": "Vieta",
+    "locationDescription": "Padėkite klientams jus rasti su tikslia vietos informacija",
+    "country": "Šalis",
+    "selectCity": "Pasirinkite miestą",
+    "borough": "Rajonas",
+    "selectBorough": "Pasirinkite rajoną (neprivaloma)",
+    "noBorough": "Nenurodyta",
+    "recommended": "rekomenduojama",
     "postcode": "Pašto kodas",
-    "postcodePlaceholder": "Įveskite pašto kodą",
+    "postcodePlaceholder": "pvz. SW1A 1AA arba E11",
+    "postcodeHint": "Įveskite galiojantį JK pašto kodą",
     "city": "Miestas",
-    "cityPlaceholder": "Įveskite miestą",
+    "cityPlaceholder": "pvz. Londonas",
+    "address": "Adresas",
+    "addressPlaceholder": "pvz. 123 High Street",
+    "addressHint": "Neprivaloma - tik rodymui",
     "locationSet": "Vieta nustatyta"
+  },
+  "validation": {
+    "postcodeRequired": "Įveskite galiojantį JK pašto kodą",
+    "postcodeInvalid": "Neteisingas pašto kodo formatas"
   },
   "languages": {
     "selectLanguages": "Pasirinkite kalbas..."
