@@ -261,7 +261,12 @@
     "locationNotFound": "Vieta nerasta",
     "locationError": "Vietos paieškos klaida",
     "servicesWithinRadius": "Paslaugos {radius} km spinduliu",
-    "alsoNearby": "Taip pat netoliese"
+    "alsoNearby": "Taip pat netoliese",
+    "useMyLocation": "Naudoti mano vietą",
+    "usingYourLocation": "Naudojama jūsų dabartinė vieta",
+    "geolocationNotSupported": "Jūsų naršyklė nepalaiko geolokacijos",
+    "locationPermissionDenied": "Prieiga prie vietos uždrausta",
+    "locationUnavailable": "Nepavyko nustatyti jūsų vietos"
   },
   "serviceDetails": {
     "description": "Aprašymas",
