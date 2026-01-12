@@ -261,7 +261,12 @@
     "locationNotFound": "Местоположение не найдено",
     "locationError": "Ошибка поиска местоположения",
     "servicesWithinRadius": "Услуги в пределах {radius} км",
-    "alsoNearby": "Также рядом"
+    "alsoNearby": "Также рядом",
+    "useMyLocation": "Использовать моё местоположение",
+    "usingYourLocation": "Используется ваше текущее местоположение",
+    "geolocationNotSupported": "Геолокация не поддерживается вашим браузером",
+    "locationPermissionDenied": "Доступ к местоположению запрещён",
+    "locationUnavailable": "Не удалось определить ваше местоположение"
   },
   "serviceDetails": {
     "description": "Описание",

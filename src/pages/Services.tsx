@@ -9,7 +9,7 @@ import { useFilters } from '@/contexts/FilterContext';
 import { seededShuffle } from '@/lib/seededShuffle';
 import { supabase } from '@/integrations/supabase/client';
 import { advertisingService, Advertisement } from '@/services/advertisingService';
-import { Loader2, MapPin, Search, Save, X, Globe } from 'lucide-react';
+import { Loader2, MapPin, Search, Save, X, Globe, Navigation } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -59,6 +59,7 @@ export default function Services() {
   const [searchRadius, setSearchRadius] = useState(filters.searchRadius || 10);
   const [userLat, setUserLat] = useState<number | null>(filters.userLat);
   const [userLng, setUserLng] = useState<number | null>(filters.userLng);
+  const [isGettingLocation, setIsGettingLocation] = useState(false);
 
   useEffect(() => {
     fetchServices();
@@ -186,6 +187,43 @@ export default function Services() {
     } finally {
       setIsGeocodingPostcode(false);
     }
+  };
+
+  const handleUseMyLocation = () => {
+    if (!navigator.geolocation) {
+      toast({
+        title: t('services.geolocationNotSupported'),
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    setIsGettingLocation(true);
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        setUserLat(position.coords.latitude);
+        setUserLng(position.coords.longitude);
+        setShowNearby(true);
+        setSearchPostcode(''); // Clear postcode since we're using GPS
+        setIsGettingLocation(false);
+        toast({
+          title: t('services.locationFound'),
+          description: t('services.usingYourLocation'),
+        });
+      },
+      (error) => {
+        setIsGettingLocation(false);
+        console.warn('Geolocation error:', error.message);
+        toast({
+          title: t('services.locationError'),
+          description: error.code === 1 
+            ? t('services.locationPermissionDenied') 
+            : t('services.locationUnavailable'),
+          variant: 'destructive',
+        });
+      },
+      { enableHighAccuracy: false, timeout: 10000, maximumAge: 300000 }
+    );
   };
 
   const fetchServices = async () => {
@@ -348,6 +386,20 @@ export default function Services() {
                 )}
               </Button>
             </div>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleUseMyLocation}
+              disabled={isGettingLocation}
+              className="w-full"
+            >
+              {isGettingLocation ? (
+                <Loader2 className="h-4 w-4 animate-spin mr-2" />
+              ) : (
+                <Navigation className="h-4 w-4 mr-2" />
+              )}
+              {t('services.useMyLocation')}
+            </Button>
             {showNearby && userLat && userLng && (
               <div className="flex gap-2 items-center">
                 <label className="text-sm text-muted-foreground">{t('services.radius')}:</label>

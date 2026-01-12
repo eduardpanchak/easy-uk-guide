@@ -261,7 +261,12 @@
     "locationNotFound": "Lokalizacja nie znaleziona",
     "locationError": "Błąd wyszukiwania lokalizacji",
     "servicesWithinRadius": "Usługi w promieniu {radius} km",
-    "alsoNearby": "Również w pobliżu"
+    "alsoNearby": "Również w pobliżu",
+    "useMyLocation": "Użyj mojej lokalizacji",
+    "usingYourLocation": "Używam twojej bieżącej lokalizacji",
+    "geolocationNotSupported": "Geolokalizacja nie jest obsługiwana przez twoją przeglądarkę",
+    "locationPermissionDenied": "Odmówiono dostępu do lokalizacji",
+    "locationUnavailable": "Nie można uzyskać twojej lokalizacji"
   },
   "serviceDetails": {
     "description": "Opis",

@@ -261,7 +261,12 @@
     "locationNotFound": "Could not find this postcode",
     "locationError": "Error finding location",
     "servicesWithinRadius": "Services within {radius} km",
-    "alsoNearby": "Also nearby"
+    "alsoNearby": "Also nearby",
+    "useMyLocation": "Use my location",
+    "usingYourLocation": "Using your current location",
+    "geolocationNotSupported": "Geolocation is not supported by your browser",
+    "locationPermissionDenied": "Location permission was denied",
+    "locationUnavailable": "Unable to get your location"
   },
   "serviceDetails": {
     "description": "Description",
