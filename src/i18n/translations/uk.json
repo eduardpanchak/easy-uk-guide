@@ -121,7 +121,8 @@
     "edit": "Редагувати",
     "tips": "Поради",
     "important": "Важливо",
-    "notFound": "Не знайдено"
+    "notFound": "Не знайдено",
+    "optional": "необов'язково"
   },
   "lists": {
     "myLists": "Мої списки",
@@ -415,12 +416,27 @@
     "paymentRequired": "Пробний період недоступний для обраного плану. Потрібна оплата.",
     "availableLanguages": "Доступні мови",
     "availableLanguagesDesc": "Оберіть мови, якими доступна ваша послуга",
-    "locationSection": "Розташування",
+    "locationSection": "Розташування послуги",
+    "locationDescription": "Допоможіть клієнтам знайти вас з точними даними про місцезнаходження",
+    "country": "Країна",
+    "selectCity": "Оберіть місто",
+    "borough": "Район / Округ",
+    "selectBorough": "Оберіть район (необов'язково)",
+    "noBorough": "Не вказано",
+    "recommended": "рекомендовано",
     "postcode": "Поштовий індекс",
-    "postcodePlaceholder": "Введіть поштовий індекс",
+    "postcodePlaceholder": "напр., SW1A 1AA або E11",
+    "postcodeHint": "Введіть дійсний британський поштовий індекс (напр., SW1A 1AA або E11)",
     "city": "Місто",
-    "cityPlaceholder": "Введіть місто",
-    "locationSet": "Розташування встановлено"
+    "cityPlaceholder": "напр., Лондон",
+    "address": "Адреса",
+    "addressPlaceholder": "напр., 123 High Street",
+    "addressHint": "Необов'язково - лише для відображення, не впливає на пошук",
+    "locationSet": "Координати розташування будуть встановлені автоматично"
+  },
+  "validation": {
+    "postcodeRequired": "Будь ласка, введіть дійсний британський поштовий індекс",
+    "postcodeInvalid": "Недійсний формат британського поштового індексу. Використовуйте формат SW1A 1AA або E11"
   },
   "languages": {
     "selectLanguages": "Оберіть мови..."
