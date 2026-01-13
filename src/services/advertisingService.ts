@@ -17,9 +17,11 @@ export interface Advertisement {
   country?: string;
   city?: string;
   postcode?: string;
-  address?: string;
+  address?: string | null;
   is_paid?: boolean;
   paid_until?: string;
+  latitude?: number | null;
+  longitude?: number | null;
 }
 
 export interface AdLocationData {
@@ -28,7 +30,9 @@ export interface AdLocationData {
   country: string;
   city: string;
   postcode: string;
-  address: string;
+  address: string | null;
+  latitude?: number | null;
+  longitude?: number | null;
 }
 
 // Validation constants
@@ -139,6 +143,12 @@ export const advertisingService = {
       insertData.city = locationData.city;
       insertData.postcode = locationData.postcode;
       insertData.address = locationData.address;
+      if (locationData.latitude !== undefined) {
+        insertData.latitude = locationData.latitude;
+      }
+      if (locationData.longitude !== undefined) {
+        insertData.longitude = locationData.longitude;
+      }
     }
 
     const { data, error } = await supabase

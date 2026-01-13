@@ -495,12 +495,15 @@ export default function AddService() {
                 {t('addService.borough')}
                 <span className="text-muted-foreground text-xs ml-1">({t('addService.recommended')})</span>
               </Label>
-              <Select value={formData.borough} onValueChange={(value) => handleSelectChange('borough', value)}>
+              <Select 
+                value={formData.borough || 'none'} 
+                onValueChange={(value) => handleSelectChange('borough', value === 'none' ? '' : value)}
+              >
                 <SelectTrigger>
                   <SelectValue placeholder={t('addService.selectBorough')} />
                 </SelectTrigger>
                 <SelectContent className="bg-background max-h-[300px]">
-                  <SelectItem value="">{t('addService.noBorough')}</SelectItem>
+                  <SelectItem value="none">{t('addService.noBorough')}</SelectItem>
                   {LONDON_BOROUGHS.map((borough) => (
                     <SelectItem key={borough.value} value={borough.value}>
                       {borough.label}

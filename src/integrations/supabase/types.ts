@@ -27,6 +27,8 @@ export type Database = {
           impressions: number
           is_paid: boolean | null
           languages: string[] | null
+          latitude: number | null
+          longitude: number | null
           media_type: string
           media_url: string
           paid_until: string | null
@@ -48,6 +50,8 @@ export type Database = {
           impressions?: number
           is_paid?: boolean | null
           languages?: string[] | null
+          latitude?: number | null
+          longitude?: number | null
           media_type: string
           media_url: string
           paid_until?: string | null
@@ -69,6 +73,8 @@ export type Database = {
           impressions?: number
           is_paid?: boolean | null
           languages?: string[] | null
+          latitude?: number | null
+          longitude?: number | null
           media_type?: string
           media_url?: string
           paid_until?: string | null

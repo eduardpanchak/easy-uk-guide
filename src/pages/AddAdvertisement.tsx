@@ -10,6 +10,9 @@ import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { advertisingService } from '@/services/advertisingService';
 import { LanguageMultiSelect } from '@/components/LanguageMultiSelect';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { validateUKPostcode, UK_CITIES, LONDON_BOROUGHS, getCityLabel, getBoroughLabel } from '@/lib/ukLocation';
+import { geocodePostcode } from '@/lib/geocoding';
 import { Loader2, Upload, Image, Video, X } from 'lucide-react';
 
 const CATEGORIES = [
@@ -38,9 +41,10 @@ export default function AddAdvertisement() {
   const [targetUrl, setTargetUrl] = useState('');
   const [category, setCategory] = useState('');
   const [selectedLanguages, setSelectedLanguages] = useState<string[]>(['en']);
-  const [country, setCountry] = useState('');
-  const [city, setCity] = useState('');
+  const [city, setCity] = useState('london');
+  const [borough, setBorough] = useState('');
   const [postcode, setPostcode] = useState('');
+  const [postcodeError, setPostcodeError] = useState<string | null>(null);
   const [address, setAddress] = useState('');
   const [mediaFile, setMediaFile] = useState<File | null>(null);
   const [mediaPreview, setMediaPreview] = useState<string | null>(null);
@@ -110,10 +114,8 @@ export default function AddAdvertisement() {
       targetUrl.trim() &&
       category &&
       selectedLanguages.length > 0 &&
-      country.trim() &&
-      city.trim() &&
-      postcode.trim() &&
-      address.trim()
+      city &&
+      postcode.trim()
     );
   };
 
@@ -127,6 +129,19 @@ export default function AddAdvertisement() {
       });
       return;
     }
+
+    // Validate postcode (required and must be valid UK format)
+    const postcodeValidation = validateUKPostcode(postcode);
+    if (!postcodeValidation.isValid) {
+      setPostcodeError(t('validation.postcodeInvalid'));
+      toast({
+        title: t('validation.postcodeInvalid'),
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    const normalizedPostcode = postcodeValidation.normalized;
 
     // Validate URL
     try {
@@ -142,6 +157,19 @@ export default function AddAdvertisement() {
     setIsUploading(true);
 
     try {
+      // Geocode using the validated postcode
+      let lat: number | null = null;
+      let lng: number | null = null;
+      
+      const geocodeResult = await geocodePostcode(normalizedPostcode);
+      if (geocodeResult) {
+        lat = geocodeResult.latitude;
+        lng = geocodeResult.longitude;
+      } else {
+        // If geocoding fails, show error but don't block (postcode is valid format)
+        console.warn('Geocoding failed for postcode:', normalizedPostcode);
+      }
+
       // Upload media
       const { url, error: uploadError } = await advertisingService.uploadAdMedia(
         user.id,
@@ -151,6 +179,10 @@ export default function AddAdvertisement() {
       if (uploadError || !url) {
         throw new Error('Failed to upload media');
       }
+
+      // Get display value for city/borough
+      const cityLabel = getCityLabel(city) || city;
+      const boroughLabel = borough ? getBoroughLabel(borough) : null;
 
       // Create ad (pending status - will be activated after payment)
       const { error: createError } = await advertisingService.createAd(
@@ -162,10 +194,12 @@ export default function AddAdvertisement() {
         {
           category,
           languages: selectedLanguages,
-          country,
-          city,
-          postcode,
-          address,
+          country: 'United Kingdom',
+          city: boroughLabel || cityLabel,
+          postcode: normalizedPostcode,
+          address: address || null,
+          latitude: lat,
+          longitude: lng,
         }
       );
 
@@ -316,51 +350,96 @@ export default function AddAdvertisement() {
           </div>
 
           {/* Location Section */}
-          <div className="space-y-4">
+          <div className="space-y-4 p-4 bg-muted/50 rounded-lg">
             <Label className="text-base font-semibold">{t('ads.locationSection')}</Label>
+            <p className="text-sm text-muted-foreground">{t('addService.locationDescription')}</p>
             
+            {/* Country (fixed) */}
             <div className="space-y-2">
-              <Label htmlFor="country">{t('ads.country')} *</Label>
-              <Input
-                id="country"
-                value={country}
-                onChange={(e) => setCountry(e.target.value)}
-                placeholder={t('ads.countryPlaceholder')}
-                required
-              />
+              <Label className="text-sm font-medium text-muted-foreground">
+                {t('ads.country')}
+              </Label>
+              <div className="px-3 py-2 border border-border rounded-lg bg-muted/50 text-muted-foreground">
+                🇬🇧 United Kingdom
+              </div>
             </div>
-
+            
+            {/* City */}
             <div className="space-y-2">
               <Label htmlFor="city">{t('ads.city')} *</Label>
-              <Input
-                id="city"
-                value={city}
-                onChange={(e) => setCity(e.target.value)}
-                placeholder={t('ads.cityPlaceholder')}
-                required
-              />
+              <Select value={city} onValueChange={setCity}>
+                <SelectTrigger>
+                  <SelectValue placeholder={t('addService.selectCity')} />
+                </SelectTrigger>
+                <SelectContent className="bg-background">
+                  {UK_CITIES.map((c) => (
+                    <SelectItem key={c.value} value={c.value}>
+                      {c.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
 
+            {/* Borough (only for London) */}
+            {city === 'london' && (
+              <div className="space-y-2">
+                <Label htmlFor="borough">
+                  {t('addService.borough')}
+                  <span className="text-muted-foreground text-xs ml-1">({t('addService.recommended')})</span>
+                </Label>
+                <Select 
+                  value={borough || 'none'} 
+                  onValueChange={(val) => setBorough(val === 'none' ? '' : val)}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder={t('addService.selectBorough')} />
+                  </SelectTrigger>
+                  <SelectContent className="bg-background max-h-[300px]">
+                    <SelectItem value="none">{t('addService.noBorough')}</SelectItem>
+                    {LONDON_BOROUGHS.map((b) => (
+                      <SelectItem key={b.value} value={b.value}>
+                        {b.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
+
+            {/* Postcode */}
             <div className="space-y-2">
               <Label htmlFor="postcode">{t('ads.postcode')} *</Label>
               <Input
                 id="postcode"
                 value={postcode}
-                onChange={(e) => setPostcode(e.target.value)}
-                placeholder={t('ads.postcodePlaceholder')}
-                required
+                onChange={(e) => {
+                  const value = e.target.value.toUpperCase();
+                  setPostcode(value);
+                  setPostcodeError(null);
+                }}
+                placeholder={t('addService.postcodePlaceholder')}
+                className={postcodeError ? 'border-destructive' : ''}
               />
+              {postcodeError && (
+                <p className="text-sm text-destructive">{postcodeError}</p>
+              )}
+              <p className="text-xs text-muted-foreground">{t('addService.postcodeHint')}</p>
             </div>
 
+            {/* Address */}
             <div className="space-y-2">
-              <Label htmlFor="address">{t('ads.address')} *</Label>
+              <Label htmlFor="address">
+                {t('ads.address')}
+                <span className="text-muted-foreground text-xs ml-1">({t('common.optional')})</span>
+              </Label>
               <Input
                 id="address"
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}
-                placeholder={t('ads.addressPlaceholder')}
-                required
+                placeholder={t('addService.addressPlaceholder')}
               />
+              <p className="text-xs text-muted-foreground">{t('addService.addressHint')}</p>
             </div>
           </div>
 
