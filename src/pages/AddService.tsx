@@ -232,9 +232,8 @@ export default function AddService() {
         lng = geocodeResult.longitude;
       }
 
-      // Get display values for city and borough
+      // Get display values for city
       const cityLabel = getCityLabel(formData.city) || formData.city;
-      const boroughLabel = formData.borough ? getBoroughLabel(formData.borough) : null;
 
       const serviceData = {
         user_id: user.id,
@@ -242,7 +241,8 @@ export default function AddService() {
         description: formData.description,
         category: formData.category,
         address: formData.address || null,
-        city: boroughLabel || cityLabel || null, // Store borough if selected, otherwise city
+        city: cityLabel || null,
+        borough: formData.borough || null,
         postcode: normalizedPostcode,
         country: 'United Kingdom',
         pricing: formData.price || null,

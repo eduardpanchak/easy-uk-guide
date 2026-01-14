@@ -416,6 +416,7 @@ export type Database = {
       services: {
         Row: {
           address: string | null
+          borough: string | null
           category: string
           city: string | null
           click_count: number | null
@@ -448,6 +449,7 @@ export type Database = {
         }
         Insert: {
           address?: string | null
+          borough?: string | null
           category: string
           city?: string | null
           click_count?: number | null
@@ -480,6 +482,7 @@ export type Database = {
         }
         Update: {
           address?: string | null
+          borough?: string | null
           category?: string
           city?: string | null
           click_count?: number | null
@@ -614,8 +617,10 @@ export type Database = {
       get_services_seeded_order: {
         Args: { seed_value: number }
         Returns: {
+          borough: string
           category: string
           city: string
+          country: string
           description: string
           id: string
           languages: string[]

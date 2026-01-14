@@ -266,7 +266,11 @@
     "usingYourLocation": "Naudojama jūsų dabartinė vieta",
     "geolocationNotSupported": "Jūsų naršyklė nepalaiko geolokacijos",
     "locationPermissionDenied": "Prieiga prie vietos uždrausta",
-    "locationUnavailable": "Nepavyko nustatyti jūsų vietos"
+    "locationUnavailable": "Nepavyko nustatyti jūsų vietos",
+    "country": "Šalis",
+    "allCountries": "Visos šalys",
+    "unitedKingdom": "Jungtinė Karalystė",
+    "allBoroughs": "Visi rajonai"
   },
   "serviceDetails": {
     "description": "Aprašymas",

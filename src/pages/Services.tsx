@@ -16,6 +16,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { calculateDistance, geocodePostcode, RADIUS_OPTIONS } from '@/lib/geocoding';
 import { useToast } from '@/hooks/use-toast';
 import { LanguageMultiSelect } from '@/components/LanguageMultiSelect';
+import { LONDON_BOROUGHS } from '@/lib/ukLocation';
 
 interface Service {
   id: string;
@@ -30,6 +31,8 @@ interface Service {
   longitude: number | null;
   postcode: string | null;
   city: string | null;
+  country: string | null;
+  borough: string | null;
 }
 
 interface ServiceWithDistance extends Service {
@@ -60,6 +63,8 @@ export default function Services() {
   const [userLat, setUserLat] = useState<number | null>(filters.userLat);
   const [userLng, setUserLng] = useState<number | null>(filters.userLng);
   const [isGettingLocation, setIsGettingLocation] = useState(false);
+  const [selectedCountry, setSelectedCountry] = useState(filters.selectedCountry || 'all');
+  const [selectedBorough, setSelectedBorough] = useState(filters.selectedBorough || 'all');
 
   useEffect(() => {
     fetchServices();
@@ -88,8 +93,10 @@ export default function Services() {
       searchRadius,
       userLat,
       userLng,
+      selectedCountry,
+      selectedBorough,
     });
-  }, [searchText, selectedCategory, sortBy, showNearby, selectedLanguageFilter, searchPostcode, searchRadius, userLat, userLng, setFilters]);
+  }, [searchText, selectedCategory, sortBy, showNearby, selectedLanguageFilter, searchPostcode, searchRadius, userLat, userLng, selectedCountry, selectedBorough, setFilters]);
 
   const loadSavedFilters = () => {
     try {
@@ -105,6 +112,8 @@ export default function Services() {
         setSearchRadius(savedFilters.searchRadius || 10);
         setUserLat(savedFilters.userLat || null);
         setUserLng(savedFilters.userLng || null);
+        setSelectedCountry(savedFilters.selectedCountry || 'all');
+        setSelectedBorough(savedFilters.selectedBorough || 'all');
       }
     } catch (error) {
       console.error('Error loading saved filters:', error);
@@ -123,6 +132,8 @@ export default function Services() {
         searchRadius,
         userLat,
         userLng,
+        selectedCountry,
+        selectedBorough,
       };
       localStorage.setItem(SAVED_FILTERS_KEY, JSON.stringify(filterData));
       toast({
@@ -145,6 +156,8 @@ export default function Services() {
       setSearchRadius(10);
       setUserLat(null);
       setUserLng(null);
+      setSelectedCountry('all');
+      setSelectedBorough('all');
       toast({
         title: t('services.filterCleared'),
       });
@@ -259,10 +272,25 @@ export default function Services() {
       return { ...service, distance };
     });
 
-    // Apply category and language filters first
+    // Apply category, country, borough, and language filters first
     let filtered = servicesWithDistance.filter(service => {
       // Category filter
       if (selectedCategory !== 'all' && service.category !== selectedCategory) {
+        return false;
+      }
+      
+      // Country filter
+      if (selectedCountry !== 'all') {
+        // Match services with "United Kingdom" or "GB" country
+        const serviceCountry = service.country?.toLowerCase() || '';
+        const isUK = serviceCountry.includes('united kingdom') || serviceCountry === 'gb';
+        if (selectedCountry === 'gb' && !isUK) {
+          return false;
+        }
+      }
+      
+      // Borough filter - match against borough field
+      if (selectedBorough !== 'all' && service.borough !== selectedBorough) {
         return false;
       }
       
@@ -333,7 +361,7 @@ export default function Services() {
       servicesWithinRadius: filtered,
       servicesNearby: [],
     };
-  }, [services, showNearby, userLat, userLng, searchRadius, selectedCategory, selectedLanguageFilter, searchText, sortBy]);
+  }, [services, showNearby, userLat, userLng, searchRadius, selectedCategory, selectedLanguageFilter, searchText, sortBy, selectedCountry, selectedBorough]);
 
   const formatDistance = (distance: number | null) => {
     if (distance === null) return null;
@@ -470,6 +498,37 @@ export default function Services() {
                 {showNearby && <SelectItem value="distance">{t('services.sortByDistance')}</SelectItem>}
               </SelectContent>
             </Select>
+          </div>
+
+          {/* Country and Borough Filters */}
+          <div className="flex gap-2 items-center flex-wrap">
+            {/* Country Filter */}
+            <Select value={selectedCountry} onValueChange={setSelectedCountry}>
+              <SelectTrigger className="w-[160px] h-9">
+                <SelectValue placeholder={t('services.country')} />
+              </SelectTrigger>
+              <SelectContent className="bg-background z-50">
+                <SelectItem value="all">{t('services.allCountries')}</SelectItem>
+                <SelectItem value="gb">{t('services.unitedKingdom')}</SelectItem>
+              </SelectContent>
+            </Select>
+            
+            {/* Borough Filter - only show when UK is selected */}
+            {selectedCountry === 'gb' && (
+              <Select value={selectedBorough} onValueChange={setSelectedBorough}>
+                <SelectTrigger className="w-[180px] h-9">
+                  <SelectValue placeholder={t('services.allBoroughs')} />
+                </SelectTrigger>
+                <SelectContent className="bg-background z-50 max-h-[300px]">
+                  <SelectItem value="all">{t('services.allBoroughs')}</SelectItem>
+                  {LONDON_BOROUGHS.map((borough) => (
+                    <SelectItem key={borough.value} value={borough.value}>
+                      {borough.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            )}
           </div>
           
           {/* Language Filter */}

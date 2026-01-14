@@ -266,7 +266,11 @@
     "usingYourLocation": "Используется ваше текущее местоположение",
     "geolocationNotSupported": "Геолокация не поддерживается вашим браузером",
     "locationPermissionDenied": "Доступ к местоположению запрещён",
-    "locationUnavailable": "Не удалось определить ваше местоположение"
+    "locationUnavailable": "Не удалось определить ваше местоположение",
+    "country": "Страна",
+    "allCountries": "Все страны",
+    "unitedKingdom": "Великобритания",
+    "allBoroughs": "Все районы"
   },
   "serviceDetails": {
     "description": "Описание",
