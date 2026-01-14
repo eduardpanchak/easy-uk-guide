@@ -267,7 +267,11 @@
     "usingYourLocation": "Використовується ваше поточне місцезнаходження",
     "geolocationNotSupported": "Геолокація не підтримується вашим браузером",
     "locationPermissionDenied": "Доступ до місцезнаходження заборонено",
-    "locationUnavailable": "Не вдалося визначити ваше місцезнаходження"
+    "locationUnavailable": "Не вдалося визначити ваше місцезнаходження",
+    "country": "Країна",
+    "allCountries": "Всі країни",
+    "unitedKingdom": "Великобританія",
+    "allBoroughs": "Всі райони"
   },
   "serviceDetails": {
     "description": "Опис",

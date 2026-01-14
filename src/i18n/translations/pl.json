@@ -266,7 +266,11 @@
     "usingYourLocation": "Używam twojej bieżącej lokalizacji",
     "geolocationNotSupported": "Geolokalizacja nie jest obsługiwana przez twoją przeglądarkę",
     "locationPermissionDenied": "Odmówiono dostępu do lokalizacji",
-    "locationUnavailable": "Nie można uzyskać twojej lokalizacji"
+    "locationUnavailable": "Nie można uzyskać twojej lokalizacji",
+    "country": "Kraj",
+    "allCountries": "Wszystkie kraje",
+    "unitedKingdom": "Wielka Brytania",
+    "allBoroughs": "Wszystkie dzielnice"
   },
   "serviceDetails": {
     "description": "Opis",

@@ -267,7 +267,11 @@
     "usingYourLocation": "Using your current location",
     "geolocationNotSupported": "Geolocation is not supported by your browser",
     "locationPermissionDenied": "Location permission was denied",
-    "locationUnavailable": "Unable to get your location"
+    "locationUnavailable": "Unable to get your location",
+    "country": "Country",
+    "allCountries": "All Countries",
+    "unitedKingdom": "United Kingdom",
+    "allBoroughs": "All Boroughs"
   },
   "serviceDetails": {
     "description": "Description",

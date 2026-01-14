@@ -26,6 +26,8 @@ interface ServiceFilters {
   searchRadius: number;
   userLat: number | null;
   userLng: number | null;
+  selectedCountry: string;
+  selectedBorough: string;
 }
 
 interface FilterContextType {
@@ -48,6 +50,8 @@ export const FilterProvider = ({ children }: { children: ReactNode }) => {
     searchRadius: 10,
     userLat: null,
     userLng: null,
+    selectedCountry: 'all',
+    selectedBorough: 'all',
   });
 
   const [orderSeed, setOrderSeed] = useState<number>(() => getOrCreateSeed());

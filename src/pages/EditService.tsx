@@ -65,6 +65,7 @@ export default function EditService() {
       if (data && data.user_id === user.id) {
         const socialLinks = data.social_links as { website?: string } | null;
         const existingCity = (data as any).city || '';
+        const existingBorough = (data as any).borough || '';
         // Try to match existing city to our dropdown values
         const cityValue = existingCity.toLowerCase().includes('london') ? 'london' : 'london';
         
@@ -74,7 +75,7 @@ export default function EditService() {
           category: data.category || 'repair',
           address: data.address || '',
           city: cityValue,
-          borough: '', // Borough will need to be re-selected
+          borough: existingBorough,
           postcode: (data as any).postcode || '',
           country: 'United Kingdom',
           price: data.pricing || '',
@@ -265,9 +266,8 @@ export default function EditService() {
         lng = geocodeResult.longitude;
       }
 
-      // Get display values for city and borough
+      // Get display value for city
       const cityLabel = getCityLabel(formData.city) || formData.city;
-      const boroughLabel = formData.borough ? getBoroughLabel(formData.borough) : null;
 
       // Update service in database
       const { error: updateError } = await dbService.updateService(id, {
@@ -275,7 +275,8 @@ export default function EditService() {
         description: formData.description,
         category: formData.category,
         address: formData.address || null,
-        city: boroughLabel || cityLabel || null,
+        city: cityLabel || null,
+        borough: formData.borough || null,
         postcode: normalizedPostcode,
         country: 'United Kingdom',
         pricing: formData.price || null,
