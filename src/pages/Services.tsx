@@ -81,11 +81,12 @@ export default function Services() {
     }
   };
 
-  // Filter ads based on country and borough selection
+  // Filter and sort ads based on country, borough, and location
   const filteredAds = useMemo(() => {
     if (ads.length === 0) return [];
     
-    return ads.filter(ad => {
+    // First apply country and borough filters
+    const filtered = ads.filter(ad => {
       // Country filter
       if (selectedCountry !== 'all') {
         const adCountry = ad.country?.toLowerCase() || '';
@@ -104,7 +105,37 @@ export default function Services() {
       
       return true;
     });
-  }, [ads, selectedCountry, selectedBorough]);
+
+    // Check if location search is active (user coords exist)
+    const locationSearchActive = userLat !== null && userLng !== null;
+    
+    if (!locationSearchActive) {
+      // No location search - return filtered ads in original order
+      return filtered;
+    }
+
+    // Location search is active - sort by distance
+    // Separate ads with valid coords from those without
+    const adsWithCoords = filtered.filter(ad => 
+      ad.latitude !== null && ad.latitude !== undefined && 
+      ad.longitude !== null && ad.longitude !== undefined
+    );
+    const adsWithoutCoords = filtered.filter(ad => 
+      ad.latitude === null || ad.latitude === undefined || 
+      ad.longitude === null || ad.longitude === undefined
+    );
+
+    // Sort ads with coords by distance (closest first)
+    const sortedByDistance = adsWithCoords
+      .map(ad => ({
+        ...ad,
+        distance: calculateDistance(userLat, userLng, ad.latitude!, ad.longitude!)
+      }))
+      .sort((a, b) => a.distance - b.distance);
+
+    // Return nearby ads first, then fill with remaining ads
+    return [...sortedByDistance, ...adsWithoutCoords];
+  }, [ads, selectedCountry, selectedBorough, userLat, userLng]);
 
   // Sync local state with context on change
   useEffect(() => {
