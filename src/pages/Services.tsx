@@ -385,18 +385,20 @@ export default function Services() {
       const nearbyRange = filtered.filter(s => 
         s.distance !== null && s.distance > searchRadius && s.distance <= searchRadius + 20
       );
+      // Services without coordinates - include at the end, not excluded
+      const withoutCoords = filtered.filter(s => s.distance === null);
 
-      // If nothing within radius, show nearest anyway
+      // If nothing within radius, show nearest with coords first, then those without
       if (withinRadius.length === 0 && nearbyRange.length === 0) {
         const withLocation = filtered.filter(s => s.distance !== null);
         return {
-          servicesWithinRadius: withLocation.slice(0, 10),
+          servicesWithinRadius: [...withLocation.slice(0, 10), ...withoutCoords],
           servicesNearby: [],
         };
       }
 
       return {
-        servicesWithinRadius: withinRadius,
+        servicesWithinRadius: [...withinRadius, ...withoutCoords],
         servicesNearby: nearbyRange,
       };
     }
