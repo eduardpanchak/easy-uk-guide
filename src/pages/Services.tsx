@@ -81,6 +81,31 @@ export default function Services() {
     }
   };
 
+  // Filter ads based on country and borough selection
+  const filteredAds = useMemo(() => {
+    if (ads.length === 0) return [];
+    
+    return ads.filter(ad => {
+      // Country filter
+      if (selectedCountry !== 'all') {
+        const adCountry = ad.country?.toLowerCase() || '';
+        const isUK = adCountry.includes('united kingdom') || adCountry === 'gb';
+        if (selectedCountry === 'gb' && !isUK) {
+          return false;
+        }
+      }
+      
+      // Borough filter - ads store borough in city field
+      if (selectedBorough !== 'all') {
+        if (ad.city !== selectedBorough) {
+          return false;
+        }
+      }
+      
+      return true;
+    });
+  }, [ads, selectedCountry, selectedBorough]);
+
   // Sync local state with context on change
   useEffect(() => {
     setFilters({
@@ -601,13 +626,13 @@ export default function Services() {
                       onClick={() => navigate(`/services/${service.id}`)}
                     />
                     {/* Insert ad after every ADS_INTERVAL services */}
-                    {ads.length > 0 && (index + 1) % ADS_INTERVAL === 0 && (
+                    {filteredAds.length > 0 && (index + 1) % ADS_INTERVAL === 0 && (
                       <AdCard
                         key={`ad-${Math.floor(index / ADS_INTERVAL)}`}
-                        id={ads[Math.floor(index / ADS_INTERVAL) % ads.length].id}
-                        mediaUrl={ads[Math.floor(index / ADS_INTERVAL) % ads.length].media_url}
-                        mediaType={ads[Math.floor(index / ADS_INTERVAL) % ads.length].media_type}
-                        targetUrl={ads[Math.floor(index / ADS_INTERVAL) % ads.length].target_url}
+                        id={filteredAds[Math.floor(index / ADS_INTERVAL) % filteredAds.length].id}
+                        mediaUrl={filteredAds[Math.floor(index / ADS_INTERVAL) % filteredAds.length].media_url}
+                        mediaType={filteredAds[Math.floor(index / ADS_INTERVAL) % filteredAds.length].media_type}
+                        targetUrl={filteredAds[Math.floor(index / ADS_INTERVAL) % filteredAds.length].target_url}
                       />
                     )}
                   </React.Fragment>
