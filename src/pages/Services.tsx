@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState, useMemo, useRef, useLayoutEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Header } from '@/components/Header';
 import { BottomNav } from '@/components/BottomNav';
@@ -6,7 +6,7 @@ import { ServiceCard } from '@/components/ServiceCard';
 import { AdCard } from '@/components/AdCard';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useFilters } from '@/contexts/FilterContext';
-import { seededShuffle } from '@/lib/seededShuffle';
+// seededShuffle no longer used directly - ordering done server-side
 import { supabase } from '@/integrations/supabase/client';
 import { advertisingService, Advertisement } from '@/services/advertisingService';
 import { Loader2, MapPin, Search, Save, X, Globe, Navigation } from 'lucide-react';
@@ -44,13 +44,23 @@ const ADS_INTERVAL = 5; // Show an ad every 5 service cards
 
 export default function Services() {
   const { language, t } = useLanguage();
-  const { filters, setFilters, orderSeed } = useFilters();
+  const { 
+    filters, 
+    setFilters, 
+    orderSeed, 
+    scrollState, 
+    saveScrollPosition, 
+    markStateRestored,
+    cachedServices,
+    setCachedServices,
+  } = useFilters();
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [services, setServices] = useState<Service[]>([]);
+  const [services, setServices] = useState<Service[]>(cachedServices);
   const [ads, setAds] = useState<Advertisement[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(!scrollState.hasRestoredState);
   const [isGeocodingPostcode, setIsGeocodingPostcode] = useState(false);
+  const hasRestoredScrollRef = useRef(false);
   
   // Local state synced with context
   const [searchText, setSearchText] = useState(filters.searchText);
@@ -66,11 +76,43 @@ export default function Services() {
   const [selectedCountry, setSelectedCountry] = useState(filters.selectedCountry || 'all');
   const [selectedBorough, setSelectedBorough] = useState(filters.selectedBorough || 'all');
 
+  // Only fetch if we don't have a saved state to restore
   useEffect(() => {
-    fetchServices();
-    fetchAds();
-    loadSavedFilters();
+    if (!scrollState.hasRestoredState || cachedServices.length === 0) {
+      fetchServices();
+      fetchAds();
+      loadSavedFilters();
+    } else {
+      // We have saved state - just load ads
+      fetchAds();
+    }
   }, [orderSeed]);
+
+  // Restore scroll position after list renders
+  useLayoutEffect(() => {
+    if (!loading && scrollState.hasRestoredState && scrollState.scrollPosition > 0 && !hasRestoredScrollRef.current) {
+      hasRestoredScrollRef.current = true;
+      // Use requestAnimationFrame to ensure DOM is painted
+      requestAnimationFrame(() => {
+        window.scrollTo(0, scrollState.scrollPosition);
+        markStateRestored();
+      });
+    }
+  }, [loading, scrollState.hasRestoredState, scrollState.scrollPosition, markStateRestored]);
+
+  // Reset the scroll restoration ref when component unmounts
+  useEffect(() => {
+    return () => {
+      hasRestoredScrollRef.current = false;
+    };
+  }, []);
+
+  const handleServiceClick = (serviceId: string) => {
+    // Save current scroll position and cache services before navigating
+    saveScrollPosition(window.scrollY);
+    setCachedServices(services);
+    navigate(`/services/${serviceId}`);
+  };
 
   const fetchAds = async () => {
     try {
@@ -307,7 +349,9 @@ export default function Services() {
         return;
       }
 
-      setServices(data || []);
+      const serviceData = data || [];
+      setServices(serviceData);
+      setCachedServices(serviceData);
     } catch (error) {
       console.error('Error fetching services:', error);
     } finally {
@@ -656,7 +700,7 @@ export default function Services() {
                       photo={service.photos?.[0] || null}
                       subscriptionTier={service.subscription_tier}
                       distance={formatDistance(service.distance)}
-                      onClick={() => navigate(`/services/${service.id}`)}
+                      onClick={() => handleServiceClick(service.id)}
                     />
                     {/* Insert ad after every ADS_INTERVAL services */}
                     {filteredAds.length > 0 && (index + 1) % ADS_INTERVAL === 0 && (
@@ -690,7 +734,7 @@ export default function Services() {
                     photo={service.photos?.[0] || null}
                     subscriptionTier={service.subscription_tier}
                     distance={formatDistance(service.distance)}
-                    onClick={() => navigate(`/services/${service.id}`)}
+                    onClick={() => handleServiceClick(service.id)}
                   />
                 ))}
               </div>
