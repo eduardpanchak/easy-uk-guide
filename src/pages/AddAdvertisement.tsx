@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate, Navigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -13,7 +13,7 @@ import { LanguageMultiSelect } from '@/components/LanguageMultiSelect';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { validateUKPostcode, UK_CITIES, LONDON_BOROUGHS, getCityLabel, getBoroughLabel } from '@/lib/ukLocation';
 import { geocodePostcode } from '@/lib/geocoding';
-import { Loader2, Upload, Image, Video, X } from 'lucide-react';
+import { Loader2, Upload, Image, Video, X, Gift, CreditCard } from 'lucide-react';
 
 const CATEGORIES = [
   { value: 'beauty', labelKey: 'categories.beauty' },
@@ -51,10 +51,38 @@ export default function AddAdvertisement() {
   const [mediaType, setMediaType] = useState<'photo' | 'video' | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [isValidating, setIsValidating] = useState(false);
+  
+  // Trial status
+  const [trialStatus, setTrialStatus] = useState<{
+    hasUsedTrial: boolean;
+    entitlementActive: boolean;
+    loading: boolean;
+  }>({ hasUsedTrial: false, entitlementActive: false, loading: true });
+
+  // Fetch trial status on mount
+  useEffect(() => {
+    const fetchTrialStatus = async () => {
+      if (!user) return;
+      
+      const result = await advertisingService.getTrialStatus();
+      setTrialStatus({
+        hasUsedTrial: result.hasUsedTrial,
+        entitlementActive: result.entitlementActive,
+        loading: false,
+      });
+    };
+    
+    fetchTrialStatus();
+  }, [user]);
 
   if (!user) {
     return <Navigate to="/auth" state={{ returnTo: '/advertising/add' }} replace />;
   }
+
+  // Determine if user can publish
+  const canPublishTrial = !trialStatus.hasUsedTrial;
+  const canPublishPaid = trialStatus.entitlementActive;
+  const canPublish = canPublishTrial || canPublishPaid;
 
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -184,13 +212,12 @@ export default function AddAdvertisement() {
       const cityLabel = getCityLabel(city) || city;
       const boroughLabel = borough ? getBoroughLabel(borough) : null;
 
-      // Create ad via secure RPC (server enforces trial rules)
-      const { data: adData, error: createError, requiresPayment } = await advertisingService.createAd(
-        user.id,
+      // Publish ad via secure RPC - server enforces trial rules
+      const result = await advertisingService.publishAd(
         url,
         mediaType!,
         targetUrl,
-        7, // 7 days duration (only used for trial)
+        canPublishTrial, // Request trial if eligible
         {
           category,
           languages: selectedLanguages,
@@ -203,27 +230,42 @@ export default function AddAdvertisement() {
         }
       );
 
-      if (createError) {
-        throw createError;
+      if (!result.success) {
+        if (result.errorCode === 'TRIAL_ALREADY_USED') {
+          toast({
+            title: t('ads.trialUsed'),
+            description: t('ads.trialUsedDesc'),
+          });
+          navigate('/advertising/my-ads');
+          return;
+        }
+        
+        if (result.errorCode === 'PAYMENT_REQUIRED') {
+          toast({
+            title: t('ads.paymentRequired'),
+            description: t('ads.paymentRequiredDesc'),
+          });
+          navigate('/advertising/my-ads');
+          return;
+        }
+        
+        throw new Error(result.error || 'Failed to create ad');
       }
 
-      if (requiresPayment) {
-        // User has already used their trial, redirect to payment
+      // Success
+      if (result.isTrial) {
         toast({
-          title: t('ads.trialUsed'),
-          description: t('ads.trialUsedDesc'),
+          title: t('ads.adCreated'),
+          description: t('ads.trialStartedDesc'),
         });
-        // Store the ad ID for payment flow
-        localStorage.setItem('pendingAdPayment', adData?.id || '');
-        navigate('/advertising/my-ads');
       } else {
-        // Trial ad created successfully
         toast({
           title: t('ads.adCreated'),
           description: t('ads.adCreatedDesc'),
         });
-        navigate('/advertising/my-ads');
       }
+      
+      navigate('/advertising/my-ads');
     } catch (error) {
       console.error('Error creating ad:', error);
       toast({
@@ -453,22 +495,69 @@ export default function AddAdvertisement() {
             </div>
           </div>
 
-          {/* Pricing Info */}
-          <div className="bg-muted/50 rounded-lg p-4 space-y-2">
-            <h3 className="font-medium">{t('ads.pricing')}</h3>
-            <p className="text-sm text-muted-foreground">
-              {t('ads.pricingInfo')}
-            </p>
-          </div>
+          {/* Trial/Payment Status Banner */}
+          {!trialStatus.loading && (
+            <div className={`rounded-lg p-4 space-y-2 ${canPublishTrial ? 'bg-primary/10 border border-primary/20' : canPublishPaid ? 'bg-muted/50' : 'bg-destructive/10 border border-destructive/20'}`}>
+              {canPublishTrial ? (
+                <>
+                  <div className="flex items-center gap-2">
+                    <Gift className="h-5 w-5 text-primary" />
+                    <h3 className="font-medium text-primary">{t('ads.trialAvailable')}</h3>
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    {t('ads.trialAvailableDesc')}
+                  </p>
+                </>
+              ) : canPublishPaid ? (
+                <>
+                  <div className="flex items-center gap-2">
+                    <CreditCard className="h-5 w-5 text-foreground" />
+                    <h3 className="font-medium">{t('ads.paidSubscription')}</h3>
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    {t('ads.paidSubscriptionDesc')}
+                  </p>
+                </>
+              ) : (
+                <>
+                  <div className="flex items-center gap-2">
+                    <CreditCard className="h-5 w-5 text-destructive" />
+                    <h3 className="font-medium text-destructive">{t('ads.subscriptionRequired')}</h3>
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    {t('ads.subscriptionRequiredDesc')}
+                  </p>
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => navigate('/advertising/subscribe')}
+                    className="mt-2"
+                  >
+                    {t('ads.subscribe')}
+                  </Button>
+                </>
+              )}
+            </div>
+          )}
+
+          {/* Pricing Info - only show if trial available */}
+          {canPublishTrial && (
+            <div className="bg-muted/50 rounded-lg p-4 space-y-2">
+              <h3 className="font-medium">{t('ads.pricing')}</h3>
+              <p className="text-sm text-muted-foreground">
+                {t('ads.pricingInfo14Days')}
+              </p>
+            </div>
+          )}
 
           {/* Submit Button */}
           <Button
             type="submit"
             className="w-full"
-            disabled={isUploading || !isFormValid()}
+            disabled={isUploading || !isFormValid() || trialStatus.loading || !canPublish}
           >
             {isUploading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            {t('ads.createAd')}
+            {canPublishTrial ? t('ads.startTrial') : t('ads.createAd')}
           </Button>
         </form>
       </div>
