@@ -290,6 +290,8 @@ export type Database = {
           avatar_url: string | null
           created_at: string
           email: string | null
+          entitlement_active: boolean | null
+          entitlement_expires_at: string | null
           has_used_ad_trial: boolean | null
           id: string
           is_business_user: boolean | null
@@ -297,6 +299,7 @@ export type Database = {
           name: string | null
           phone: string | null
           premium_trial_used: boolean
+          revenuecat_customer_id: string | null
           standard_trial_used: boolean
           trial_ad_id: string | null
           updated_at: string
@@ -307,6 +310,8 @@ export type Database = {
           avatar_url?: string | null
           created_at?: string
           email?: string | null
+          entitlement_active?: boolean | null
+          entitlement_expires_at?: string | null
           has_used_ad_trial?: boolean | null
           id: string
           is_business_user?: boolean | null
@@ -314,6 +319,7 @@ export type Database = {
           name?: string | null
           phone?: string | null
           premium_trial_used?: boolean
+          revenuecat_customer_id?: string | null
           standard_trial_used?: boolean
           trial_ad_id?: string | null
           updated_at?: string
@@ -324,6 +330,8 @@ export type Database = {
           avatar_url?: string | null
           created_at?: string
           email?: string | null
+          entitlement_active?: boolean | null
+          entitlement_expires_at?: string | null
           has_used_ad_trial?: boolean | null
           id?: string
           is_business_user?: boolean | null
@@ -331,6 +339,7 @@ export type Database = {
           name?: string | null
           phone?: string | null
           premium_trial_used?: boolean
+          revenuecat_customer_id?: string | null
           standard_trial_used?: boolean
           trial_ad_id?: string | null
           updated_at?: string
@@ -631,28 +640,97 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      active_advertisements: {
+        Row: {
+          address: string | null
+          category: string | null
+          city: string | null
+          clicks: number | null
+          country: string | null
+          created_at: string | null
+          expires_at: string | null
+          id: string | null
+          impressions: number | null
+          is_paid: boolean | null
+          is_trial: boolean | null
+          languages: string[] | null
+          latitude: number | null
+          longitude: number | null
+          media_type: string | null
+          media_url: string | null
+          paid_until: string | null
+          postcode: string | null
+          status: string | null
+          target_url: string | null
+          trial_days_remaining: number | null
+          trial_ended_at: string | null
+          trial_started_at: string | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          address?: string | null
+          category?: string | null
+          city?: string | null
+          clicks?: number | null
+          country?: string | null
+          created_at?: string | null
+          expires_at?: string | null
+          id?: string | null
+          impressions?: number | null
+          is_paid?: boolean | null
+          is_trial?: boolean | null
+          languages?: string[] | null
+          latitude?: number | null
+          longitude?: number | null
+          media_type?: string | null
+          media_url?: string | null
+          paid_until?: string | null
+          postcode?: string | null
+          status?: string | null
+          target_url?: string | null
+          trial_days_remaining?: never
+          trial_ended_at?: string | null
+          trial_started_at?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          address?: string | null
+          category?: string | null
+          city?: string | null
+          clicks?: number | null
+          country?: string | null
+          created_at?: string | null
+          expires_at?: string | null
+          id?: string | null
+          impressions?: number | null
+          is_paid?: boolean | null
+          is_trial?: boolean | null
+          languages?: string[] | null
+          latitude?: number | null
+          longitude?: number | null
+          media_type?: string | null
+          media_url?: string | null
+          paid_until?: string | null
+          postcode?: string | null
+          status?: string | null
+          target_url?: string | null
+          trial_days_remaining?: never
+          trial_ended_at?: string | null
+          trial_started_at?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
-      activate_paid_ad: { Args: { p_ad_id: string }; Returns: boolean }
+      activate_paid_ad: { Args: { p_ad_id: string }; Returns: Json }
       can_get_ad_trial: { Args: never; Returns: boolean }
       cancel_expired_trials: { Args: never; Returns: undefined }
-      create_advertisement: {
-        Args: {
-          p_address?: string
-          p_category?: string
-          p_city?: string
-          p_country?: string
-          p_languages?: string[]
-          p_latitude?: number
-          p_longitude?: number
-          p_media_type: string
-          p_media_url: string
-          p_postcode?: string
-          p_target_url: string
-        }
-        Returns: string
-      }
+      expire_trial_ads: { Args: never; Returns: number }
+      get_ad_trial_status: { Args: never; Returns: Json }
       get_services_seeded_order: {
         Args: { seed_value: number }
         Returns: {
@@ -686,6 +764,32 @@ export type Database = {
         Returns: undefined
       }
       increment_view_count: { Args: { service_id: string }; Returns: undefined }
+      publish_ad: {
+        Args: {
+          p_address?: string
+          p_category?: string
+          p_city?: string
+          p_country?: string
+          p_languages?: string[]
+          p_latitude?: number
+          p_longitude?: number
+          p_media_type: string
+          p_media_url: string
+          p_postcode?: string
+          p_request_trial?: boolean
+          p_target_url: string
+        }
+        Returns: Json
+      }
+      update_user_entitlement: {
+        Args: {
+          p_active: boolean
+          p_expires_at: string
+          p_revenuecat_customer_id?: string
+          p_user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
       app_role: "admin" | "moderator" | "user"
