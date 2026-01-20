@@ -6,7 +6,7 @@ export interface Advertisement {
   media_url: string;
   media_type: 'photo' | 'video';
   target_url: string;
-  status: 'pending' | 'active' | 'expired' | 'cancelled';
+  status: 'pending' | 'active' | 'expired' | 'cancelled' | 'payment_required';
   impressions: number;
   clicks: number;
   expires_at: string;
@@ -22,6 +22,9 @@ export interface Advertisement {
   paid_until?: string;
   latitude?: number | null;
   longitude?: number | null;
+  is_trial?: boolean;
+  trial_started_at?: string | null;
+  trial_ended_at?: string | null;
 }
 
 export interface AdLocationData {
@@ -113,7 +116,17 @@ export const advertisingService = {
   },
 
   /**
-   * Create a new advertisement with 7-day trial
+   * Check if user can get a free trial for their first ad
+   */
+  async canGetAdTrial(): Promise<{ canGetTrial: boolean; error: any }> {
+    const { data, error } = await supabase.rpc('can_get_ad_trial');
+    return { canGetTrial: data === true, error };
+  },
+
+  /**
+   * Create a new advertisement using secure RPC (enforces trial rules server-side)
+   * - First ad: 7-day trial, status='active'
+   * - Subsequent ads: status='payment_required', requires payment
    */
   async createAd(
     userId: string,
@@ -122,42 +135,42 @@ export const advertisingService = {
     targetUrl: string,
     durationDays: number = 7,
     locationData?: AdLocationData
-  ): Promise<{ data: Advertisement | null; error: any }> {
-    const expiresAt = new Date();
-    expiresAt.setDate(expiresAt.getDate() + durationDays);
+  ): Promise<{ data: { id: string } | null; error: any; requiresPayment?: boolean }> {
+    // Use secure RPC function that enforces trial rules
+    const { data: adId, error } = await supabase.rpc('create_advertisement', {
+      p_media_url: mediaUrl,
+      p_media_type: mediaType,
+      p_target_url: targetUrl,
+      p_category: locationData?.category || null,
+      p_languages: locationData?.languages || ['en'],
+      p_country: locationData?.country || null,
+      p_city: locationData?.city || null,
+      p_postcode: locationData?.postcode || null,
+      p_address: locationData?.address || null,
+      p_latitude: locationData?.latitude ?? null,
+      p_longitude: locationData?.longitude ?? null,
+    });
 
-    const insertData: any = {
-      user_id: userId,
-      media_url: mediaUrl,
-      media_type: mediaType,
-      target_url: targetUrl,
-      status: 'active', // Active during 7-day trial
-      expires_at: expiresAt.toISOString(),
-      is_paid: false, // Not paid yet, in trial
-    };
-
-    if (locationData) {
-      insertData.category = locationData.category;
-      insertData.languages = locationData.languages;
-      insertData.country = locationData.country;
-      insertData.city = locationData.city;
-      insertData.postcode = locationData.postcode;
-      insertData.address = locationData.address;
-      if (locationData.latitude !== undefined) {
-        insertData.latitude = locationData.latitude;
-      }
-      if (locationData.longitude !== undefined) {
-        insertData.longitude = locationData.longitude;
-      }
+    if (error) {
+      return { data: null, error };
     }
 
-    const { data, error } = await supabase
+    // Fetch the created ad to check its status
+    const { data: ad, error: fetchError } = await supabase
       .from('advertisements')
-      .insert(insertData)
-      .select()
+      .select('id, status, is_trial')
+      .eq('id', adId)
       .single();
 
-    return { data: data as Advertisement | null, error };
+    if (fetchError) {
+      return { data: { id: adId }, error: null, requiresPayment: false };
+    }
+
+    return { 
+      data: { id: adId }, 
+      error: null,
+      requiresPayment: ad?.status === 'payment_required'
+    };
   },
 
   /**
@@ -197,25 +210,14 @@ export const advertisingService = {
   },
 
   /**
-   * Mark ad as paid and extend for 30 days
+   * Mark ad as paid and extend for 30 days using secure RPC
    */
-  async markAdAsPaid(adId: string): Promise<{ data: Advertisement | null; error: any }> {
-    const paidUntil = new Date();
-    paidUntil.setDate(paidUntil.getDate() + 30);
+  async markAdAsPaid(adId: string): Promise<{ success: boolean; error: any }> {
+    const { data, error } = await supabase.rpc('activate_paid_ad', {
+      p_ad_id: adId,
+    });
 
-    const { data, error } = await supabase
-      .from('advertisements')
-      .update({ 
-        status: 'active',
-        expires_at: paidUntil.toISOString(),
-        is_paid: true,
-        paid_until: paidUntil.toISOString(),
-      })
-      .eq('id', adId)
-      .select()
-      .single();
-
-    return { data: data as Advertisement | null, error };
+    return { success: data === true, error };
   },
 
   /**

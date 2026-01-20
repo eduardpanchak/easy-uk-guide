@@ -586,11 +586,16 @@
     "statusActive": "Active",
     "statusExpired": "Expired",
     "statusCancelled": "Cancelled",
+    "statusPaymentRequired": "Payment Required",
+    "statusTrial": "Trial",
     "nextPayment": "Your next payment",
     "payForAd": "Pay",
     "extendAd": "Extend",
+    "payToActivate": "Pay to Activate",
     "paymentSuccess": "Payment successful! Your ad is now extended.",
-    "errorPayment": "Error processing payment"
+    "errorPayment": "Error processing payment",
+    "trialUsed": "Trial Already Used",
+    "trialUsedDesc": "You've already used your free trial. Please pay to activate this ad."
   },
   "documents": {
     "pageTitle": "Documents",

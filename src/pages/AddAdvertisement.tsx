@@ -184,13 +184,13 @@ export default function AddAdvertisement() {
       const cityLabel = getCityLabel(city) || city;
       const boroughLabel = borough ? getBoroughLabel(borough) : null;
 
-      // Create ad (pending status - will be activated after payment)
-      const { error: createError } = await advertisingService.createAd(
+      // Create ad via secure RPC (server enforces trial rules)
+      const { data: adData, error: createError, requiresPayment } = await advertisingService.createAd(
         user.id,
         url,
         mediaType!,
         targetUrl,
-        7, // 7 days duration
+        7, // 7 days duration (only used for trial)
         {
           category,
           languages: selectedLanguages,
@@ -207,13 +207,23 @@ export default function AddAdvertisement() {
         throw createError;
       }
 
-      toast({
-        title: t('ads.adCreated'),
-        description: t('ads.adCreatedDesc'),
-      });
-
-      // Navigate to my ads page
-      navigate('/advertising/my-ads');
+      if (requiresPayment) {
+        // User has already used their trial, redirect to payment
+        toast({
+          title: t('ads.trialUsed'),
+          description: t('ads.trialUsedDesc'),
+        });
+        // Store the ad ID for payment flow
+        localStorage.setItem('pendingAdPayment', adData?.id || '');
+        navigate('/advertising/my-ads');
+      } else {
+        // Trial ad created successfully
+        toast({
+          title: t('ads.adCreated'),
+          description: t('ads.adCreatedDesc'),
+        });
+        navigate('/advertising/my-ads');
+      }
     } catch (error) {
       console.error('Error creating ad:', error);
       toast({
