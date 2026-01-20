@@ -26,6 +26,7 @@ export type Database = {
           id: string
           impressions: number
           is_paid: boolean | null
+          is_trial: boolean | null
           languages: string[] | null
           latitude: number | null
           longitude: number | null
@@ -35,6 +36,8 @@ export type Database = {
           postcode: string | null
           status: string
           target_url: string
+          trial_ended_at: string | null
+          trial_started_at: string | null
           updated_at: string
           user_id: string
         }
@@ -49,6 +52,7 @@ export type Database = {
           id?: string
           impressions?: number
           is_paid?: boolean | null
+          is_trial?: boolean | null
           languages?: string[] | null
           latitude?: number | null
           longitude?: number | null
@@ -58,6 +62,8 @@ export type Database = {
           postcode?: string | null
           status?: string
           target_url: string
+          trial_ended_at?: string | null
+          trial_started_at?: string | null
           updated_at?: string
           user_id: string
         }
@@ -72,6 +78,7 @@ export type Database = {
           id?: string
           impressions?: number
           is_paid?: boolean | null
+          is_trial?: boolean | null
           languages?: string[] | null
           latitude?: number | null
           longitude?: number | null
@@ -81,6 +88,8 @@ export type Database = {
           postcode?: string | null
           status?: string
           target_url?: string
+          trial_ended_at?: string | null
+          trial_started_at?: string | null
           updated_at?: string
           user_id?: string
         }
@@ -276,9 +285,12 @@ export type Database = {
       }
       profiles: {
         Row: {
+          ad_trial_ended_at: string | null
+          ad_trial_started_at: string | null
           avatar_url: string | null
           created_at: string
           email: string | null
+          has_used_ad_trial: boolean | null
           id: string
           is_business_user: boolean | null
           location: string | null
@@ -286,12 +298,16 @@ export type Database = {
           phone: string | null
           premium_trial_used: boolean
           standard_trial_used: boolean
+          trial_ad_id: string | null
           updated_at: string
         }
         Insert: {
+          ad_trial_ended_at?: string | null
+          ad_trial_started_at?: string | null
           avatar_url?: string | null
           created_at?: string
           email?: string | null
+          has_used_ad_trial?: boolean | null
           id: string
           is_business_user?: boolean | null
           location?: string | null
@@ -299,12 +315,16 @@ export type Database = {
           phone?: string | null
           premium_trial_used?: boolean
           standard_trial_used?: boolean
+          trial_ad_id?: string | null
           updated_at?: string
         }
         Update: {
+          ad_trial_ended_at?: string | null
+          ad_trial_started_at?: string | null
           avatar_url?: string | null
           created_at?: string
           email?: string | null
+          has_used_ad_trial?: boolean | null
           id?: string
           is_business_user?: boolean | null
           location?: string | null
@@ -312,6 +332,7 @@ export type Database = {
           phone?: string | null
           premium_trial_used?: boolean
           standard_trial_used?: boolean
+          trial_ad_id?: string | null
           updated_at?: string
         }
         Relationships: []
@@ -613,7 +634,25 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      activate_paid_ad: { Args: { p_ad_id: string }; Returns: boolean }
+      can_get_ad_trial: { Args: never; Returns: boolean }
       cancel_expired_trials: { Args: never; Returns: undefined }
+      create_advertisement: {
+        Args: {
+          p_address?: string
+          p_category?: string
+          p_city?: string
+          p_country?: string
+          p_languages?: string[]
+          p_latitude?: number
+          p_longitude?: number
+          p_media_type: string
+          p_media_url: string
+          p_postcode?: string
+          p_target_url: string
+        }
+        Returns: string
+      }
       get_services_seeded_order: {
         Args: { seed_value: number }
         Returns: {
