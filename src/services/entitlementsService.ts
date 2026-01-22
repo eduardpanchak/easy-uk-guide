@@ -1,10 +1,15 @@
 import { supabase } from "@/integrations/supabase/client";
-import { revenuecatService } from "./revenuecatService";
+import { revenuecatService, EntitlementType } from "./revenuecatService";
 
 export interface Entitlements {
   ads: { active: boolean; expiresAt: string | null };
   topService: { active: boolean; expiresAt: string | null };
   premium: { active: boolean; expiresAt: string | null };
+}
+
+export interface PurchaseResult {
+  success: boolean;
+  error?: string;
 }
 
 /**
@@ -152,5 +157,36 @@ export const entitlementsService = {
       console.error('[Entitlements] Server check error:', error);
       return false;
     }
+  },
+
+  /**
+   * Check if running on native platform
+   */
+  isNativeApp(): boolean {
+    return revenuecatService.isNativePlatform();
+  },
+
+  /**
+   * Purchase an entitlement via RevenueCat (native only)
+   */
+  async purchaseEntitlement(type: EntitlementType): Promise<PurchaseResult> {
+    if (!revenuecatService.isNativePlatform()) {
+      return { success: false, error: 'NOT_NATIVE' };
+    }
+
+    const result = await revenuecatService.purchaseEntitlement(type);
+    return { success: result.success, error: result.error };
+  },
+
+  /**
+   * Restore purchases via RevenueCat (native only)
+   */
+  async restorePurchases(): Promise<PurchaseResult> {
+    if (!revenuecatService.isNativePlatform()) {
+      return { success: false, error: 'NOT_NATIVE' };
+    }
+
+    const customerInfo = await revenuecatService.restorePurchases();
+    return { success: !!customerInfo };
   },
 };
