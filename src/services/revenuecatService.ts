@@ -9,6 +9,15 @@ export const ENTITLEMENT_IDS = {
   PREMIUM: 'premium',
 } as const;
 
+// Package identifiers matching RevenueCat dashboard offerings
+export const PACKAGE_IDS = {
+  ADS: 'ads_monthly',
+  TOP_SERVICE: 'top_service_monthly',
+  PREMIUM: 'premium_yearly',
+} as const;
+
+export type EntitlementType = 'ads' | 'topService' | 'premium';
+
 export interface EntitlementStatus {
   ads: { active: boolean; expiresAt: string | null };
   topService: { active: boolean; expiresAt: string | null };
@@ -294,6 +303,52 @@ export const revenuecatService = {
     } catch (error) {
       console.error('[RevenueCat] Restore failed:', error);
       return null;
+    }
+  },
+
+  /**
+   * Purchase a specific entitlement by finding the matching package
+   */
+  async purchaseEntitlement(entitlementType: 'ads' | 'topService' | 'premium'): Promise<{ success: boolean; customerInfo: any | null; error?: string }> {
+    if (!isNativePlatform()) {
+      return { success: false, customerInfo: null, error: 'NOT_NATIVE' };
+    }
+
+    try {
+      const offerings = await this.getOfferings();
+      if (!offerings?.current) {
+        return { success: false, customerInfo: null, error: 'NO_OFFERINGS' };
+      }
+
+      // Map entitlement type to package identifier
+      const packageIdMap: Record<string, string> = {
+        ads: PACKAGE_IDS.ADS,
+        topService: PACKAGE_IDS.TOP_SERVICE,
+        premium: PACKAGE_IDS.PREMIUM,
+      };
+
+      const targetPackageId = packageIdMap[entitlementType];
+      const packages = offerings.current.availablePackages || [];
+      
+      // Find the package by identifier
+      const targetPackage = packages.find((pkg: any) => 
+        pkg.identifier === targetPackageId || 
+        pkg.packageType === targetPackageId
+      );
+
+      if (!targetPackage) {
+        console.error('[RevenueCat] Package not found:', targetPackageId, 'Available:', packages.map((p: any) => p.identifier));
+        return { success: false, customerInfo: null, error: 'PACKAGE_NOT_FOUND' };
+      }
+
+      const customerInfo = await this.purchasePackage(targetPackage);
+      return { success: true, customerInfo };
+    } catch (error: any) {
+      if (error.code === 'PURCHASE_CANCELLED_ERROR' || error.message?.includes('cancelled')) {
+        return { success: false, customerInfo: null, error: 'CANCELLED' };
+      }
+      console.error('[RevenueCat] Purchase entitlement error:', error);
+      return { success: false, customerInfo: null, error: error.message || 'PURCHASE_ERROR' };
     }
   },
 

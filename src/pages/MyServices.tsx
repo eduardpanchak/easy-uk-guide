@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { ArrowLeft, Clock, CheckCircle, XCircle, CreditCard, Edit, Trash2, AlertTriangle } from 'lucide-react';
+import { ArrowLeft, Clock, CheckCircle, XCircle, CreditCard, Edit, Trash2, AlertTriangle, Smartphone } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
+import { entitlementsService } from '@/services/entitlementsService';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { BottomNav } from '@/components/BottomNav';
@@ -37,11 +38,13 @@ export default function MyServices() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { t } = useLanguage();
-  const { user } = useAuth();
+  const { user, refreshEntitlements } = useAuth();
   const [services, setServices] = useState<Service[]>([]);
   const [loading, setLoading] = useState(true);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [serviceToDelete, setServiceToDelete] = useState<Service | null>(null);
+  const [subscribingServiceId, setSubscribingServiceId] = useState<string | null>(null);
+  const isNative = entitlementsService.isNativeApp();
 
   useEffect(() => {
     if (user) {
@@ -100,19 +103,37 @@ export default function MyServices() {
   };
 
   const handleSubscribe = async (serviceId: string, tier: string) => {
+    // Check if we're on native platform
+    if (!isNative) {
+      toast.info(t('subscriptions.mobileOnly'));
+      return;
+    }
+
+    setSubscribingServiceId(serviceId);
     try {
-      const { data, error } = await supabase.functions.invoke('create-service-subscription', {
-        body: { serviceId, tier }
-      });
+      const result = await entitlementsService.purchaseEntitlement('topService');
+      
+      if (result.success) {
+        // Refresh entitlements in context
+        await refreshEntitlements?.();
+        
+        // Publish as top service via RPC
+        const { error } = await supabase.rpc('publish_top_service', { p_service_id: serviceId });
+        
+        if (error) throw error;
 
-      if (error) throw error;
-
-      if (data?.url) {
-        window.open(data.url, '_blank');
+        toast.success(t('myServices.subscriptionSuccess'));
+        fetchServices();
+      } else if (result.error === 'CANCELLED') {
+        // User cancelled, do nothing
+      } else {
+        toast.error(t('myServices.subscriptionFailed'));
       }
     } catch (error) {
-      console.error('Error creating subscription:', error);
-      toast.error('Failed to start subscription process');
+      console.error('Error subscribing:', error);
+      toast.error(t('myServices.subscriptionFailed'));
+    } finally {
+      setSubscribingServiceId(null);
     }
   };
 
@@ -312,9 +333,16 @@ export default function MyServices() {
                       onClick={() => handleSubscribe(service.id, service.subscription_tier)}
                       className="w-full"
                       size="sm"
+                      disabled={subscribingServiceId === service.id}
                     >
-                      <CreditCard className="h-4 w-4 mr-2" />
-                      {t('myServices.subscribeNow')} - {getPriceForTier(service.subscription_tier)}/month
+                      {subscribingServiceId === service.id ? (
+                        <span className="h-4 w-4 mr-2 animate-spin rounded-full border-2 border-background border-t-transparent" />
+                      ) : isNative ? (
+                        <CreditCard className="h-4 w-4 mr-2" />
+                      ) : (
+                        <Smartphone className="h-4 w-4 mr-2" />
+                      )}
+                      {isNative ? t('myServices.subscribeNow') : t('subscriptions.openInApp')}
                     </Button>
                   </div>
                 )}
@@ -334,8 +362,16 @@ export default function MyServices() {
                       variant="outline"
                       className="w-full"
                       size="sm"
+                      disabled={subscribingServiceId === service.id}
                     >
-                      {t('myServices.reactivate')} - {getPriceForTier(service.subscription_tier)}/month
+                      {subscribingServiceId === service.id ? (
+                        <span className="h-4 w-4 mr-2 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+                      ) : isNative ? (
+                        <CreditCard className="h-4 w-4 mr-2" />
+                      ) : (
+                        <Smartphone className="h-4 w-4 mr-2" />
+                      )}
+                      {isNative ? t('myServices.reactivate') : t('subscriptions.openInApp')}
                     </Button>
                   </div>
                 )}

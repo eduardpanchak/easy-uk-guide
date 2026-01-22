@@ -6,11 +6,11 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Crown, Loader2 } from "lucide-react";
+import { Crown, Loader2, Smartphone } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
-import { supabase } from "@/integrations/supabase/client";
+import { entitlementsService } from "@/services/entitlementsService";
 import { toast } from "sonner";
 import React, { useState } from "react";
 
@@ -22,8 +22,9 @@ interface PaywallModalProps {
 export const PaywallModal = ({ isOpen, onClose }: PaywallModalProps) => {
   const { t } = useLanguage();
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, refreshEntitlements } = useAuth();
   const [loading, setLoading] = useState(false);
+  const isNative = entitlementsService.isNativeApp();
 
   const handleUpgrade = async () => {
     if (!user) {
@@ -32,19 +33,27 @@ export const PaywallModal = ({ isOpen, onClose }: PaywallModalProps) => {
       return;
     }
 
+    if (!isNative) {
+      toast.info(t('subscriptions.mobileOnly'));
+      return;
+    }
+
     setLoading(true);
     try {
-      const { data, error } = await supabase.functions.invoke('create-checkout');
+      const result = await entitlementsService.purchaseEntitlement('premium');
       
-      if (error) throw error;
-      
-      if (data?.url) {
-        window.open(data.url, '_blank');
+      if (result.success) {
+        await refreshEntitlements?.();
+        toast.success(t('subscriptions.purchaseSuccess'));
         onClose();
+      } else if (result.error === 'CANCELLED') {
+        // User cancelled
+      } else {
+        toast.error(t('subscriptions.purchaseFailed'));
       }
     } catch (error) {
-      console.error('Error creating checkout:', error);
-      toast.error('Failed to start checkout. Please try again.');
+      console.error('Error purchasing:', error);
+      toast.error(t('subscriptions.purchaseFailed'));
     } finally {
       setLoading(false);
     }
@@ -72,9 +81,21 @@ export const PaywallModal = ({ isOpen, onClose }: PaywallModalProps) => {
           </div>
 
           <Button className="w-full" size="lg" onClick={handleUpgrade} disabled={loading}>
-            {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            {t('upgradeToPro')}
+            {loading ? (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            ) : isNative ? (
+              <Crown className="mr-2 h-4 w-4" />
+            ) : (
+              <Smartphone className="mr-2 h-4 w-4" />
+            )}
+            {isNative ? t('upgradeToPro') : t('subscriptions.openInApp')}
           </Button>
+
+          {!isNative && (
+            <p className="text-xs text-muted-foreground text-center">
+              {t('subscriptions.mobileOnlyDesc')}
+            </p>
+          )}
 
           <Button 
             variant="ghost" 
